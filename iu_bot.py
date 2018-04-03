@@ -89,8 +89,8 @@ class General:
     @commands.command()
     async def choose(self, ctx, *, options):
         if len(options.split('|')) >= 2:
-            return await ctx.send(random.choice(options.split('|')))
-        await ctx.send('Give atleast two options separated by **|**')
+            return await ctx.send(embed=discord.Embed(title="And the bot has chosen...",description=random.choice(options.split('|')),color=discord.Color.yellow()))
+        await ctx.send(embed=discord.Embed(title='You invoked command incorrectly!',description='Give at least two options separated by **|**',color=discord.Color.red()))
             
 
 
