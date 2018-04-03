@@ -1,7 +1,5 @@
-import asyncio,discord,math,random,time,datetime,aiohttp,functools,inspect,re
+import asyncio, discord, math, random, time, datetime, aiohttp, functools, inspect, re
 from discord.ext import commands
-import urllib.request
-import urllib.parse
 import traceback
 import inspect
 import textwrap
@@ -18,7 +16,7 @@ def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
 
 class Admin:
-    '''for administrative purposes'''
+    '''For administrative purposes'''
     @commands.command()
     async def kick(self, ctx, member: discord.Member):
         '''Kick members from your server'''
@@ -39,7 +37,7 @@ class Admin:
 
     @commands.command(aliases=['cr', 'updaterole'])
     async def changerole(self, ctx, member: discord.Member, *, rolename):
-        '''to add/remove a role from a person'''
+        '''To add/remove a role from a person'''
         try:
             role = discord.utils.get(ctx.guild.roles, name=rolename)
             if role not in member.roles:
@@ -52,12 +50,12 @@ class Admin:
 
     @commands.command()
     async def purge(self, ctx, number):
-        '''clears specified number of messages, ranging from 2 to 100'''
+        '''Clears specified number of messages, ranging from 2 to 100'''
         await ctx.channel.purge(limit=number)
 
 
 class General:
-    '''general commands'''
+    '''General commands'''
     @commands.command()
     async def ping(self, ctx):
         '''Call the bot'''
