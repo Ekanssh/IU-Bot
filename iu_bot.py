@@ -8,7 +8,7 @@ import io
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
-import globals
+import globalvars
 
 bot = commands.Bot(description='The offical bot overwatching Indians United.', command_prefix='iu_')
 
