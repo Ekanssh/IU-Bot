@@ -234,18 +234,18 @@ class REPL():
 @bot.event
 async def on_member_join(member):
     for channel in member.server.channels:
-        if channel.name is globals.welcomeName:
+        if channel.name is globalvars.welcomeName:
             await bot.send_message(channel, 'Welcome to IU United, '+member.mention+'! Please enjoy your time here and hope you check #rules! :)')
 
 @bot.event
 async def on_member_remove(member):
     for channel in member.server.channels:
-        if channel.name is globals.leaveName:
+        if channel.name is globalvars.leaveName:
             await ctx.send_message(channel, 'We are feeling bad to see you leaving %s!' %(member.name))
 
 @bot.event
 async def on_message(ctx):
-    if ctx.channel.name is globals.memesChannel:
+    if ctx.channel.name is globalvars.memesChannel:
         for chr in list(string.ascii_letters):
             if chr in str(ctx.content):
                 await ctx.delete_message(ctx)
@@ -260,4 +260,4 @@ async def on_ready():
     bot.add_cog(Admin())
     bot.add_cog(REPL(bot))
 
-bot.run(globals.TOKEN)
+bot.run(globalvars.TOKEN)
