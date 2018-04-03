@@ -79,6 +79,13 @@ class General:
         embed.add_field(name='Date', value='{}'.format(m[0]))
         embed.add_field(name='Time', value='{}GMT'.format(m[1]))
         await ctx.send(embed=embed)
+        
+    @commands.command(name = '8ball')
+    async def _func(self, ctx, *, question):
+        if question[-1] == '?':
+            return await ctx.send(random.choice(globals.ballAnswers))
+        await ctx.send('`Try again with a question!`')
+        
 
 
 @bot.event
