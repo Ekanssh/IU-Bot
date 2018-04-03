@@ -16,7 +16,7 @@ def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
 
 class Admin:
-    '''For administrative purposes'''
+    '''for administrative purposes'''
     @commands.command()
     async def kick(self, ctx, member: discord.Member):
         '''Kick members from your server'''
@@ -37,7 +37,7 @@ class Admin:
 
     @commands.command(aliases=['cr', 'updaterole'])
     async def changerole(self, ctx, member: discord.Member, *, rolename):
-        '''To add/remove a role from a person'''
+        '''to add/remove a role from a person'''
         try:
             role = discord.utils.get(ctx.guild.roles, name=rolename)
             if role not in member.roles:
@@ -50,12 +50,12 @@ class Admin:
 
     @commands.command()
     async def purge(self, ctx, number):
-        '''Clears specified number of messages, ranging from 2 to 100'''
+        '''clears specified number of messages, ranging from 2 to 100'''
         await ctx.channel.purge(limit=number)
 
 
 class General:
-    '''General commands'''
+    '''general commands'''
     @commands.command()
     async def ping(self, ctx):
         '''Call the bot'''
@@ -82,10 +82,16 @@ class General:
         
     @commands.command(name = '8ball')
     async def _func(self, ctx, *, question = ' '):
-        '''Let the bot answer your questions in yes or no.'''
         if question[-1] == '?':
             return await ctx.send(random.choice(globals.ballAnswers))
         await ctx.send('`Try again with a question!`')
+    
+    @commands.command()
+    async def choose(self, ctx, *, options):
+        if len(options.split('|')) > 2:
+            return await ctx.send(random.choice(options.split('|')))
+        await ctx.send('Give atleast two options separated by **|**')
+            
         
 
 
