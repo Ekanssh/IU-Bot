@@ -82,12 +82,14 @@ class General:
         
     @commands.command(name = '8ball')
     async def _func(self, ctx, *, question = ' '):
+        '''the bot entertains you with nonsense'''
         if question[-1] == '?':
             return await ctx.send(random.choice(globalvars.ballAnswers))
         await ctx.send('`Try again with a question!`')
     
     @commands.command()
     async def choose(self, ctx, *, options):
+        '''randomly gets a choice from a list of choices separated with '|' '''
         if len(options.split('|')) >= 2:
             return await ctx.send(embed=discord.Embed(title="And the bot has chosen...",description=random.choice(options.split('|')),color=discord.Color.yellow()))
         await ctx.send(embed=discord.Embed(title='You invoked command incorrectly!',description='Give at least two options separated by **|**',color=discord.Color.red()))
