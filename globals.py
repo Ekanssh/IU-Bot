@@ -4,3 +4,4 @@ rulesID = 429618590061297664
 iuID = 281793428793196544
 welcomeName = 'welcome-good_bye'
 leaveName = 'welcome-good_bye'
+memesChannel = 'picture_memes'
