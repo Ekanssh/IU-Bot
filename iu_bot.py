@@ -89,7 +89,6 @@ class General:
     @commands.command()
     async def choose(self, ctx, *, options):
         if len(options.split('|')) >= 2:
-            await ctx.send(list(option.split('|')))
             return await ctx.send(random.choice(options.split('|')))
         await ctx.send('Give atleast two options separated by **|**')
             
