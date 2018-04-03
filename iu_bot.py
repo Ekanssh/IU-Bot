@@ -81,7 +81,7 @@ class General:
         await ctx.send(embed=embed)
         
     @commands.command(name = '8ball')
-    async def _func(self, ctx, *, question):
+    async def _func(self, ctx, *, question = ' '):
         if question[-1] == '?':
             return await ctx.send(random.choice(globals.ballAnswers))
         await ctx.send('`Try again with a question!`')
