@@ -1,4 +1,4 @@
 # IU Bot
-The offical bot overwatching Indians United.
+The offical bot overwatching Indians United discord server
 
-If you can see this text then congrates you're officially the contributer !
+If you can see this text then congrats you're officially a contributer !
