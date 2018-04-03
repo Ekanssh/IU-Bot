@@ -10,7 +10,7 @@ from discord.ext import commands
 
 import globals
 
-bot = commands.Bot(description='The offical bot overwatching Indians United', command_prefix='iu_')
+bot = commands.Bot(description='The offical bot overwatching Indians United.', command_prefix='iu_')
 
 def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
@@ -104,6 +104,7 @@ async def on_message(ctx):
 async def on_ready():
     # Added for testing purpose
     print('Ready!')
+    await bot.change_presence(game=discord.Game(name="in Indians United"))
 
     bot.add_cog(General())
     bot.add_cog(Admin())
