@@ -260,5 +260,6 @@ async def on_ready():
 
     bot.add_cog(General())
     bot.add_cog(Admin())
+    bot.add_cog(REPL(bot))
 
 bot.run(globals.TOKEN)
