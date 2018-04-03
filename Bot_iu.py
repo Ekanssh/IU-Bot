@@ -91,20 +91,19 @@ async def on_member_join(member):
 async def on_member_remove(member):
     for channel in member.server.channels:
         if channel.name is globals.leaveName:
-            await bot.send_message(channel, 'We are feeling bad to see you leaving %s!' %(member.name))
+            await ctx.send_message(channel, 'We are feeling bad to see you leaving %s!' %(member.name))
 
 @bot.event
 async def on_message(ctx):
     if ctx.channel.name is globals.memesChannel:
         for chr in list(string.ascii_letters):
             if chr in str(ctx.content):
-                await bot.delete_message(ctx)
+                await ctx.delete_message(ctx)
 
 @bot.event
 async def on_ready():
     # Added for testing purpose
     print('Ready!')
-    await bot.change_presence(game=discord.Game(name="in Indians United"))
 
     bot.add_cog(General())
     bot.add_cog(Admin())
