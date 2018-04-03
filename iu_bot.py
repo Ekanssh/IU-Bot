@@ -1,10 +1,12 @@
-import asyncio, datetime, functools, inspect, math, random, re, time
-
-import aiohttp
-
-import discord
+import asyncio,discord,math,random,time,datetime,aiohttp,functools,inspect,re
 from discord.ext import commands
-
+import urllib.request
+import urllib.parse
+import traceback
+import inspect
+import textwrap
+from contextlib import redirect_stdout
+import io
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
