@@ -83,7 +83,7 @@ class General:
     @commands.command(name = '8ball')
     async def _func(self, ctx, *, question = ' '):
         if question[-1] == '?':
-            return await ctx.send(random.choice(globals.ballAnswers))
+            return await ctx.send(random.choice(globalvars.ballAnswers))
         await ctx.send('`Try again with a question!`')
     
     @commands.command()
