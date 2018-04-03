@@ -95,7 +95,7 @@ async def on_member_remove(member):
 
 @bot.event
 async def on_message(ctx):
-    if ctx.channel.name is globals.memesChannel
+    if ctx.channel.name is globals.memesChannel:
         for chr in list(string.ascii_letters):
             if chr in str(ctx.content):
                 await bot.delete_message(ctx)
