@@ -16,7 +16,7 @@ def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
 
 class Admin:
-    '''for administrative purposes'''
+    '''For administrative purposes'''
     @commands.command()
     async def kick(self, ctx, member: discord.Member):
         '''Kick members from your server'''
@@ -37,7 +37,7 @@ class Admin:
 
     @commands.command(aliases=['cr', 'updaterole'])
     async def changerole(self, ctx, member: discord.Member, *, rolename):
-        '''to add/remove a role from a person'''
+        '''To add/remove a role from a person'''
         try:
             role = discord.utils.get(ctx.guild.roles, name=rolename)
             if role not in member.roles:
@@ -50,12 +50,12 @@ class Admin:
 
     @commands.command()
     async def purge(self, ctx, number):
-        '''clears specified number of messages, ranging from 2 to 100'''
+        '''Clears specified number of messages, ranging from 2 to 100'''
         await ctx.channel.purge(limit=number)
 
 
 class General:
-    '''general commands'''
+    '''General commands'''
     @commands.command()
     async def ping(self, ctx):
         '''Call the bot'''
@@ -81,6 +81,7 @@ class General:
         await ctx.send(embed=embed)
         
     @commands.command(name = '8ball')
+    '''Let the bot answer your questions in yes or no.'''
     async def _func(self, ctx, *, question = ' '):
         if question[-1] == '?':
             return await ctx.send(random.choice(globals.ballAnswers))
