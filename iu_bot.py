@@ -99,6 +99,7 @@ async def on_message(ctx):
         for chr in list(string.ascii_letters):
             if chr in str(ctx.content):
                 await ctx.delete_message(ctx)
+    await bot.process_commands(ctx)
 
 @bot.event
 async def on_ready():
