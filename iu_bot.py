@@ -262,5 +262,5 @@ async def on_ready():
     bot.add_cog(Admin())
     bot.add_cog(REPL(bot))
     await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
-
+    await bot.guilds[1].get_channel(430752769146617866).send("It's a brand new day for me :)")
 bot.run(globalvars.TOKEN)
