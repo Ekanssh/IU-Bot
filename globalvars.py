@@ -26,8 +26,8 @@ ballAnswers = [
   "My sources say no :8ball:",
   "Outlook not so good :8ball:",
   "Very doubtful :8ball:",
-  "Are you sure? :8ball",
+  "Are you sure? :8ball:",
   "Let me think about it :8ball:",
   "If it's a yes, then it's a yes :8ball:",
-  "Let me get back to you :8ball""
+  "Let me get back to you :8ball:"
 ]
