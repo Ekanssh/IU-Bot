@@ -65,7 +65,7 @@ class General:
         await msg.edit(content=ctx.author.mention+', Pong! :ping_pong: Took {} ms'.format(res))
 
     @commands.command()
-    async def say(self, ctx, *, something='IU Bot Bot here!'):
+    async def say(self, ctx, *, something: commands.clean_content='IU Bot Bot here!'):
         '''The bot becomes your copycat'''
         await ctx.send(something)
         await ctx.message.delete()
