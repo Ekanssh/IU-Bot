@@ -5,12 +5,19 @@ import inspect
 import textwrap
 from contextlib import redirect_stdout
 import io
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
 import globalvars
 
 bot = commands.Bot(description='The offical bot overwatching Indians United.', command_prefix='iu_')
+
+scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+client = gspread.authorize(creds)
+sheet = client.open("IU DB").sheet1
 
 def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
@@ -73,6 +80,11 @@ class General:
         '''The bot becomes your copycat'''
         await ctx.send(something)
         await ctx.message.delete()
+
+    @commands.command()
+    async def bday(self, ctx, bDay):
+        userID = ctx.message.author.id
+        sheet.insert_row([userID, bDay], index=1, value_input_option='RAW')
 
     @commands.command()
     async def now(self, ctx):
@@ -266,5 +278,5 @@ async def on_ready():
     bot.add_cog(Admin())
     bot.add_cog(REPL(bot))
     await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
-    await bot.guilds[1].get_channel(430752769146617866).send("It's a brand new day for me :)")
+    
 bot.run(globalvars.TOKEN)
