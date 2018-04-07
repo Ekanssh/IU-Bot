@@ -18,6 +18,7 @@ def tdm(td):
 class Admin:
     '''For administrative purposes'''
     @commands.command()
+    @commands.has_permissions(kick_members=True) 
     async def kick(self, ctx, member: discord.Member):
         '''Kick members from your server'''
         try:
@@ -27,6 +28,7 @@ class Admin:
             await ctx.message.add_reaction('\u274C')
 
     @commands.command()
+    @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member):
         '''Ban toxic members from your server'''
         try:
@@ -36,6 +38,7 @@ class Admin:
             await ctx.message.add_reaction('\u274C')
 
     @commands.command(aliases=['cr', 'updaterole'])
+    @commands.has_permissions(manage_roles=True)
     async def changerole(self, ctx, member: discord.Member, *, rolename):
         '''To add/remove a role from a person'''
         try:
@@ -49,6 +52,7 @@ class Admin:
             await ctx.message.add_reaction('\u274C')
 
     @commands.command()
+    @commands.has_permissions(manage_messages=True)
     async def purge(self, ctx, number):
         '''Clears specified number of messages, ranging from 2 to 100'''
         await ctx.channel.purge(limit=number)
