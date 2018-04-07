@@ -69,7 +69,7 @@ class General:
         await msg.edit(content=ctx.author.mention+', Pong! :ping_pong: Took {} ms'.format(res))
 
     @commands.command()
-    async def say(self, ctx, *, something='IU Bot Bot here!'):
+    async def say(self, ctx, *, something: commands.clean_content='IU Bot Bot here!'):
         '''The bot becomes your copycat'''
         await ctx.send(something)
         await ctx.message.delete()
@@ -86,20 +86,22 @@ class General:
         
     @commands.command(name = '8ball')
     async def _func(self, ctx, *, question = ' '):
+        '''the bot entertains you with nonsense'''
         if question[-1] == '?':
             return await ctx.send(random.choice(globalvars.ballAnswers))
         await ctx.send('`Try again with a question!`')
     
     @commands.command()
     async def choose(self, ctx, *, options):
+        '''randomly gets a choice from a list of choices separated with '|' '''
         if len(options.split('|')) >= 2:
-            return await ctx.send(random.choice(options.split('|')))
-        await ctx.send('Give atleast two options separated by **|**')
+            return await ctx.send(embed=discord.Embed(title="And the bot has chosen...",description=random.choice(options.split('|')),color=discord.Color.gold()))
+        await ctx.send(embed=discord.Embed(title='You invoked command incorrectly!',description='Give at least two options separated by **|**',color=discord.Color.red()))
             
 
 
 '''REPL'''
-ownerid = [360022804357185537,315728369369088003,270898185961078785]
+ownerid = [360022804357185537,315728369369088003,270898185961078785,341958485724102668,371673235395182592]
 
 class REPL():
 
@@ -264,5 +266,5 @@ async def on_ready():
     bot.add_cog(Admin())
     bot.add_cog(REPL(bot))
     await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
-
+    await bot.guilds[1].get_channel(430752769146617866).send("It's a brand new day for me :)")
 bot.run(globalvars.TOKEN)
