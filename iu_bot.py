@@ -180,7 +180,7 @@ class REPL():
     @commands.command(hidden=True)
     async def repl(self, ctx):
         '''for bot owner to run series of commands'''
-        if ctx.author.id not in ownerid:
+        if ctx.message.author.id not in ownerid:
             return
         msg = ctx.message
         variables = {
