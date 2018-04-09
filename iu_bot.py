@@ -113,7 +113,22 @@ class General:
             return await ctx.send(embed=discord.Embed(title="And the bot has chosen...",description=random.choice(options.split('|')),color=discord.Color.gold()))
         await ctx.send(embed=discord.Embed(title='You invoked command incorrectly!',description='Give at least two options separated by **|**',color=discord.Color.red()))
             
-
+    @commands.command()
+    async def rps(self, ctx, value):
+        '''Play Rock Paper Scissors with the bot'''
+        options = ['Rock', 'Paper', 'Scissors', 'Rock'];
+        value = value.title()
+        if value not in options:
+            return await ctx.send('You can choose from %s only'%(', '.join(options[:3])))
+        guess = random.choice(options[:3])
+        i = options.index(value)
+        if value is guess:
+            res = 'It\'s a tie!'
+        else:
+            res = 'You won'
+            if guess is options[i+1]:
+                res = 'You lost'
+        return await ctx.send('**Bot**: %s\n**You**: %s\n%s'%(guess, value, res))
 
 '''REPL'''
 ownerid = [360022804357185537,315728369369088003,270898185961078785,341958485724102668,371673235395182592, 388984732156690433] #pls add names in the same order. Last: Yash
