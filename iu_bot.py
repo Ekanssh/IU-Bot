@@ -124,10 +124,10 @@ class General:
         i = options.index(value)
         if value is guess:
             res = 'It\'s a tie!'
+        elif guess is options[i+1]:
+            res = 'You lost'
         else:
             res = 'You won'
-            if guess is options[i+1]:
-                res = 'You lost'
         return await ctx.send('**Bot**: %s\n**You**: %s\n%s'%(guess, value, res))
 
 '''REPL'''
