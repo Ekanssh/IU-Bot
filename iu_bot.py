@@ -8,7 +8,7 @@ import asyncio, discord, aiohttp
 import time, datetime
 import math, random
 import functools 
-import textwrap, re
+import textwrap,re
 import sqlite3
 import globalvars
 
