@@ -11,7 +11,7 @@ import functools
 import textwrap,re
 import sqlite3
 import globalvars
-
+import httplib2
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
@@ -27,7 +27,7 @@ c = connection.cursor()
 c.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
 
 if creds.access_token_expired:
-    gs_client.login()
+    creds.refresh(httplib2.Http())
 
 def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
