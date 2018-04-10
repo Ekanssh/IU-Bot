@@ -19,10 +19,10 @@ bot = commands.Bot(description='The offical bot overwatching Indians United.', c
 
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
-sheet = client.open("IU DB").sheet1
 http = creds.authorize(httplib2.Http())
 creds.refresh(http)
 client = gspread.authorize(creds)
+sheet = client.open("IU DB").sheet1
 
 connection = sqlite3.connect("dailies.db")
 c = connection.cursor()
