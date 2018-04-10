@@ -95,7 +95,7 @@ class General:
                 ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\n You have ₹{}".format(time[0], time[1], time[2], currentDaily))
         else:
             c.execute("INSERT INTO Dailies VALUES (" + str(ctx.message.author.id) + ',' + "200" + ',' + "86400" + ")")
-            await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
+            await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹200")
                 
     
     @commands.command()
