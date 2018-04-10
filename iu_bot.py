@@ -340,4 +340,5 @@ async def dailiesCounter(ctx):
                 c.execute("UPDATE Dailies SET secToReset = {} WHERE id = i[0]".format(tempTime))
                 await asyncio.sleep(2)           #update every 2 secs. Let da boi have some time
     
+bot.loop.create_task(dailiesCounter())
 bot.run(globalvars.TOKEN)
