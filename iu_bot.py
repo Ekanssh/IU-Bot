@@ -19,15 +19,14 @@ bot = commands.Bot(description='The offical bot overwatching Indians United.', c
 
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
-client = gspread.authorize(creds)
 sheet = client.open("IU DB").sheet1
+http = creds.authorize(httplib2.Http())
+creds.refresh(http)
+client = gspread.authorize(creds)
 
 connection = sqlite3.connect("dailies.db")
 c = connection.cursor()
 c.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
-
-if creds.access_token_expired:
-    creds.refresh(httplib2.Http())
 
 def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
