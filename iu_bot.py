@@ -1,16 +1,19 @@
-import asyncio, discord, math, random, time, datetime, aiohttp, functools, inspect, re
 from discord.ext import commands
-import traceback
-import inspect
-import textwrap
-from contextlib import redirect_stdout
-import io
-import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from contextlib import redirect_stdout
+import gspread
+import io
+import traceback, inspect
+import asyncio, discord, aiohttp
+import time, datetime
+import math, random
+import functools 
+import textwrap, re
+import sqlite3
+import globalvars
+
 # import bs4
 # from bs4 import BeautifulSoup as bs
-
-import globalvars
 
 bot = commands.Bot(description='The offical bot overwatching Indians United.', command_prefix='iu_')
 
@@ -18,6 +21,11 @@ scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/au
 creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
 client = gspread.authorize(creds)
 sheet = client.open("IU DB").sheet1
+
+connection = sqlite3.connect("dailies.db")
+cursor = connection.cursor()
+cursor.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
+
 if creds.access_token_expired:
     gs_client.login()
 
@@ -69,6 +77,28 @@ class Admin:
 
 class General:
     '''General commands'''
+    
+    @commands.command(aliases=['daily'])
+    async def dailies(self, ctx):
+        c.execute("SELECT * FROM Dailies WHERE id=ctx.message.author.id)")
+        
+        if c.fetchone():                                                  #if found
+            currentDaily = int(c.fetchall()[0][1])
+            secondsRemaining = int(c.fetchall()[0][2])
+            time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
+            
+            if secondsRemaining <= 0:                              
+                currentDaily += 200
+                c.execute("UPDATE Dailies SET dailiesCount = {0}, secToReset = '86400' WHERE id = {1}".format(str(currentDaily), ctx.message.author.id))
+                await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
+                
+            else:
+                ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\n You have ₹{}".format(time[0], time[1], time[2], currentDaily))
+        else:
+            c.execute("INSERT INTO Dailies VALUES ({0}, {1}, {2})".format(ctx.message.author.id, "200", "86400"))
+            await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
+                
+    
     @commands.command()
     async def ping(self, ctx):
         '''Call the bot'''
@@ -299,5 +329,15 @@ async def on_ready():
     bot.add_cog(Admin())
     bot.add_cog(REPL(bot))
     await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
+    
+async def dailiesCounter(ctx):
+    await bot.wait_until_ready()
+    while not bot.is_closed:
+        c.execute("SELECT * from Dailies")
+        for i in c.fetchall():
+            if not i[2] <= 0:
+                tempTime = int(i[2]) - 1
+                c.execute("UPDATE Dailies SET secToReset = {} WHERE id = i[0]".format(tempTime))
+                await asyncio.sleep(2)           #update every 2 secs. Let da boi have some time
     
 bot.run(globalvars.TOKEN)
