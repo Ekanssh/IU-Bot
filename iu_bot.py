@@ -124,6 +124,8 @@ class General:
         i = options.index(value)
         if value is guess:
             res = 'It\'s a tie!'
+        else if value == "Rock" and guess == "Rock":
+            res = "It's a tie!"
         else:
             if guess is options[i+1]:
                 res = 'You lost'
@@ -132,7 +134,7 @@ class General:
         return await ctx.send('**Bot**: %s\n**You**: %s\n%s'%(guess, value, res))
 
 '''REPL'''
-ownerid = [360022804357185537,315728369369088003,270898185961078785,341958485724102668,371673235395182592, 388984732156690433] #pls add names in the same order. Last: Yash
+ownerid = [360022804357185537, 315728369369088003, 270898185961078785, 341958485724102668, 371673235395182592, 388984732156690433] #pls add names in the same order. Last: Yash
 
 class REPL():
 
