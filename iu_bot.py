@@ -79,7 +79,7 @@ class General:
     
     @commands.command(aliases=['daily'])
     async def dailies(self, ctx):
-        c.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id)))
+        c.execute("SELECT * FROM Dailies WHERE id = " + str(ctx.message.author.id))
         
         if c.fetchone():                                                  #if found
             currentDaily = int(c.fetchall()[0][1])
@@ -88,13 +88,13 @@ class General:
             
             if secondsRemaining <= 0:                              
                 currentDaily += 200
-                c.execute("UPDATE Dailies SET dailiesCount = (?), secToReset = '86400' WHERE id = (?)", (str(currentDaily), str(ctx.message.author.id)))
+                c.execute("UPDATE Dailies SET dailiesCount = " + str(currentDaily) + ", secToReset = '86400' WHERE id = " + str(ctx.message.author.id))
                 await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
                 
             else:
                 ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\n You have ₹{}".format(time[0], time[1], time[2], currentDaily))
         else:
-            c.execute("INSERT INTO Dailies VALUES ((?), (?), (?))", (str(ctx.message.author.id), "200", "86400"))
+            c.execute("INSERT INTO Dailies VALUES (" + str(ctx.message.author.id) + ',' + "200" + ',' + "86400" + ")")
             await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
                 
     
@@ -336,7 +336,7 @@ async def dailiesCounter():
         for i in c.fetchall():
             if not i[2] <= 0:
                 tempTime = int(i[2]) - 1
-                c.execute("UPDATE Dailies SET secToReset = (?) WHERE id = (?)", (tempTime, i[0]))
+                c.execute("UPDATE Dailies SET secToReset = " + str(tempTime) + "WHERE id = " + str(i[0]))
                 await asyncio.sleep(2)           #update every 2 secs. Let ma boi have some time
     
 bot.loop.create_task(dailiesCounter())
