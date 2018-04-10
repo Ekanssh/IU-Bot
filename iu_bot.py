@@ -330,7 +330,7 @@ async def on_ready():
     bot.add_cog(REPL(bot))
     await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
     
-async def dailiesCounter(ctx):
+async def dailiesCounter():
     await bot.wait_until_ready()
     while not bot.is_closed:
         c.execute("SELECT * from Dailies")
