@@ -80,8 +80,8 @@ class General:
     @commands.command(aliases=['daily'])
     async def dailies(self, ctx):
         c.execute("SELECT * FROM Dailies WHERE id = " + str(ctx.message.author.id))
-        c.fetchall()
-        if c.fetchone():                                                  #if found
+       
+        if c.rowcount > 0:                                                  #if found
             currentDaily = int(c.fetchall()[0][1])
             secondsRemaining = int(c.fetchall()[0][2])
             time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
