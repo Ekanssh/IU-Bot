@@ -111,6 +111,7 @@ class General:
         '''The bot becomes your copycat'''
         await ctx.send(something)
         await ctx.message.delete()
+
     @commands.command()
     async def bday(self, ctx, bDay):
         try:
