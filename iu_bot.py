@@ -23,8 +23,8 @@ client = gspread.authorize(creds)
 sheet = client.open("IU DB").sheet1
 
 connection = sqlite3.connect("dailies.db")
-cursor = connection.cursor()
-cursor.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
+c = connection.cursor()
+c.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
 
 if creds.access_token_expired:
     gs_client.login()
