@@ -80,7 +80,7 @@ class General:
     
     @commands.command(aliases=['daily'])
     async def dailies(self, ctx):
-        c.execute("SELECT * FROM Dailies WHERE id=ctx.message.author.id)")
+        c.execute("SELECT * FROM Dailies WHERE id={})".format(ctx.message.author.id))
         
         if c.fetchone():                                                  #if found
             currentDaily = int(c.fetchall()[0][1])
