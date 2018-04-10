@@ -117,7 +117,7 @@ class General:
             sheet.find(str(ctx.message.author.id))
             await ctx.message.add_reaction('\u274C')
         except:
-            userID = ctx.message.author.id
+            userID = str(ctx.message.author.id)
             sheet.insert_row([userID, bDay], index=1, value_input_option='RAW')
             await ctx.message.add_reaction('\u2705')
 
