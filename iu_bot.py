@@ -111,12 +111,15 @@ class General:
         '''The bot becomes your copycat'''
         await ctx.send(something)
         await ctx.message.delete()
-
     @commands.command()
     async def bday(self, ctx, bDay):
-        userID = ctx.message.author.id
-        sheet.insert_row([userID, bDay], index=1, value_input_option='RAW')
-        await ctx.message.add_reaction('\u2705')
+        try:
+            sheet.find(str(ctx.message.author.id))
+            await ctx.message.add_reaction('\u274C')
+        except:
+            userID = ctx.message.author.id
+            sheet.insert_row([userID, bDay], index=1, value_input_option='RAW')
+            await ctx.message.add_reaction('\u2705')
 
     @commands.command()
     async def now(self, ctx):
