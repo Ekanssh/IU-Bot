@@ -24,7 +24,7 @@ creds.refresh(http)
 client = gspread.authorize(creds)
 db = client.open("IU DB").sheet1
 
-connection = sqlite3.connect("dailies.db")
+conn = sqlite3.connect("dailies.db")
 c = connection.cursor()
 c.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
 
@@ -79,22 +79,25 @@ class General:
     
     @commands.command(aliases=['daily'])
     async def dailies(self, ctx):
-        c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
-
-        if c.rowcount > 0:                                                  #if found
-            currentDaily = int(c.fetchall()[0][1])
-            secondsRemaining = int(c.fetchall()[0][2])
-            time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
+        found = False
+        for i in c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),)):
+            if i[0] == str(ctx.message.author.id):
+                found = !found
+                currentDaily = int(c.fetchall()[0][1])
+                secondsRemaining = int(c.fetchall()[0][2])
+                time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
             
-            if secondsRemaining <= 0:                              
-                currentDaily += 200
-                c.execute("UPDATE Dailies SET dailiesCount = " + str(currentDaily) + ", secToReset = '86400' WHERE id = " + str(ctx.message.author.id))
-                await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
+                if secondsRemaining <= 0:                              
+                    currentDaily += 200
+                    c.execute("UPDATE Dailies SET dailiesCount = " + str(currentDaily) + ", secToReset = '86400' WHERE id =" + str(ctx.message.author.id))
+                    conn.commit()
+                    await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
                 
-            else:
-                ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\n You have ₹{}".format(time[0], time[1], time[2], currentDaily))
-        else:
+                else:
+                    ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\n You have ₹{}".format(time[0], time[1], time[2], currentDaily))
+        if not found:
             c.execute("INSERT INTO Dailies VALUES (" + str(ctx.message.author.id) + ',' + "200" + ',' + "86400" + ")")
+            conn.commit()
             await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹200")
                 
     
@@ -341,6 +344,7 @@ async def dailiesCounter():
             if not i[2] <= 0:
                 tempTime = int(i[2]) - 1
                 c.execute("UPDATE Dailies SET secToReset = " + str(tempTime) + "WHERE id = " + str(i[0]))
+                conn.commit()
                 await asyncio.sleep(2)           #update every 2 secs. Let ma boi have some time
     
 bot.loop.create_task(dailiesCounter())
