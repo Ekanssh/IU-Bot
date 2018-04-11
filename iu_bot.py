@@ -341,7 +341,8 @@ async def on_ready():
 async def dailiesCounter():
     await bot.wait_until_ready()
     while not bot.is_closed:
-        for i in c.execute("SELECT * from Dailies"):
+        c.execute("SELECT * from Dailies")
+        for i in c.fetchall():
             if not int(i[2]) <= 0:
                 tempTime = int(i[2]) - 2
                 print(tempTime)
