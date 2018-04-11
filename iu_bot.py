@@ -83,7 +83,9 @@ class General:
         for i in c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),)):
             if i[0] == str(ctx.message.author.id):
                 found = True
+                c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
                 currentDaily = int(c.fetchall()[0][1])
+                c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
                 secondsRemaining = int(c.fetchall()[0][2])
                 time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
             
@@ -339,8 +341,7 @@ async def on_ready():
 async def dailiesCounter():
     await bot.wait_until_ready()
     while not bot.is_closed:
-        c.execute("SELECT * from Dailies")
-        for i in c.fetchall():
+        for i in c.execute("SELECT * from Dailies"):
             if not i[2] <= 0:
                 tempTime = int(i[2]) - 1
                 c.execute("UPDATE Dailies SET secToReset = " + str(tempTime) + "WHERE id = " + str(i[0]))
