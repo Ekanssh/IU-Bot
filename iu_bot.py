@@ -342,7 +342,7 @@ async def dailiesCounter():
     await bot.wait_until_ready()
     while not bot.is_closed:
         for i in c.execute("SELECT * from Dailies"):
-            if not i[2] <= 0:
+            if not int(i[2]) <= 0:
                 tempTime = int(i[2]) - 1
                 c.execute("UPDATE Dailies SET secToReset =? WHERE id =?", (str(tempTime), str(i[0]), ))
                 conn.commit()
