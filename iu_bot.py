@@ -112,7 +112,7 @@ class Admin:
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
-    async def purge(self, ctx, number):
+    async def purge(self, ctx, number: int):
         '''Clears specified number of messages, ranging from 2 to 100'''
         await ctx.channel.purge(limit=number)
 
