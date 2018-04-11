@@ -124,7 +124,7 @@ class General:
             await ctx.message.add_reaction('\u274C')
         except:
             userID = str(ctx.message.author.id)
-            dbt.insert_row([userID, bDay], index=1, value_input_option='RAW')
+            db.insert_row([userID, bDay], index=1, value_input_option='RAW')
             await ctx.message.add_reaction('\u2705')
 
     @commands.command()
