@@ -348,6 +348,6 @@ async def dailiesCounter():
             c.execute("UPDATE Dailies SET secToReset =? WHERE id =?", (str(tempTime), str(i[0]), ))
             conn.commit()
     await asyncio.sleep(2)
-    dailiesCounter()
+    await dailiesCounter()
 
 bot.run(globalvars.TOKEN)
