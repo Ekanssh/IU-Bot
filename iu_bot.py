@@ -344,7 +344,7 @@ async def dailiesCounter():
         for i in c.execute("SELECT * from Dailies"):
             if not i[2] <= 0:
                 tempTime = int(i[2]) - 1
-                c.execute("UPDATE Dailies SET secToReset = " + str(tempTime) + "WHERE id = " + str(i[0]))
+                c.execute("UPDATE Dailies SET secToReset =? WHERE id =?", (str(tempTime), str(i[0],))
                 conn.commit()
                 await asyncio.sleep(2)           #update every 2 secs. Let ma boi have some time
     
