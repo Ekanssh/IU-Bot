@@ -82,7 +82,7 @@ class General:
         found = False
         for i in c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),)):
             if i[0] == str(ctx.message.author.id):
-                found = !found
+                found = True
                 currentDaily = int(c.fetchall()[0][1])
                 secondsRemaining = int(c.fetchall()[0][2])
                 time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
