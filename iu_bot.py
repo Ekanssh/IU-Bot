@@ -124,7 +124,7 @@ class General:
             await ctx.message.add_reaction('\u274C')
         except:
             userID = str(ctx.message.author.id)
-            db.insert_row([userID, bDay], index=1, value_input_option='RAW')
+            dbt.insert_row([userID, bDay], index=1, value_input_option='RAW')
             await ctx.message.add_reaction('\u2705')
 
     @commands.command()
@@ -343,7 +343,8 @@ async def dailiesCounter():
     while not bot.is_closed:
         for i in c.execute("SELECT * from Dailies"):
             if not int(i[2]) <= 0:
-                tempTime = int(i[2]) - 1
+                tempTime = int(i[2]) - 2
+                print(tempTime)
                 c.execute("UPDATE Dailies SET secToReset =? WHERE id =?", (str(tempTime), str(i[0]), ))
                 conn.commit()
                 await asyncio.sleep(2)           #update every 2 secs. Let ma boi have some time
