@@ -25,7 +25,7 @@ client = gspread.authorize(creds)
 db = client.open("IU DB").sheet1
 
 conn = sqlite3.connect("dailies.db")
-c = connection.cursor()
+c = conn.cursor()
 c.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
 
 def tdm(td):
