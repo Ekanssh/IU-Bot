@@ -12,6 +12,7 @@ import textwrap,re
 import sqlite3
 import globalvars
 import httplib2
+import threading
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
@@ -337,10 +338,15 @@ async def on_ready():
     bot.add_cog(Admin())
     bot.add_cog(REPL(bot))
     await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
+    if not dailies_thread.is_alive():
+        dailies_thread.start() 
     
-async def dailiesCounter():
-    await bot.wait_until_ready()
-    while not bot.is_closed:
+    
+poll_every = 2
+on_exit_condition = threading.Event()
+
+def dailiesCounter():
+    while not on_exit_condition.is_set():
         c.execute("SELECT * from Dailies")
         for i in c.fetchall():
             if not int(i[2]) <= 0:
@@ -348,7 +354,18 @@ async def dailiesCounter():
                 print(tempTime)
                 c.execute("UPDATE Dailies SET secToReset =? WHERE id =?", (str(tempTime), str(i[0]), ))
                 conn.commit()
-                await asyncio.sleep(2)           #update every 2 secs. Let ma boi have some time
+        try:
+           on_exit_condition.wait(poll_every)
+           return
+        except TimeoutError:
+           continue
     
-bot.loop.create_task(dailiesCounter())
+dailies_thread = threading.Thread(target=dailiesCounter, daemon=True)
+    
+
 bot.run(globalvars.TOKEN)
+
+on_exit_condition.set()
+if dailies_thread.isalive():
+    dailies_thread.join(2)
+
