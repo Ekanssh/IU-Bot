@@ -96,7 +96,7 @@ class General:
                     await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
                 
                 else:
-                    ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\n You have ₹{}".format(time[0], time[1], time[2], currentDaily))
+                    await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\n You have ₹{3}".format(time[0], time[1], time[2], currentDaily))
         if not found:
             c.execute("INSERT INTO Dailies VALUES (" + str(ctx.message.author.id) + ',' + "200" + ',' + "86400" + ")")
             conn.commit()
