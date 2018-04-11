@@ -79,10 +79,8 @@ class General:
     
     @commands.command(aliases=['daily'])
     async def dailies(self, ctx):
-        c.execute("SELECT * FROM Dailies WHERE id=" + str(ctx.message.author.id))
-        for i in c.execute("SELECT * FROM Dailies WHERE id=" + str(ctx.message.author.id)):
-            ctx.send(i)
-    
+        c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
+
         if c.rowcount > 0:                                                  #if found
             currentDaily = int(c.fetchall()[0][1])
             secondsRemaining = int(c.fetchall()[0][2])
