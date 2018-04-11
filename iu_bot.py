@@ -36,7 +36,7 @@ def tdm(td):
 @bot.event
 async def on_command_error(error, ctx):
   if isinstance(error, commands.CommandOnCooldown):
-    await ctx.send(ctx.message.channel, ":x:Sorry, you are on a cooldown. Try again in " + str(round(int(error.retry_after), 2)) + "s")
+    await ctx.send_message(ctx.message.channel, ":x:Sorry, you are on a cooldown. Try again in " + str(round(int(error.retry_after), 2)) + "s")
      
 @bot.event
 async def on_member_join(member):
