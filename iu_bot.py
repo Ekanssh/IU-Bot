@@ -22,7 +22,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', s
 http = creds.authorize(httplib2.Http())
 creds.refresh(http)
 client = gspread.authorize(creds)
-sheet = client.open("IU DB").sheet1
+db = client.open("IU DB").sheet1
 
 connection = sqlite3.connect("dailies.db")
 c = connection.cursor()
@@ -117,11 +117,11 @@ class General:
     @commands.command()
     async def bday(self, ctx, bDay):
         try:
-            sheet.find(str(ctx.message.author.id))
+            db.find(str(ctx.message.author.id))
             await ctx.message.add_reaction('\u274C')
         except:
             userID = str(ctx.message.author.id)
-            sheet.insert_row([userID, bDay], index=1, value_input_option='RAW')
+            dbt.insert_row([userID, bDay], index=1, value_input_option='RAW')
             await ctx.message.add_reaction('\u2705')
 
     @commands.command()
