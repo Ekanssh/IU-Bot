@@ -32,6 +32,12 @@ c.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToR
 def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
 
+
+@bot.event
+async def on_command_error(error, ctx):
+  if isinstance(error, commands.CommandOnCooldown):
+    await ctx.send(ctx.message.channel, ":x:Sorry, you are on a cooldown. Try again in " + str(round(int(error.retry_after), 2)) + "s")
+     
 @bot.event
 async def on_member_join(member):
     for channel in member.server.channels:
@@ -66,6 +72,8 @@ async def on_ready():
 
 class Admin:
     '''For administrative purposes'''
+    
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     @commands.has_permissions(kick_members=True) 
     async def kick(self, ctx, member: discord.Member):
@@ -75,7 +83,8 @@ class Admin:
             await ctx.message.add_reaction('\u2705')
         except:
             await ctx.message.add_reaction('\u274C')
-
+    
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member):
@@ -85,7 +94,8 @@ class Admin:
             await ctx.message.add_reaction('\u2705')
         except:
             await ctx.message.add_reaction('\u274C')
-
+    
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command(aliases=['cr', 'updaterole'])
     @commands.has_permissions(manage_roles=True)
     async def changerole(self, ctx, member: discord.Member, *, rolename):
@@ -110,6 +120,7 @@ class Admin:
 class General:
     '''General commands'''
     
+    @commands.cooldown(rate=1, per=15, type=commands.BucketType.user)
     @commands.command(aliases=['daily'])
     async def dailies(self, ctx):
         found = False
@@ -135,7 +146,7 @@ class General:
             conn.commit()
             await ctx.send("You got your 200 dialies! :moneybag:\nYou have ₹200")
                 
-    
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def ping(self, ctx):
         '''Call the bot'''
@@ -143,13 +154,14 @@ class General:
         res = msg.created_at - ctx.message.created_at
         res = tdm(res)
         await msg.edit(content=ctx.author.mention+', Pong! :ping_pong: Took {} ms'.format(res))
-
+    
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def say(self, ctx, *, something: commands.clean_content='IU Bot Bot here!'):
         '''The bot becomes your copycat'''
         await ctx.send(something)
         await ctx.message.delete()
-
+   
     @commands.command()
     async def bday(self, ctx, bDay):
         try:
@@ -159,7 +171,8 @@ class General:
             userID = str(ctx.message.author.id)
             dbt.insert_row([userID, bDay], index=1, value_input_option='RAW')
             await ctx.message.add_reaction('\u2705')
-
+    
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def now(self, ctx):
         '''Get current date and time'''
@@ -169,7 +182,8 @@ class General:
         embed.add_field(name='Date', value='{}'.format(m[0]))
         embed.add_field(name='Time', value='{}GMT'.format(m[1]))
         await ctx.send(embed=embed)
-        
+    
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command(name = '8ball')
     async def _func(self, ctx, *, question = ' '):
         '''the bot entertains you with nonsense'''
@@ -177,13 +191,15 @@ class General:
             return await ctx.send(random.choice(globalvars.ballAnswers))
         await ctx.send('`Try again with a question!`')
     
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def choose(self, ctx, *, options):
         '''randomly gets a choice from a list of choices separated with '|' '''
         if len(options.split('|')) >= 2:
             return await ctx.send(embed=discord.Embed(title="And the bot has chosen...",description=random.choice(options.split('|')),color=discord.Color.gold()))
         await ctx.send(embed=discord.Embed(title='You invoked command incorrectly!',description='Give at least two options separated by **|**',color=discord.Color.red()))
-            
+     
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def rps(self, ctx, value):
         '''Play Rock Paper Scissors with the bot'''
@@ -344,7 +360,6 @@ async def dailiesCounter():
     for i in c.fetchall():
         if not int(i[2]) <= 0:
             tempTime = int(i[2]) - 2
-            print(tempTime)
             c.execute("UPDATE Dailies SET secToReset =? WHERE id =?", (str(tempTime), str(i[0]), ))
             conn.commit()
     await asyncio.sleep(2)
