@@ -16,7 +16,7 @@ import threading
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
-bot = commands.Bot(description='The offical bot overwatching Indians United.', command_prefix='iu_')
+bot = commands.Bot(description='The offical bot overwatching Indians United.', command_prefix=['iu_', 'iu ', 'IU ', 'IU_', 'Iu '])
 
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
@@ -31,6 +31,38 @@ c.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToR
 
 def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
+
+@bot.event
+async def on_member_join(member):
+    for channel in member.server.channels:
+        if channel.name is globalvars.welcomeName:
+            await bot.send_message(channel, 'Welcome to IU United, '+member.mention+'! Please enjoy your time here and hope you check #rules! :)')
+
+@bot.event
+async def on_member_remove(member):
+    for channel in member.server.channels:
+        if channel.name is globalvars.leaveName:
+            await ctx.send_message(channel, 'We are feeling bad to see you leaving %s!' %(member.name))
+
+@bot.event
+async def on_message(ctx):
+    if ctx.channel.name is globalvars.memesChannel:
+        for chr in list(string.ascii_letters):
+            if chr in str(ctx.content):
+                await ctx.delete_message(ctx)
+    await bot.process_commands(ctx)
+
+@bot.event
+async def on_ready():
+    # Added for testing purpose
+    print('Ready!')
+
+    bot.add_cog(General())
+    bot.add_cog(Admin())
+    bot.add_cog(REPL(bot))
+    await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
+    dailiesCounter() 
+
 
 class Admin:
     '''For administrative purposes'''
@@ -97,11 +129,11 @@ class General:
                     await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
                 
                 else:
-                    await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\n You have ₹{3}".format(time[0], time[1], time[2], currentDaily))
+                    await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
         if not found:
             c.execute("INSERT INTO Dailies VALUES (" + str(ctx.message.author.id) + ',' + "200" + ',' + "86400" + ")")
             conn.commit()
-            await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹200")
+            await ctx.send("You got your 200 dialies! :moneybag:\nYou have ₹200")
                 
     
     @commands.command()
@@ -172,11 +204,11 @@ class General:
                 res = 'You won'
         return await ctx.send('**Bot**: %s\n**You**: %s\n%s'%(guess, value, res))
 
-'''REPL'''
+
 ownerid = [360022804357185537, 315728369369088003, 270898185961078785, 341958485724102668, 371673235395182592, 388984732156690433] #pls add names in the same order. Last: Yash
 
 class REPL():
-
+    '''REPL'''
     def __init__(self, bot):
         self.bot = bot
         self._last_result = None
@@ -306,66 +338,16 @@ class REPL():
             except discord.HTTPException as e:
                 await msg.channel.send('Unexpected error: `{}`'.format(e))
 
-'''Added'''
 
-
-@bot.event
-async def on_member_join(member):
-    for channel in member.server.channels:
-        if channel.name is globalvars.welcomeName:
-            await bot.send_message(channel, 'Welcome to IU United, '+member.mention+'! Please enjoy your time here and hope you check #rules! :)')
-
-@bot.event
-async def on_member_remove(member):
-    for channel in member.server.channels:
-        if channel.name is globalvars.leaveName:
-            await ctx.send_message(channel, 'We are feeling bad to see you leaving %s!' %(member.name))
-
-@bot.event
-async def on_message(ctx):
-    if ctx.channel.name is globalvars.memesChannel:
-        for chr in list(string.ascii_letters):
-            if chr in str(ctx.content):
-                await ctx.delete_message(ctx)
-    await bot.process_commands(ctx)
-
-@bot.event
-async def on_ready():
-    # Added for testing purpose
-    print('Ready!')
-
-    bot.add_cog(General())
-    bot.add_cog(Admin())
-    bot.add_cog(REPL(bot))
-    await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
-    if not dailies_thread.is_alive():
-        dailies_thread.start() 
-    
-    
-poll_every = 2
-on_exit_condition = threading.Event()
-
-def dailiesCounter():
-    while not on_exit_condition.is_set():
-        c.execute("SELECT * from Dailies")
-        for i in c.fetchall():
-            if not int(i[2]) <= 0:
-                tempTime = int(i[2]) - 2
-                print(tempTime)
-                c.execute("UPDATE Dailies SET secToReset =? WHERE id =?", (str(tempTime), str(i[0]), ))
-                conn.commit()
-        try:
-           on_exit_condition.wait(poll_every)
-           return
-        except TimeoutError:
-           continue
-    
-dailies_thread = threading.Thread(target=dailiesCounter, daemon=True)
-    
+async def dailiesCounter():
+    c.execute("SELECT * from Dailies")
+    for i in c.fetchall():
+        if not int(i[2]) <= 0:
+            tempTime = int(i[2]) - 2
+            print(tempTime)
+            c.execute("UPDATE Dailies SET secToReset =? WHERE id =?", (str(tempTime), str(i[0]), ))
+            conn.commit()
+    await asyncio.sleep(2)
+    dailiesCounter()
 
 bot.run(globalvars.TOKEN)
-
-on_exit_condition.set()
-if dailies_thread.isalive():
-    dailies_thread.join(2)
-
