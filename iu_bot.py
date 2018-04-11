@@ -61,7 +61,7 @@ async def on_ready():
     bot.add_cog(Admin())
     bot.add_cog(REPL(bot))
     await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
-    dailiesCounter() 
+    await dailiesCounter() 
 
 
 class Admin:
