@@ -37,8 +37,12 @@ class aiopg_commands:
                                         password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8',
                                         host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
         self.cursor = await self.conn.cursor()
-    async def execute(self, statement):
-        await self.cursor.execute(statement)
+        
+    async def execute(self, statement, args = None):
+        if args is None:
+            await self.cursor.execute(statement)
+        else:
+            await self.cursor.execute(statement, args)
     
     @property 
     def get_conn(self):
