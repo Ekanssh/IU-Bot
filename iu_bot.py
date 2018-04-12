@@ -23,9 +23,10 @@ creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', s
 http = creds.authorize(httplib2.Http())
 creds.refresh(http)
 client = gspread.authorize(creds)
-db = client.open("IU DB").sheet1
 if creds.access_token_expired:
     client.login()
+
+db = client.open("IU DB").sheet1
 
 conn = sqlite3.connect("dailies.db")
 c = conn.cursor()
