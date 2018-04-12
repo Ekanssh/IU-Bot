@@ -95,7 +95,7 @@ class REPL():
         self.sessions.add(msg.channel.id)
         await ctx.send('Enter code to execute or evaluate. `exit()` or `quit` to exit.')
         while True:
-            response = await self.bot.wait_for('message', check=(lambda m: m.content.startswith('`') and m.author.id == ownerid and m.channel == ctx.channel))
+            response = await self.bot.wait_for('message', check=(lambda m: m.content.startswith('`') and m.author.id in ownerid and m.channel == ctx.channel))
             cleaned = self.cleanup_code(response.content)
             if cleaned in ('quit', 'exit', 'exit()'):
                 await ctx.send('Exiting.')
