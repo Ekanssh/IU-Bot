@@ -24,6 +24,8 @@ http = creds.authorize(httplib2.Http())
 creds.refresh(http)
 client = gspread.authorize(creds)
 db = client.open("IU DB").sheet1
+if creds.access_token_expired:
+    gc.login()
 
 conn = sqlite3.connect("dailies.db")
 c = conn.cursor()
