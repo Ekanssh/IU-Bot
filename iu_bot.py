@@ -13,7 +13,6 @@ import sqlite3
 import globalvars
 import httplib2
 import threading
-import repl
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
@@ -68,7 +67,7 @@ async def on_message(ctx):
 async def on_ready():
     # Added for testing purpose
     print('Ready!')
-
+    bot.load_extension("repl")
     bot.add_cog(General())
     bot.add_cog(Admin())
     await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
