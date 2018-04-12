@@ -13,6 +13,7 @@ import sqlite3
 import globalvars
 import httplib2
 import threading
+import aiopg
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
@@ -28,9 +29,13 @@ if creds.access_token_expired:
 
 db = client.open("IU DB").sheet1
 
-conn = sqlite3.connect("dailies.db")
-c = conn.cursor()
-c.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
+conn = await aiopg.connect(database='d1b1qi3p5efneq',
+                           user='ynhburlpfyrfon',
+                           password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8',
+                           host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
+
+c = await conn.cursor()
+await c.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
 
 def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
@@ -128,26 +133,26 @@ class General:
     @commands.command(aliases=['daily'])
     async def dailies(self, ctx):
         found = False
-        for i in c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),)):
+        for i in await c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),)):
             if i[0] == str(ctx.message.author.id):
                 found = True
-                c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
+                await c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
                 currentDaily = int(c.fetchall()[0][1])
-                c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
+                await c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
                 secondsRemaining = int(c.fetchall()[0][2])
                 time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
             
                 if secondsRemaining <= 0:                              
                     currentDaily += 200
-                    c.execute("UPDATE Dailies SET dailiesCount = " + str(currentDaily) + ", secToReset = '86400' WHERE id =" + str(ctx.message.author.id))
-                    conn.commit()
+                    await c.execute("UPDATE Dailies SET dailiesCount = " + str(currentDaily) + ", secToReset = '86400' WHERE id =" + str(ctx.message.author.id))
+                    await conn.commit()
                     await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
                 
                 else:
                     await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
         if not found:
-            c.execute("INSERT INTO Dailies VALUES (" + str(ctx.message.author.id) + ',' + "200" + ',' + "86400" + ")")
-            conn.commit()
+            await c.execute("INSERT INTO Dailies VALUES (" + str(ctx.message.author.id) + ',' + "200" + ',' + "86400" + ")")
+            await conn.commit()
             await ctx.send("You got your 200 dialies! :moneybag:\nYou have ₹200")
                 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
@@ -227,12 +232,12 @@ class General:
 
 
 async def dailiesCounter():
-    c.execute("SELECT * from Dailies")
+    await c.execute("SELECT * from Dailies")
     for i in c.fetchall():
         if not int(i[2]) <= 0:
             tempTime = int(i[2]) - 2
-            c.execute("UPDATE Dailies SET secToReset =? WHERE id =?", (str(tempTime), str(i[0]), ))
-            conn.commit()
+            await c.execute("UPDATE Dailies SET secToReset =? WHERE id =?", (str(tempTime), str(i[0]), ))
+            await conn.commit()
     await asyncio.sleep(2)
     await dailiesCounter()
 
