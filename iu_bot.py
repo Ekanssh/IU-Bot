@@ -29,13 +29,25 @@ if creds.access_token_expired:
 
 db = client.open("IU DB").sheet1
 
-conn = await aiopg.connect(database='d1b1qi3p5efneq',
-                           user='ynhburlpfyrfon',
-                           password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8',
-                           host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
+conn = None
+c = None
 
-c = await conn.cursor()
-await c.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
+async def connect():
+    conn = await aiopg.connect(database='d1b1qi3p5efneq',
+                               user='ynhburlpfyrfon',
+                               password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8',
+                               host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
+    c = await conn.cursor()
+    
+async def executeSQLstatement(ctx, statement):
+    global conn
+    global c
+    try:
+        await c.execute(statement)
+    except Exception as e:
+        ctx.send(e)
+
+await executeSQLstatement("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
 
 def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
@@ -76,6 +88,7 @@ async def on_ready():
     bot.add_cog(General())
     bot.add_cog(Admin())
     await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
+    await connect()
     await dailiesCounter() 
 
 
@@ -133,25 +146,25 @@ class General:
     @commands.command(aliases=['daily'])
     async def dailies(self, ctx):
         found = False
-        for i in await c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),)):
+        for i in await executeSQLstatement("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),)):
             if i[0] == str(ctx.message.author.id):
                 found = True
-                await c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
-                currentDaily = int(c.fetchall()[0][1])
-                await c.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
-                secondsRemaining = int(c.fetchall()[0][2])
+                await executeSQLstatement("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
+                currentDaily = int(await c.fetchall()[0][1])
+                await executeSQLstatement("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
+                secondsRemaining = int(await c.fetchall()[0][2])
                 time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
             
                 if secondsRemaining <= 0:                              
                     currentDaily += 200
-                    await c.execute("UPDATE Dailies SET dailiesCount = " + str(currentDaily) + ", secToReset = '86400' WHERE id =" + str(ctx.message.author.id))
+                    await executeSQLstatement("UPDATE Dailies SET dailiesCount = " + str(currentDaily) + ", secToReset = '86400' WHERE id =" + str(ctx.message.author.id))
                     await conn.commit()
                     await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
                 
                 else:
                     await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
         if not found:
-            await c.execute("INSERT INTO Dailies VALUES (" + str(ctx.message.author.id) + ',' + "200" + ',' + "86400" + ")")
+            await executeSQLstatement("INSERT INTO Dailies VALUES (" + str(ctx.message.author.id) + ',' + "200" + ',' + "86400" + ")")
             await conn.commit()
             await ctx.send("You got your 200 dialies! :moneybag:\nYou have ₹200")
                 
@@ -232,11 +245,11 @@ class General:
 
 
 async def dailiesCounter():
-    await c.execute("SELECT * from Dailies")
-    for i in c.fetchall():
+    await executeSQLstatement("SELECT * from Dailies")
+    for i in await c.fetchall():
         if not int(i[2]) <= 0:
             tempTime = int(i[2]) - 2
-            await c.execute("UPDATE Dailies SET secToReset =? WHERE id =?", (str(tempTime), str(i[0]), ))
+            await executeSQLstatement("UPDATE Dailies SET secToReset =? WHERE id =?", (str(tempTime), str(i[0]), ))
             await conn.commit()
     await asyncio.sleep(2)
     await dailiesCounter()
