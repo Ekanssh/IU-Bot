@@ -36,7 +36,7 @@ class aiopg_commands:
                                         user='ynhburlpfyrfon',
                                         password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8',
                                         host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
-        self.cursor = await conn.cursor()
+        self.cursor = await self.conn.cursor()
     async def execute(self, statement):
         await self.cursor.execute(statement)
     
