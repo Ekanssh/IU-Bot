@@ -38,7 +38,7 @@ class aiopg_commands:
                                         host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
         self.cursor = await self.conn.cursor()
         
-    async def execute(self, statement, args = None):
+    async def execute(self, statement, args:tuple = None):
         if args is None:
             await self.cursor.execute(statement)
         else:
