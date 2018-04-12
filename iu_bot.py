@@ -13,6 +13,7 @@ import sqlite3
 import globalvars
 import httplib2
 import threading
+import repl
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
