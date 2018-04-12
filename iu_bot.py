@@ -33,6 +33,8 @@ conn = None
 c = None
 
 async def connect():
+    global conn
+    global c
     conn = await aiopg.connect(database='d1b1qi3p5efneq',
                                user='ynhburlpfyrfon',
                                password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8',
