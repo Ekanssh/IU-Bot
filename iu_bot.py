@@ -168,13 +168,14 @@ class General:
         await ctx.message.delete()
    
     @commands.command()
+    #dont dare to touch this command
     async def bday(self, ctx, bDay):
         try:
             db.find(str(ctx.message.author.id))
             await ctx.message.add_reaction('\u274C')
         except:
             userID = str(ctx.message.author.id)
-            dbt.insert_row([userID, bDay], index=1, value_input_option='RAW')
+            db.insert_row([userID, bDay], index=1, value_input_option='RAW')
             await ctx.message.add_reaction('\u2705')
     
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
