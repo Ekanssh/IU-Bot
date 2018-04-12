@@ -41,13 +41,11 @@ async def connect():
     await executeSQLstatement("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
 
     
-async def executeSQLstatement(ctx, statement):
+async def executeSQLstatement(statement):
     global conn
     global c
-    try:
-        await c.execute(statement)
-    except Exception as e:
-        ctx.send(e)
+    await c.execute(statement)
+    
 
 
 def tdm(td):
