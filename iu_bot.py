@@ -38,7 +38,7 @@ async def connect():
                                password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8',
                                host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
     c = await conn.cursor()
-    await executeSQLstatement("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
+    await c.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
 
     
 async def executeSQLstatement(statement):
