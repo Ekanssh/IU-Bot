@@ -10,7 +10,7 @@ import textwrap
 from contextlib import redirect_stdout
 import io
 
-ownerid = "your id"
+ownerid = [360022804357185537, 315728369369088003, 270898185961078785, 341958485724102668, 371673235395182592, 388984732156690433] #pls add names in the same order. Last: Yash
 
 class REPL:
     def __init__(self, bot):
@@ -34,7 +34,7 @@ class REPL:
 
     @commands.command(pass_context=True, hidden=True, name='exec')
     async def _eval(self, ctx, *, body: str):
-        if ctx.message.author.id != ownerid:
+        if not ctx.message.author.id in ownerid:
             return
         env = {
             'bot': self.bot,
@@ -81,7 +81,7 @@ class REPL:
 
     @commands.command(pass_context=True, hidden=True)
     async def repl(self, ctx):
-        if ctx.message.author.id != ownerid:
+        if not ctx.message.author.id in ownerid:
             return
         msg = ctx.message
 
