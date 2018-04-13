@@ -56,13 +56,14 @@ aio = aiopg_commands()
 def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
 
-
+```
 @bot.event
 async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandOnCooldown):
     await ctx.message.channel.send(":x:Sorry, you are on a cooldown. Try again in " + str(round(int(error.retry_after), 2)) + "s")
   else:
     print(error)
+```
      
 @bot.event
 async def on_member_join(member):
@@ -152,23 +153,25 @@ class General:
     @commands.command(aliases=['daily'])
     async def dailies(self, ctx):
         found = False
-        for i in await aio.execute("SELECT * FROM Dailies WHERE id='" + str(ctx.message.author.id) + "'"):
-            if i[0] == str(ctx.message.author.id):
-                found = True
-                await aio.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
-                currentDaily = int(await aio.get_cursor.fetchall()[0][1])
-                await aio.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
-                secondsRemaining = int(await aio.get_cursor.fetchall()[0][2])
-                time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
+        await aio.execute("SELECT * FROM Dailies WHERE id='" + str(ctx.message.author.id) + "'")
+        for i in await aio.get_cursor.fetchall():
+            if i is not None:
+                if i[0] == str(ctx.message.author.id):
+                    found = True
+                    await aio.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
+                    currentDaily = int(await aio.get_cursor.fetchall()[0][1])
+                    await aio.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
+                    secondsRemaining = int(await aio.get_cursor.fetchall()[0][2])
+                    time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
             
-                if secondsRemaining <= 0:                              
-                    currentDaily += 200
-                    await aio.execute("UPDATE Dailies SET dailiesCount = " + str(currentDaily) + ", secToReset = '86400' WHERE id =" + str(ctx.message.author.id))
-                    await aio.get_conn.commit()
-                    await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
+                    if secondsRemaining <= 0:                              
+                        currentDaily += 200
+                        await aio.execute("UPDATE Dailies SET dailiesCount = " + str(currentDaily) + ", secToReset = '86400' WHERE id =" + str(ctx.message.author.id))
+                        await aio.get_conn.commit()
+                        await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
                 
-                else:
-                    await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
+                    else:
+                        await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
         if not found:
             await aio.execute("INSERT INTO Dailies VALUES (" + str(ctx.message.author.id) + ',' + "200" + ',' + "86400" + ")")
             await aio.get_conn.commit()
