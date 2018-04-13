@@ -14,6 +14,7 @@ import globalvars
 import httplib2
 import threading
 import aiopg
+import logging
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
@@ -49,14 +50,16 @@ aio = aiopg_commands()
 def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
 
-'''
+
 @bot.event
 async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandOnCooldown):
     await ctx.message.channel.send(":x:Sorry, you are on a cooldown. Try again in " + str(round(int(error.retry_after), 2)) + "s")
+  elif isinstance(error, RuntimeError):
+    await dailiesCounter()
   else:
-    print(error)
-'''
+    logging.error(e, exc_info=True)
+
 
 @bot.event
 async def on_ready():
@@ -69,7 +72,7 @@ async def on_ready():
     
     await aio.connect()
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
-    await start_background_tasks(dailiesCounter)
+    await dailiesCounter()
     
      
 @bot.event
@@ -250,18 +253,13 @@ class General:
 
 
 async def dailiesCounter():
-    await bot.wait_until_ready()
-    while not bot.is_closed:
         await aio.execute("SELECT * from Dailies")
         for i in await aio.cursor.fetchall():
             if not int(i[2]) <= 0:
                 tempTime = int(i[2]) - 2
                 await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
         await asyncio.sleep(2)
-
-#add "await start_background_tasks(any_task)" in on_ready event
-async def start_background_tasks(task):
-    await bot.loop.create_task(task()) 
+        await dailiesCounter()
 
 
 bot.run(globalvars.TOKEN)
