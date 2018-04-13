@@ -258,5 +258,5 @@ async def dailiesCounter():
                 await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
         await asyncio.sleep(2)
    
-bot.loop.create_task(dailiesCounter())
+await bot.loop.create_task(dailiesCounter())
 bot.run(globalvars.TOKEN)
