@@ -69,6 +69,7 @@ async def on_ready():
     
     await aio.connect()
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
+    await start_background_tasks(dailiesCounter)
     
      
 @bot.event
@@ -257,6 +258,10 @@ async def dailiesCounter():
                 tempTime = int(i[2]) - 2
                 await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
         await asyncio.sleep(2)
-   
-await bot.loop.create_task(dailiesCounter())
+
+#add "await start_background_tasks(any_task)" in on_ready event
+async def start_background_tasks(task):
+    await bot.loop.create_task(task()) 
+
+
 bot.run(globalvars.TOKEN)
