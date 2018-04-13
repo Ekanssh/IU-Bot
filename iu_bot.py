@@ -152,7 +152,7 @@ class General:
     @commands.command(aliases=['daily'])
     async def dailies(self, ctx):
         found = False
-        for i in await aio.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),)):
+        for i in await aio.execute("SELECT * FROM Dailies WHERE id=" + str(ctx.message.author.id)):
             if i[0] == str(ctx.message.author.id):
                 found = True
                 await aio.execute("SELECT * FROM Dailies WHERE id=?", (str(ctx.message.author.id),))
