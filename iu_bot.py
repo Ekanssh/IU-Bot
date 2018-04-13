@@ -152,9 +152,9 @@ class General:
                 if i[0] == str(ctx.message.author.id):
                     found = True
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
-                    currentDaily = int(await aio.get_cursor.fetchall()[0][1])
+                    currentDaily = int(await aio.cursor.fetchall()[0][1])
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
-                    secondsRemaining = int(await aio.get_cursor.fetchall()[0][2])
+                    secondsRemaining = int(await aio.cursor.fetchall()[0][2])
                     time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
             
                     if secondsRemaining <= 0:                              
