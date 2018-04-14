@@ -33,20 +33,20 @@ db = client.open("IU DB").sheet1
 
 class aiopg_commands:
     async def connect(self):
-        self.conn = await aiopg.connect(database='d1b1qi3p5efneq',
+        conn = await aiopg.connect(database='d1b1qi3p5efneq',
                                         user='ynhburlpfyrfon',
                                         password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8',
                                         host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
-        self.cursor = await self.conn.cursor()
+        cursor = await conn.cursor()
+        
+        self.cursor = cursor
+        self.conn = conn
         
     async def execute(self, statement, args:tuple = None):
         if args is None:
             await self.cursor.execute(statement)
         else:
             await self.cursor.execute(statement, args)
-    @property
-    def cursor(self):
-        return self.cursor
   
 aio = aiopg_commands()
 
