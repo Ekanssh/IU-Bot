@@ -77,6 +77,7 @@ async def on_command_error(ctx, error):
 async def on_ready():
     
     await aio.connect()
+    connected_to_db = True
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
     print('Ready!')
     bot.load_extension("repl")
@@ -265,7 +266,6 @@ class General:
 
 
 async def dailiesCounter():
-    await bot.wait_until_ready()
     while not bot.is_closed():
         await aio.execute("SELECT * from Dailies")
         for i in await aio.cursor.fetchall():
