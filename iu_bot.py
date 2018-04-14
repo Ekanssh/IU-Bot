@@ -273,6 +273,8 @@ async def dailiesCounter():
             await asyncio.sleep(2)
     except AttributeError:
         pass
+    except Exception as e:
+        logging.error(e, exc_info=True)
         
 
 
