@@ -33,23 +33,26 @@ db = client.open("IU DB").sheet1
 
 class aiopg_commands:
     async def connect(self):
-        conn = await aiopg.connect(database='d1b1qi3p5efneq',
-                                        user='ynhburlpfyrfon',
-                                        password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8',
-                                        host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
-        cursor = await conn.cursor()
+        self.conn = await aiopg.connect(database='d1b1qi3p5efneq',
+                                   user='ynhburlpfyrfon',
+                                   password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8',
+                                   ost='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
+        self.cursor = conn.cursor()
         
-        self.cursor = cursor
-        self.conn = conn
-    
     async def execute(self, statement, args:tuple = None):
         if args is None:
             await self.cursor.execute(statement)
         else:
             await self.cursor.execute(statement, args)
+            
+    @property
+    def get_conn(self):
+        return self.conn
+    @property 
+    def get_cursor(self):
+        return self.cursor
   
 aio = aiopg_commands()
-ready_to_edit_db = False
 
 def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
@@ -158,14 +161,14 @@ class General:
     async def dailies(self, ctx):
         found = False
         await aio.execute("SELECT * FROM Dailies WHERE id=(%s)", (str(ctx.message.author.id), ))
-        for i in await aio.cursor.fetchall():
+        for i in await aio.get_cursor.fetchall():
             if i is not None:
                 if i[0] == str(ctx.message.author.id):
                     found = True
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
-                    currentDaily = int((await aio.cursor.fetchall())[0][1])
+                    currentDaily = int((await aio.get_cursor.fetchall())[0][1])
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
-                    secondsRemaining = int((await aio.cursor.fetchall())[0][2])
+                    secondsRemaining = int((await aio.get_cursor.fetchall())[0][2])
                     time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
             
                     if secondsRemaining <= 0:                              
@@ -260,7 +263,7 @@ async def dailiesCounter():
     if ready_to_edit_db:
         while not bot.is_closed():
             await aio.execute("SELECT * from Dailies")
-            for i in await aio.cursor.fetchall():
+            for i in await aio.get_cursor.fetchall():
                 if not int(i[2]) <= 0:
                     tempTime = int(i[2]) - 2
                     await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
