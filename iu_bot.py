@@ -64,7 +64,7 @@ async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandOnCooldown):
     await ctx.message.channel.send(":x:Sorry, you are on a cooldown. Try again in " + str(round(int(error.retry_after), 2)) + "s")
   else:
-    logging.error(e, exc_info=True)
+    logging.error(error, exc_info=True)
 
 
 @bot.event
