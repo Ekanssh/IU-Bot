@@ -53,10 +53,9 @@ def tdm(td):
 
 @bot.event
 async def on_command_error(ctx, error):
+
   if isinstance(error, commands.CommandOnCooldown):
     await ctx.message.channel.send(":x:Sorry, you are on a cooldown. Try again in " + str(round(int(error.retry_after), 2)) + "s")
-  elif isinstance(error, RuntimeError):
-    await dailiesCounter()
   else:
     logging.error(e, exc_info=True)
 
@@ -72,7 +71,6 @@ async def on_ready():
     
     await aio.connect()
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
-    await dailiesCounter()
     
      
 @bot.event
@@ -253,23 +251,17 @@ class General:
 
 
 async def dailiesCounter():
+    await bot.wait_until_ready()
+    while not bot.is_closed():
         await aio.execute("SELECT * from Dailies")
         for i in await aio.cursor.fetchall():
             if not int(i[2]) <= 0:
                 tempTime = int(i[2]) - 2
                 await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
         await asyncio.sleep(2)
-        await dailiesCounter()
         
-async def my_background_task():
-    await bot.wait_until_ready()
-    counter = 0
-    channel = bot.get_channel(429616630054780928)
-    while not bot.is_closed:
-        counter += 5
-        await channel.send(counter)
-        await asyncio.sleep(5) 
+        
 
 
-bot.loop.create_task(my_background_task())
+bot.loop.create_task(dailiesCounter())
 bot.run(globalvars.TOKEN)
