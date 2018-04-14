@@ -30,7 +30,6 @@ if creds.access_token_expired:
 
 db = client.open("IU DB").sheet1
 
-connected_to_db = False
 class aiopg_commands:
     def __init__(self):
         self.conn = None
@@ -42,7 +41,6 @@ class aiopg_commands:
                                    password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8',
                                    host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
         self.cursor = await self.conn.cursor()
-        connected_to_db = True
         
     async def execute(self, statement, args:tuple = None):
         if args is None:
@@ -66,7 +64,6 @@ def tdm(td):
 
 @bot.event
 async def on_command_error(ctx, error):
-
   if isinstance(error, commands.CommandOnCooldown):
     await ctx.message.channel.send(":x:Sorry, you are on a cooldown. Try again in " + str(round(int(error.retry_after), 2)) + "s")
   else:
@@ -77,7 +74,6 @@ async def on_command_error(ctx, error):
 async def on_ready():
     
     await aio.connect()
-    connected_to_db = True
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
     print('Ready!')
     bot.load_extension("repl")
@@ -266,16 +262,19 @@ class General:
 
 
 async def dailiesCounter():
-    while not bot.is_closed():
-        await aio.execute("SELECT * from Dailies")
-        for i in await aio.cursor.fetchall():
-            if not int(i[2]) <= 0:
-                tempTime = int(i[2]) - 2
-                await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
-        await asyncio.sleep(2)
-        
+    await bot.wait_until_ready()
+    try:
+        while not bot.is_closed():
+            await aio.execute("SELECT * from Dailies")
+            for i in await aio.cursor.fetchall():
+                if not int(i[2]) <= 0:
+                    tempTime = int(i[2]) - 2
+                    await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
+            await asyncio.sleep(2)
+    except AttributeError:
+        pass
         
 
-if connected_to_db:
-    bot.loop.create_task(dailiesCounter())
+
+bot.loop.create_task(dailiesCounter())
 bot.run(globalvars.TOKEN)
