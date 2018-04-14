@@ -44,6 +44,9 @@ class aiopg_commands:
             await self.cursor.execute(statement)
         else:
             await self.cursor.execute(statement, args)
+    @property
+    def cursor(self):
+        return self.cursor
   
 aio = aiopg_commands()
 
