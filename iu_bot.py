@@ -264,11 +264,11 @@ async def dailiesCounter():
 async def my_background_task():
     await bot.wait_until_ready()
     counter = 0
-    channel = discord.Object(id='429616630054780928')
+    channel = bot.get_channel(429616630054780928)
     while not bot.is_closed:
         counter += 5
         await channel.send(counter)
-        await asyncio.sleep(5) # task runs every 60 seconds
+        await asyncio.sleep(5) 
 
 
 bot.loop.create_task(my_background_task())
