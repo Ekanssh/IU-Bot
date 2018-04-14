@@ -36,7 +36,7 @@ class aiopg_commands:
         self.conn = await aiopg.connect(database='d1b1qi3p5efneq',
                                    user='ynhburlpfyrfon',
                                    password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8',
-                                   ost='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
+                                   host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
         self.cursor = conn.cursor()
         
     async def execute(self, statement, args:tuple = None):
@@ -260,7 +260,6 @@ class General:
 
 async def dailiesCounter():
     await bot.wait_until_ready()
-    if ready_to_edit_db:
         while not bot.is_closed():
             await aio.execute("SELECT * from Dailies")
             for i in await aio.get_cursor.fetchall():
