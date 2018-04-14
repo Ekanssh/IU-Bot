@@ -41,7 +41,7 @@ class aiopg_commands:
         
         self.cursor = cursor
         self.conn = conn
-        
+    
     async def execute(self, statement, args:tuple = None):
         if args is None:
             await self.cursor.execute(statement)
@@ -49,6 +49,7 @@ class aiopg_commands:
             await self.cursor.execute(statement, args)
   
 aio = aiopg_commands()
+ready_to_edit_db = False
 
 def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
@@ -73,6 +74,7 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
     
     await aio.connect()
+    ready_to_edit_db = True
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
     
      
@@ -255,13 +257,14 @@ class General:
 
 async def dailiesCounter():
     await bot.wait_until_ready()
-    while not bot.is_closed():
-        await aio.execute("SELECT * from Dailies")
-        for i in await aio.cursor.fetchall():
-            if not int(i[2]) <= 0:
-                tempTime = int(i[2]) - 2
-                await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
-        await asyncio.sleep(2)
+    if ready_to_edit_db:
+        while not bot.is_closed():
+            await aio.execute("SELECT * from Dailies")
+            for i in await aio.cursor.fetchall():
+                if not int(i[2]) <= 0:
+                    tempTime = int(i[2]) - 2
+                    await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
+            await asyncio.sleep(2)
         
         
 
