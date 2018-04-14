@@ -260,13 +260,13 @@ class General:
 
 async def dailiesCounter():
     await bot.wait_until_ready()
-        while not bot.is_closed():
-            await aio.execute("SELECT * from Dailies")
-            for i in await aio.get_cursor.fetchall():
-                if not int(i[2]) <= 0:
-                    tempTime = int(i[2]) - 2
-                    await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
-            await asyncio.sleep(2)
+    while not bot.is_closed():
+        await aio.execute("SELECT * from Dailies")
+        for i in await aio.get_cursor.fetchall():
+            if not int(i[2]) <= 0:
+                tempTime = int(i[2]) - 2
+                await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
+        await asyncio.sleep(2)
         
         
 
