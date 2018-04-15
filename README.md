@@ -6,15 +6,15 @@ If you can see this text then congrats 🎉 you're officially a collaborator !
 I hope to see your contributions! :)
 
 # Quick start
-
-# Contact
+Better make updates else I will sack you.
 
 # TODO
 
-- [ ] this
-- [ ] this
+- [ ] #count-past-infinity
+- [ ] #bday
+- [ ] welcoming
 
 # Commands
-*
-*
-*
+* nothing as of
+* now
+* kken
