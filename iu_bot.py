@@ -18,7 +18,7 @@ import logging
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
-bot = commands.Bot(description='The offical bot overwatching Indians United.', command_prefix=['iu_', 'iu ', 'IU ', 'IU_', 'Iu '])
+bot = commands.Bot(description='The offical bot overwatching Indians United.', command_prefix=['iu_', 'iu ', 'IU ', 'IU_', 'Iu ','Iu_'])
 
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
@@ -68,7 +68,7 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_ready():
-    print('Ready!')
+    await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID).send("Bot has loaded!")
     bot.load_extension("repl")
     bot.add_cog(General())
     bot.add_cog(Admin())
