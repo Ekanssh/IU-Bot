@@ -31,10 +31,6 @@ if creds.access_token_expired:
 db = client.open("IU DB").sheet1
 
 class aiopg_commands:
-    def __init__(self):
-        self.conn = None
-        self.cursor = None
-        
     async def connect(self):
         self.conn = await aiopg.connect(database='d1b1qi3p5efneq',
                                    user='ynhburlpfyrfon',
@@ -72,9 +68,6 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_ready():
-    
-    await aio.connect()
-    await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
     print('Ready!')
     bot.load_extension("repl")
     bot.add_cog(General())
@@ -263,7 +256,9 @@ class General:
 
 async def dailiesCounter():
     await bot.wait_until_ready()
-    try:
+    
+        await aio.connect()
+        await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
         while not bot.is_closed():
             await aio.execute("SELECT * from Dailies")
             for i in await aio.cursor.fetchall():
@@ -271,11 +266,7 @@ async def dailiesCounter():
                     tempTime = int(i[2]) - 2
                     await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
             await asyncio.sleep(2)
-    except AttributeError:
-        pass
-    except Exception as e:
-        logging.error(e, exc_info=True)
-        
+    
 
 
 bot.loop.create_task(dailiesCounter())
