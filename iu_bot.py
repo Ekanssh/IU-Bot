@@ -61,7 +61,7 @@ def tdm(td):
 @bot.event
 async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandOnCooldown):
-    await ctx.message.channel.send(":x:Sorry, you are on a cooldown. Try again in " + str(round(int(error.retry_after), 2)) + "s")
+    await ctx.message.channel.send(":x: | Sorry, you are on a cooldown. Try again in " + str(round(int(error.retry_after), 2)) + "s")
   else:
     logging.error(error, exc_info=True)
 
@@ -245,13 +245,38 @@ class Economy:
                     if secondsRemaining <= 0:                              
                         currentDaily += 200
                         await aio.execute("UPDATE Dailies SET dailiesCount = %s, secToReset = '86400' WHERE id = %s", (str(currentDaily), str(ctx.message.author.id), ))
-                        await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
+                        await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
                 
                     else:
                         await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
         if not found:
             await aio.execute("INSERT INTO Dailies VALUES (%s, '200', '86400')", (str(ctx.message.author.id), ))
-            await ctx.send("You got your 200 dialies! :moneybag:\nYou have ₹200"), 
+            await ctx.send(":moneybag: | You got your 200 dialies!\nYou have ₹200")
+            
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
+    @commands.command()
+    async def credits(self, ctx, otherMem: discord.Member = None):
+        found_in_db = False
+        if otherMem is None:
+            await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
+            for i in await aio.cursor.fetchall():
+                if i is not None:
+                    if i[0] == str(ctx.message.author.id):
+                        found_in_db = True
+                        await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))                       
+                        await ctx.send(":moneybag: | You currently have ₹{0}".format((await aio.cursor.fetchall())[0][1]))
+            if not found_in_db:
+                await ctx.send(":moneybag: | You currently have ₹0")
+        else:
+            await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(otherMem.id),))
+            for i in await aio.cursor.fetchall():
+                if i is not None:
+                    if i[0] == str(otherMem.id):
+                        found_in_db = True
+                        await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(otherMem.id),))                       
+                        await ctx.send(":moneybag: | {0} currently has ₹{1}".format(otherMem.name, (await aio.cursor.fetchall())[0][1]))
+            if not found_in_db:
+                await ctx.send(":moneybag: | You currently have ₹0")
     
 async def dailiesCounter():
     await bot.wait_until_ready()
