@@ -68,7 +68,7 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_ready():
-    await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID).send(f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+"Bot has loaded!")
+    await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID).send("Bot load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+":D")
     bot.load_extension("repl")
     bot.add_cog(General())
     bot.add_cog(Admin())
