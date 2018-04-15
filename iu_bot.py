@@ -276,7 +276,7 @@ class Economy:
                         await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(otherMem.id),))                       
                         await ctx.send(":moneybag: | {0} currently has ₹{1}".format(otherMem.name, (await aio.cursor.fetchall())[0][1]))
             if not found_in_db:
-                await ctx.send(":moneybag: | You currently have ₹0")
+                await ctx.send(":moneybag: | {0} currently has ₹0".format(otherMem.name))
     
 async def dailiesCounter():
     await bot.wait_until_ready()
