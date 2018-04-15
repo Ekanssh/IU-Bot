@@ -72,10 +72,8 @@ async def on_ready():
     bot.load_extension("repl")
     bot.add_cog(General())
     bot.add_cog(Admin())
+    bot.add_cog(Economy())
     await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
-    
-    
-    
      
 @bot.event
 async def on_member_join(member):
