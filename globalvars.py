@@ -4,6 +4,7 @@ welcomeID = 429618676875001856
 rulesID = 429618590061297664
 iuID = 281793428793196544
 logID = 430752769146617866
+devServerID = 381052278708240385
 
 welcomeName = 'welcome-good_bye'
 leaveName = 'welcome-good_bye'
