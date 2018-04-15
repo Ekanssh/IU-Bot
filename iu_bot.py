@@ -77,15 +77,15 @@ async def on_ready():
      
 @bot.event
 async def on_member_join(member):
-    for channel in member.guild.channels:
-        if channel.name == globalvars.welcomeName:
-            await channel.send('Welcome to IU United, '+member.mention+'! Please enjoy your time here and hope you check #rules! :)')
+    if "Indians" in member.guild.name:
+        channel = bot.get_channel(429618676875001856)
+        await channel.send('Welcome to IU United, '+member.mention+'! Please enjoy your time here and hope you check #rules! :)')
 
 @bot.event
 async def on_member_remove(member):
-    for channel in member.guild.channels:
-        if channel.name == globalvars.leaveName:
-            await channel.send('We are feeling bad to see you leaving %s!' %(member.name))
+    if "Indians" in member.guild.name:
+        channel = bot.get_channel(429618676875001856)
+        await channel.send('We are feeling bad to see you leaving %s!' %(member.name))
 
 @bot.event
 async def on_message(ctx):
