@@ -152,31 +152,6 @@ class Admin:
 class General:
     '''General commands'''
     
-    @commands.cooldown(rate=1, per=15, type=commands.BucketType.user)
-    @commands.command(aliases=['daily'])
-    async def dailies(self, ctx):
-        found = False
-        await aio.execute("SELECT * FROM Dailies WHERE id=(%s)", (str(ctx.message.author.id), ))
-        for i in await aio.cursor.fetchall():
-            if i is not None:
-                if i[0] == str(ctx.message.author.id):
-                    found = True
-                    await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
-                    currentDaily = int((await aio.cursor.fetchall())[0][1])
-                    await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
-                    secondsRemaining = int((await aio.cursor.fetchall())[0][2])
-                    time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
-            
-                    if secondsRemaining <= 0:                              
-                        currentDaily += 200
-                        await aio.execute("UPDATE Dailies SET dailiesCount = %s, secToReset = '86400' WHERE id = %s", (str(currentDaily), str(ctx.message.author.id), ))
-                        await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
-                
-                    else:
-                        await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
-        if not found:
-            await aio.execute("INSERT INTO Dailies VALUES (%s, '200', '86400')", (str(ctx.message.author.id), ))
-            await ctx.send("You got your 200 dialies! :moneybag:\nYou have ₹200")
                 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
@@ -253,7 +228,33 @@ class General:
                 res = 'You won'
         return await ctx.send('**Bot**: %s\n**You**: %s\n%s'%(guess, value, res))
 
-
+class Economy:
+    @commands.cooldown(rate=1, per=15, type=commands.BucketType.user)
+    @commands.command(aliases=['daily'])
+    async def dailies(self, ctx):
+        found = False
+        await aio.execute("SELECT * FROM Dailies WHERE id=(%s)", (str(ctx.message.author.id), ))
+        for i in await aio.cursor.fetchall():
+            if i is not None:
+                if i[0] == str(ctx.message.author.id):
+                    found = True
+                    await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
+                    currentDaily = int((await aio.cursor.fetchall())[0][1])
+                    await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
+                    secondsRemaining = int((await aio.cursor.fetchall())[0][2])
+                    time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
+            
+                    if secondsRemaining <= 0:                              
+                        currentDaily += 200
+                        await aio.execute("UPDATE Dailies SET dailiesCount = %s, secToReset = '86400' WHERE id = %s", (str(currentDaily), str(ctx.message.author.id), ))
+                        await ctx.send("You got your 200 dialies! :moneybag:\n You have ₹{}".format(currentDaily))
+                
+                    else:
+                        await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
+        if not found:
+            await aio.execute("INSERT INTO Dailies VALUES (%s, '200', '86400')", (str(ctx.message.author.id), ))
+            await ctx.send("You got your 200 dialies! :moneybag:\nYou have ₹200"), 
+    
 async def dailiesCounter():
     await bot.wait_until_ready()
     await aio.connect()
