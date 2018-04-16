@@ -14,7 +14,7 @@ import globalvars
 import httplib2
 import threading
 import aiopg
-import logging
+import logging, signal
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
@@ -282,6 +282,7 @@ async def dailiesCounter():
     await bot.wait_until_ready()
     await aio.connect()
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
+    killer = GracefulKiller()
     while not bot.is_closed():
         await aio.execute("SELECT * from Dailies")
         for i in await aio.cursor.fetchall():
@@ -289,8 +290,24 @@ async def dailiesCounter():
                 tempTime = int(i[2]) - 2
                 await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
         await asyncio.sleep(2)
+        if killer.kill_now: 
+            await aio.cursor.close()
+            await aio.conn.close()
+            dailies_task.cancel()
+            break
+            
+        
+class GracefulKiller:
+  kill_now = False
+  def __init__(self):
+    signal.signal(signal.SIGINT, self.exit_gracefully)
+    signal.signal(signal.SIGTERM, self.exit_gracefully)
+    signal.signal(signal.SIGKILL, self.exit_gracefully)
+
+  def exit_gracefully(self,signum, frame):
+    self.kill_now = True
     
 
 
-bot.loop.create_task(dailiesCounter())
+dailies_task = bot.loop.create_task(dailiesCounter())
 bot.run(globalvars.TOKEN)
