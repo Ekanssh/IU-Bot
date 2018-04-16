@@ -283,8 +283,9 @@ async def dailiesCounter():
     await bot.wait_until_ready()
     await aio.connect()
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
-    killer = GracefulKiller()
+    
     while not bot.is_closed():
+        killer = GracefulKiller()
         await aio.execute("SELECT * from Dailies")
         for i in await aio.cursor.fetchall():
             if not int(i[2]) <= 0:
