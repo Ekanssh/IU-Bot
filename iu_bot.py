@@ -285,7 +285,6 @@ async def dailiesCounter():
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
     
     while not bot.is_closed():
-        killer = GracefulKiller()
         await aio.execute("SELECT * from Dailies")
         for i in await aio.cursor.fetchall():
             if not int(i[2]) <= 0:
@@ -302,20 +301,6 @@ class Miscellaneous:
         await bot.get_guild(381052278708240385).get_channel(435375286385770497).send(embed=discord.Embed(color=eval(hex(ctx.author.color.value)),title=author,description="#"+ctx.channel.name+":\n"+message))
         await ctx.message.add_reaction('\u2705')
         
-class GracefulKiller:
-  kill_now = False
-  def __init__(self):
-    signal.signal(signal.SIGINT, self.exit_gracefully)
-    signal.signal(signal.SIGTERM, self.exit_gracefully)
-    signal.signal(signal.SIGKILL, self.exit_gracefully)
 
-  async def exit_gracefully(self,signum, frame):
-    await aio.cursor.close()
-    await aio.conn.close()
-    dailies_task.cancel()
-    self.kill_now = True
-    
-
-
-dailies_task = bot.loop.create_task(dailiesCounter())
+bot.loop.create_task(dailiesCounter())
 bot.run(globalvars.TOKEN)
