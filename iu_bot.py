@@ -292,11 +292,7 @@ async def dailiesCounter():
                 tempTime = int(i[2]) - 2
                 await aio.execute("UPDATE Dailies SET secToReset = %s WHERE id = %s", (str(tempTime), str(i[0]), ))
         await asyncio.sleep(2)
-        if killer.kill_now: 
-            await aio.cursor.close()
-            await aio.conn.close()
-            dailies_task.cancel()
-            break
+            
             
 class Miscellaneous:
     @commands.command(aliases=['fb'])
@@ -313,7 +309,10 @@ class GracefulKiller:
     signal.signal(signal.SIGTERM, self.exit_gracefully)
     signal.signal(signal.SIGKILL, self.exit_gracefully)
 
-  def exit_gracefully(self,signum, frame):
+  async def exit_gracefully(self,signum, frame):
+    await aio.cursor.close()
+    await aio.conn.close()
+    dailies_task.cancel()
     self.kill_now = True
     
 
