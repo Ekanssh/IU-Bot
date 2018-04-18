@@ -89,7 +89,7 @@ async def on_message(ctx):
                 await ctx.delete_message(ctx)
                 
     await aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
-    if len((await aio.cursor.fetchall())[0]) > 0:
+    if len(await aio.cursor.fetchall()) > 0:
         await aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
         xp = (await aio.cursor.fetchall())[0][6]
         await aio.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 5, ctx.author.id, ))
