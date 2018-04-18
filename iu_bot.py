@@ -214,7 +214,7 @@ class General:
                     d.rectangle([135, 400, 480, 490])
                     d.text(text = note, xy = (145, 405), font = note_font)
                     back.save(str(mem.name) + '.png')
-                    await ctx.send(file = discord.File(str(mem.name) + '.png')
+                    await ctx.send(file = discord.File(str(mem.name) + '.png'))
                     os.remove(str(mem.name) + '.png')
                     os.remove('TEMPava.png')
       
