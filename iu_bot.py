@@ -370,7 +370,7 @@ async def dailiesCounter():
     await bot.wait_until_ready()
     await aio.connect()
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id TEXT, dailiesCount TEXT, secToReset TEXT)")
-    await aio.execute("CREATE TABLE IF NOT EXISTS profile(id INT, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT)")
+    await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT)")
     while not bot.is_closed():
         await aio.execute("SELECT * from Dailies")
         for i in await aio.cursor.fetchall():
