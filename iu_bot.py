@@ -88,19 +88,19 @@ async def on_message(ctx):
             if chr in str(ctx.content):
                 await ctx.delete_message(ctx)
                 
-    await aio.execute("SELECT * FROM profile WHERE id=(%s)", (ctx.message.author.id, ))
+    await aio.execute("SELECT * FROM profile WHERE id=(%s)", (ctx.author.id, ))
     if len((await aio.cursor.fetchall())[0]) > 0:
-        await aio.execute("SELECT * FROM profile WHERE id=(%s)", (ctx.message.author.id, ))
+        await aio.execute("SELECT * FROM profile WHERE id=(%s)", (ctx.author.id, ))
         xp = (await aio.cursor.fetchall())[0][6]
-        await aio.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 5, ctx.message.author, ))
+        await aio.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 5, ctx.author.id, ))
         
-        await aio.execute("SELECT * FROM profile WHERE id=(%s)", (ctx.message.author.id, ))
+        await aio.execute("SELECT * FROM profile WHERE id=(%s)", (ctx.author.id, ))
         level = (await aio.cursor.fetchall())[0][4]
         if xp % 100 == 0:
-            await aio.execute("UPDATE profile SET level = %s WHERE id = %s", (level + 1, ctx.message.author, ))
-            await ctx.channel.send("Congratulations, " + ctx.message.author.mention + "you advanced to level {}".format(level + 1))
+            await aio.execute("UPDATE profile SET level = %s WHERE id = %s", (level + 1, ctx.author.id, ))
+            await ctx.channel.send("Congratulations, " + ctx.author.mention + "you advanced to level {}".format(level + 1))
     else:
-        await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s)", (ctx.message.author.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', ))
+        await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s)", (ctx.author.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', ))
 
     await bot.process_commands(ctx)
 
