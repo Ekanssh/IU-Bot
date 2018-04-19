@@ -12,13 +12,16 @@ class Paginator:
 
 
     async def paginate(self, list_to_paginate: list):
+        c = await self.bot.get_context(self.message)
         emoji_list = "\u23EA \u25C0 \u23F9 \u25B6 \u23E9 \U0001f522 \u2139".split()
-        await self.bot.edit_message(self.message, '** **')
+        await self.message.edit(content = '** **')
         for i in emoji_list:
-            await self.bot.add_reaction(self.message, i)
+            await self.message.add_reaction(i)
             await asyncio.sleep(0.3)
+        def check(reaction, user):
+            return user == self.user and reaction.emoji in emoji_list
         while True:
-            r = await self.bot.wait_for_reaction(emoji_list, user = self.user)
+            r, u = await self.bot.wait_for('reaction_add', check = check)
             
             if r.reaction.emoji == emoji_list[0]:
                 self.index = 0
@@ -30,7 +33,7 @@ class Paginator:
                     self.index = 0
 
             elif r.reaction.emoji == emoji_list[2]:
-                await self.bot.delete_message(self.message)
+                await self.message.delete()
                 break
 
             elif r.reaction.emoji == emoji_list[3]:
@@ -43,43 +46,48 @@ class Paginator:
                 self.index = len(list_to_paginate) - 2
 
             elif r.reaction.emoji == emoji_list[5]:
-                bot_msg = await self.bot.say("Choose a number between 0 to {} to move to that page.".format(len(list_to_paginate)))
-                msg = await self.bot.wait_for_message(timeout = 10, author = self.user)
-                await self.bot.delete_message(bot_msg)
+                bot_msg = await c.send("Choose a number between 0 to {} to move to that page.".format(len(list_to_paginate)))
+                def check_msg(message):
+                    return message.author == self.user                    
+                msg = await self.bot.wait_for('message', timeout = 10, check = check_msg)
+                await msg.delete()
 
                 if msg is not None:
                     try:
                         msg_index = int(msg.content)- 1
                         if not msg_index > 0 and msg_index < len(list_to_paginate):
-                            bot_msg = await self.bot.say("Wrong input. Choose a number between 0 to {} to move to that page.".format(len(list_to_paginate)))
+                            bot_msg = await c.send("Wrong input. Choose a number between 0 to {} to move to that page.".format(len(list_to_paginate)))
                             await asyncio.sleep(4)
-                            await self.bot.delete_message(bot_msg)
+                            await bot_msg.delete()
                             
                         else:
                             self.index = msg_index 
 
                     except ValueError:
-                        bot_msg = await self.bot.say("Wrong input. Choose a number between 0 to {} to move to that page.".format(len(list_to_paginate)))
+                        bot_msg = await c.send("Wrong input. Choose a number between 0 to {} to move to that page.".format(len(list_to_paginate)))
                         await asyncio.sleep(4)
-                        await self.bot.delete_message(bot_msg)
+                        await bot_msg.delete()
                     
                     try:
-                        await self.bot.delete_message(msg)
+                        await msg.delete()
                     except:
                         pass
 
                 else: 
-                    await self.bot.say("You did not chose a number :<\nI got bored")
+                    await c.send("You did not chose a number :<\nI got bored")
 
 
             elif r.reaction.emoji == emoji_list[6]:
                 self.index = len(list_to_paginate) - 1
 
             try:
-                await self.bot.remove_reaction(self.message, r.reaction.emoji, self.user)
+                await self.message.remove_reaction(r.reaction.emoji, self.user)
             except:
                 pass
             
             #edit message everytime
-            await self.bot.edit_message(self.message, embed = list_to_paginate[self.index], new_content = '')
+            if isinstance(embed_list[self.index], discord.Embed):
+                await self.message.edit(new_content = '', embed = embed_list[self.index])
+            else:
+                await self.message.edit(new_content = embed_list[self.index])
 
