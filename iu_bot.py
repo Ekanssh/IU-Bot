@@ -16,6 +16,7 @@ import threading
 import aiopg
 import logging, signal
 from PIL import Image, ImageFont, ImageDraw
+from Paginator import Paginator
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
@@ -206,9 +207,10 @@ class General:
       
                   d = ImageDraw.Draw(back)
                   d.rectangle([0, 160, 110, 270], fill = (255, 255, 255))
-                  async with aiohttp.ClientSession().get(mem.avatar_url) as r:
-                      with open("TEMPava.png", 'wb') as ava:
-                          ava.write(await r.read())
+                  async with aiohttp.ClientSession() as cs
+                      async with cs.get(mem.avatar_url) as r:
+                          with open("TEMPava.png", 'wb') as ava:
+                              ava.write(await r.read())
                   avatar = Image.open("TEMPava.png")
                   avatar = avatar.resize((100, 100))
                   back.paste(avatar, (5, 165))    
@@ -254,7 +256,44 @@ class General:
          elif option == "reset":
              await aio.execute("UPDATE profile SET note = %s WHERE id = %s", ('I am imperfectly perfect...', ctx.message.author.id, ))  
              await ctx.send("Your profile's note has been reset to:\n" + '```I am imperfectly perfect...```')
-                                   
+            
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
+    @commands.command()
+    async def top(self, ctx):
+        '''Check who tops the local server's Scoreboard'''
+        msg = await bot.say("*Please wait for the help message to load*")
+        page_index = 1
+        embed_list = []
+        profile_list = []
+        aio.execute("SELECT id, xp FROM profile")
+        rows_count = len(aio.cursor.fetchall())
+        row_index = 1
+        for i in range (1, rows_count, 10):
+            await aio.execute("SELECT id, xp FROM profile LIMIT %s, %s ORDER BY xp", (i, 10))
+            em = discord.Embed(title = "Scoreboard for " + ctx.guild.name, 
+                                    color = 0x00FFFF,
+                                    description = '')
+            for l in await aio.cursor.fetchall():
+                profile_list.append(l)
+                name = (await bot.get_user_info(l[0])).name
+                em.description += name + ' ' * (29 - len(name)) + ':: ' + str(l[1]) + '\n'
+                if l[0] == ctx.message.author.id:
+                    em.description += "\n\nYour position in " + ctx.guild.name + " is " + str(row_index)
+                row_index += 1                 
+            em.set_footer(text="Page {0} of {1}".format(page_index, int(rows_count/10)))
+            page_index += 1
+            embed_list.append(em)
+            
+            
+        info_embed = discord.Embed(title = "Help Info", 
+                                   description = "\u23EA:  Go to the first page\n\u25C0:  Go to the previous page\n\u23F9:  Stop the help command\n\u25B6:  Go to the next page\n\u23E9:  Go to the last page\n\U0001f522:  Asks for a page number\n\u2139:  Shows this info", 
+                                   colour = 0x2279DE)  
+        embed_list.append(info_embed)
+        await bot.edit_message(msg, embed = embed_list[0])
+        pa = Paginator(bot, msg, ctx.message.author, 0)
+        await pa.paginate(embed_list)
+        
+        
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def ping(self, ctx):
