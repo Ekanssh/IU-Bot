@@ -207,7 +207,7 @@ class General:
       
                   d = ImageDraw.Draw(back)
                   d.rectangle([0, 160, 110, 270], fill = (255, 255, 255))
-                  async with aiohttp.ClientSession() as cs
+                  async with aiohttp.ClientSession() as cs:
                       async with cs.get(mem.avatar_url) as r:
                           with open("TEMPava.png", 'wb') as ava:
                               ava.write(await r.read())
