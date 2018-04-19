@@ -266,7 +266,7 @@ class General:
         embed_list = []
         profile_list = []
         aio.execute("SELECT id, xp FROM profile")
-        rows_count = len(aio.cursor.fetchall())
+        rows_count = len(await aio.cursor.fetchall())
         row_index = 1
         for i in range (1, rows_count, 10):
             await aio.execute("SELECT id, xp FROM profile LIMIT %s, %s ORDER BY xp", (i, 10))
