@@ -268,8 +268,8 @@ class General:
         await aio.execute("SELECT id, xp FROM profile")
         rows_count = len(await aio.cursor.fetchall())
         row_index = 1
-        for i in range (1, rows_count, 10):
-            await aio.execute("SELECT id, xp FROM profile LIMIT %s, %s ORDER BY xp", (i, 10))
+        for i in range (10, rows_count, 10):
+            await aio.execute("SELECT id, xp FROM profile ORDER BY xp LIMIT %s OFFSET %s", (i, i-10))
             em = discord.Embed(title = "Scoreboard for " + ctx.guild.name, 
                                     color = 0x00FFFF,
                                     description = '')
