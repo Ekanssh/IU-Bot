@@ -82,27 +82,32 @@ async def on_member_remove(member):
         await channel.send('We are feeling bad to see you leaving %s!' %(member.name))
 
 @bot.event
-async def on_message(ctx):
-    if ctx.channel.name is globalvars.memesChannel:
+async def on_message(msg):
+    if msg.channel.name is globalvars.memesChannel:
         for chr in list(string.ascii_letters):
-            if chr in str(ctx.content):
-                await ctx.delete_message(ctx)
+            if chr in str(msg.content):
+                await msg.delete()
                 
+    found = False
     await aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
-    if len(await aio.cursor.fetchall()) > 0:
-        await aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
-        xp = (await aio.cursor.fetchall())[0][6]
-        await aio.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 5, ctx.author.id, ))
+        for i in await aio.cursor.fetchall():
+            if i is not None:
+                if i[0] == msg.author.id:
+                    found = True
+    
+                    await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
+                    xp = (await aio.cursor.fetchall())[0][6]
+                    await aio.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 5, msg.author.id, ))
         
-        await aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
-        level = (await aio.cursor.fetchall())[0][4]
-        if xp % 100 == 0:
-            await aio.execute("UPDATE profile SET level = %s WHERE id = %s", (level + 1, ctx.author.id, ))
-            await ctx.channel.send("Congratulations, " + ctx.author.mention + "you advanced to level {}".format(level + 1))
-    else:
-        await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s)", (ctx.author.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', ))
+                    await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
+                    level = (await aio.cursor.fetchall())[0][4]
+                    if xp % 100 == 0:
+                        await aio.execute("UPDATE profile SET level = %s WHERE id = %s", (level + 1, msg.author.id, ))
+                        await msg.channel.send("Congratulations, " + msg.author.mention + "you advanced to level {}".format(level + 1))
+    if not found:
+        await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s)", (msg.author.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
 
-    await bot.process_commands(ctx)
+    await bot.process_commands(msg)
 
 @bot.event
 async def on_message_edit(before, after):
@@ -219,7 +224,7 @@ class General:
                     os.remove('TEMPava.png')
       
         if not found:
-            await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s)", (mem.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', ))
+            await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s)", (mem.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
             await ctx.invoke(bot.get_command("profile"), mem)
         
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
