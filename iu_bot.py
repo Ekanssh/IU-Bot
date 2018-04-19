@@ -89,7 +89,7 @@ async def on_message(msg):
                 await msg.delete()
                 
     found = False
-    if not msg.author.bot
+    if not msg.author.bot:
         await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
         for i in await aio.cursor.fetchall():
             if i is not None:
@@ -107,7 +107,7 @@ async def on_message(msg):
                         await aio.execute("UPDATE profile SET level = %s WHERE id = %s", (level + 1, msg.author.id, ))
                         await msg.channel.send("Congratulations, " + msg.author.mention + " you advanced to level {}".format(level + 1))
     if not found:
-        if not msg.author.bot
+        if not msg.author.bot:
             await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s)", (msg.author.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
 
     await bot.process_commands(msg)
@@ -171,10 +171,11 @@ class General:
     @commands.command()
     async def profile(self, ctx, mem: discord.Member = None):
         '''Check your or someone else's profile'''
-        if msg.author.bot:
-           return 
         found = False
         mem = mem or ctx.message.author
+        if mem.bot:
+            await ctx.send("Sorry, bots don't have a profile... ~~*until they overthrow humans*~~"
+            return 
         await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id, ))
         for i in await aio.cursor.fetchall():
             if i is not None:
