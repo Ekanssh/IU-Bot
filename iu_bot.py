@@ -182,8 +182,11 @@ class General:
                 if i[0] == mem.id:
                   found = True
                   await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(mem.id), ))
-                    
-                  currentDaily = int((await aio.cursor.fetchall())[0][1])
+                  if len(await aio.cursor.fetchall()) > 0:
+                      await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(mem.id), ))
+                      currentDaily = int((await aio.cursor.fetchall())[0][1])
+                  else :
+                      currentDaily = 0
       
                   await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id,))
                   level = (await aio.cursor.fetchall())[0][4]
@@ -362,7 +365,7 @@ class Economy:
     @commands.command()
     async def credits(self, ctx, otherMem: discord.Member = None):
         '''Check your or someone else's credits'''
-        if ctx.message.author.bot or (otherMember is not None and otherMember.bot):
+        if ctx.message.author.bot or (otherMem is not None and otherMem.bot):
             await ctx.send("Sorry, bot have nothing to do with money")
             return 
         found_in_db = False
