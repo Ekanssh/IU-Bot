@@ -265,7 +265,7 @@ class General:
         page_index = 1
         embed_list = []
         profile_list = []
-        aio.execute("SELECT id, xp FROM profile")
+        await aio.execute("SELECT id, xp FROM profile")
         rows_count = len(await aio.cursor.fetchall())
         row_index = 1
         for i in range (1, rows_count, 10):
