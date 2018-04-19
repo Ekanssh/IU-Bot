@@ -208,7 +208,7 @@ class General:
                     d.line([(11, 302), (100, 302)], fill = (50, 50, 50), width = 3)
                     d.text(text = "Badges", xy = (10, 275), font = badges_font)
                     d.text(text = "Level:", xy = (360, 265), font = level_font)
-                    d.text(text = level, xy = (435, 265), font = level_font)
+                    d.text(text = str(level), xy = (435, 265), font = level_font)
 
                     d.text(text = "Credits:", xy = (135, 310), font = credits_reps_font)
                     d.text(text = str(currentDaily), xy = (435, 310), font = credits_reps_font, align = 'RIGHT')
