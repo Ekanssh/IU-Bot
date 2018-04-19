@@ -261,7 +261,7 @@ class General:
     @commands.command()
     async def top(self, ctx):
         '''Check who tops the local server's Scoreboard'''
-        msg = await bot.say("*Please wait for the help message to load*")
+        msg = await ctx.send("*Please wait for the help message to load*")
         page_index = 1
         embed_list = []
         profile_list = []
@@ -278,8 +278,9 @@ class General:
                 name = (await bot.get_user_info(l[0])).name
                 em.description += name + ' ' * (29 - len(name)) + ':: ' + str(l[1]) + '\n'
                 if l[0] == ctx.message.author.id:
-                    em.description += "\n\nYour position in " + ctx.guild.name + " is " + str(row_index)
-                row_index += 1                 
+                    position = row_index
+                row_index += 1
+            em.add_field(name = ctx.message.author.name, value = "\n\nYour position in " + ctx.guild.name + " is " + str(position))
             em.set_footer(text="Page {0} of {1}".format(page_index, int(rows_count/10)))
             page_index += 1
             embed_list.append(em)
