@@ -174,7 +174,7 @@ class General:
         found = False
         mem = mem or ctx.message.author
         if mem.bot:
-            await ctx.send("Sorry, bots don't have a profile... ~~*until they overthrow humans*~~"
+            await ctx.send("Sorry, bots don't have a profile... ~~*until they overthrow humans*~~")
             return 
         await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id, ))
         for i in await aio.cursor.fetchall():
