@@ -89,7 +89,7 @@ async def on_message(msg):
                 await msg.delete()
                 
     found = False
-    await aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
+    await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
     for i in await aio.cursor.fetchall():
         if i is not None:
             if i[0] == msg.author.id:
