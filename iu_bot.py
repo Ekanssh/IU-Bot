@@ -264,19 +264,17 @@ class General:
         msg = await ctx.send("*Please wait for the help message to load*")
         page_index = 1
         embed_list = []
-        profile_list = []
         await aio.execute("SELECT id, xp FROM profile")
         rows_count = len(await aio.cursor.fetchall())
         row_index = 1
         for i in range (10, rows_count, 10):
-            await aio.execute("SELECT id, xp FROM profile ORDER BY xp LIMIT %s OFFSET %s", (i, i-10))
+            await aio.execute("SELECT * FROM profile ORDER BY xp LIMIT %s OFFSET %s", (i, i-10))
             em = discord.Embed(title = "Scoreboard for " + ctx.guild.name, 
                                     color = 0x00FFFF,
                                     description = '')
             for l in await aio.cursor.fetchall():
-                profile_list.append(l)
                 name = (await bot.get_user_info(l[0])).name
-                em.description += name + ' ' * (29 - len(name)) + ':: ' + str(l[1]) + '\n'
+                em.description += name + ' ' * (29 - len(name)) + ':: ' + str(l[6]) + '\n'
                 if l[0] == ctx.message.author.id:
                     position = row_index
                 row_index += 1
