@@ -50,14 +50,14 @@ aio = aiopg_commands()
 def tdm(td):
     return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
 
-
+'''
 @bot.event
 async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandOnCooldown):
     await ctx.message.channel.send(":x: | Sorry, you are on a cooldown. Try again in " + str(round(int(error.retry_after), 2)) + "s")
   else:
     logging.error(error, exc_info=True)
-
+'''
 
 @bot.event
 async def on_ready():
@@ -170,18 +170,18 @@ class General:
         '''Check your or someone else's profile'''
         found = False
         mem = mem or ctx.message.author
-        await aio.execute("SELECT * FROM profile WHERE id=(%s)", (mem.id, ))
+        await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id, ))
         for i in await aio.cursor.fetchall():
             if i is not None:
-                if i[0] == str(mem.id):
+                if i[0] == mem.id:
                     found = True
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(mem.id),))
                     currentDaily = int((await aio.cursor.fetchall())[0][1])
                     
-                    await aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.message.author.id,))
+                    await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id,))
                     level = (await aio.cursor.fetchall())[0][4]
                     
-                    await aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.message.author.id,))
+                    await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id,))
                     note = (await aio.cursor.fetchall())[0][5]
                     
                     back = Image.open("Images/background.png")
@@ -224,7 +224,7 @@ class General:
                     os.remove('TEMPava.png')
       
         if not found:
-            await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s)", (mem.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
+            await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s)", (mem.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
             await ctx.invoke(bot.get_command("profile"), mem)
         
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
