@@ -89,10 +89,12 @@ async def on_message(msg):
                 await msg.delete()
                 
     found = False
-    await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
-    for i in await aio.cursor.fetchall():
-        if i is not None:
-            if i[0] == msg.author.id:
+    if not msg.author.bot
+        await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
+        for i in await aio.cursor.fetchall():
+            if i is not None:
+                if i[0] == msg.author.id:
+                
                     found = True
     
                     await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
@@ -105,7 +107,8 @@ async def on_message(msg):
                         await aio.execute("UPDATE profile SET level = %s WHERE id = %s", (level + 1, msg.author.id, ))
                         await msg.channel.send("Congratulations, " + msg.author.mention + " you advanced to level {}".format(level + 1))
     if not found:
-        await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s)", (msg.author.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
+        if not msg.author.bot
+            await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s)", (msg.author.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
 
     await bot.process_commands(msg)
 
@@ -168,87 +171,85 @@ class General:
     @commands.command()
     async def profile(self, ctx, mem: discord.Member = None):
         '''Check your or someone else's profile'''
-        found_in_profile = False
-        found_in_daily = False
+        if msg.author.bot:
+           return 
+        found = False
         mem = mem or ctx.message.author
         await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id, ))
         for i in await aio.cursor.fetchall():
             if i is not None:
                 if i[0] == mem.id:
-                    found_in_profile = True
-                    await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(mem.id), ))
-                    for u in await aio.cursor.fetchall():
-                        if u is not None:
-                            if u[0] == mem.id:
-                                found_in_daily = True
-                                await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(mem.id),))
-                                currentDaily = int((await aio.cursor.fetchall())[0][1])
+                  found = True
+                  await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(mem.id), ))
                     
-                                await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id,))
-                                level = (await aio.cursor.fetchall())[0][4]
-                    
-                                await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id,))
-                                note = (await aio.cursor.fetchall())[0][5]
-                    
-                                back = Image.open("Images/background.png")
-                                background = Image.open("Images/" + random.choice(os.listdir('Images')))
-                                background = background.crop((0, 0, 500, 215))
-                                back.paste(background, box = (0, 0))
-                                font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 45)
-                                badges_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 25)
-                                level_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 25)
-                                credits_reps_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 20)
-                                note_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 20)
-                    
-                                d = ImageDraw.Draw(back)
-                                d.rectangle([0, 160, 110, 270], fill = (255, 255, 255))
-                                async with aiohttp.ClientSession().get(mem.avatar_url) as r:
-                                    with open("TEMPava.png", 'wb') as ava:
-                                        ava.write(await r.read())
-                                avatar = Image.open("TEMPava.png")
-                                avatar = avatar.resize((100, 100))
-                                back.paste(avatar, (5, 165))    
-                                d.text(text = str(mem), xy = (125, 215), font = font)
-                                d.line([(113, 219), (113, 500)], fill = (50, 50, 50), width = 3) #line beside ava
-
-                                d.line([(11, 302), (100, 302)], fill = (50, 50, 50), width = 3)
-                                d.text(text = "Badges", xy = (10, 275), font = badges_font)
-                                d.text(text = "Level:", xy = (360, 265), font = level_font)
-                                d.text(text = str(level), xy = (435, 265), font = level_font)
-
-                                d.text(text = "Credits:", xy = (135, 310), font = credits_reps_font)
-                                d.text(text = str(currentDaily), xy = (435, 310), font = credits_reps_font, align = 'RIGHT')
-
-                                d.text(text = "Reputations:", xy = (135, 340), font = credits_reps_font)
-                                d.text(text = "-", xy = (435, 340), font = credits_reps_font, align = 'RIGHT')
-
-                                d.rectangle([135, 400, 480, 490])
-                                d.text(text = note, xy = (145, 405), font = note_font)
-                                back.save(str(mem.name) + '.png')
-                                await ctx.send(file = discord.File(str(mem.name) + '.png'))
-                                os.remove(str(mem.name) + '.png')
-                                os.remove('TEMPava.png')
+                  currentDaily = int((await aio.cursor.fetchall())[0][1])
       
-        if not found_in_profile and found_in_dailies:
-            await aio.execute("INSERT INTO Dailies VALUES (%s, '200', '86400')", (str(ctx.message.author.id), ))
+                  await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id,))
+                  level = (await aio.cursor.fetchall())[0][4]
+      
+                  await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id,))
+                  note = (await aio.cursor.fetchall())[0][5]
+      
+                  back = Image.open("Images/background.png")
+                  background = Image.open("Images/milky-way.jpg")
+                  background = background.crop((0, 0, 500, 215))
+                  back.paste(background, box = (0, 0))
+                  font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 45)
+                  badges_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 25)
+                  level_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 25)
+                  credits_reps_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 20)
+                  note_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 20)
+      
+                  d = ImageDraw.Draw(back)
+                  d.rectangle([0, 160, 110, 270], fill = (255, 255, 255))
+                  async with aiohttp.ClientSession().get(mem.avatar_url) as r:
+                      with open("TEMPava.png", 'wb') as ava:
+                          ava.write(await r.read())
+                  avatar = Image.open("TEMPava.png")
+                  avatar = avatar.resize((100, 100))
+                  back.paste(avatar, (5, 165))    
+                  d.text(text = str(mem), xy = (125, 215), font = font)
+                  d.line([(113, 219), (113, 500)], fill = (50, 50, 50), width = 3) #line beside ava
+
+                  d.line([(11, 302), (100, 302)], fill = (50, 50, 50), width = 3)
+                  d.text(text = "Badges", xy = (10, 275), font = badges_font)
+                  d.text(text = "Level:", xy = (360, 265), font = level_font)
+                  d.text(text = str(level), xy = (435, 265), font = level_font)
+
+                  d.text(text = "Credits:", xy = (135, 310), font = credits_reps_font)
+                  d.text(text = str(currentDaily), xy = (435, 310), font = credits_reps_font, align = 'RIGHT')
+
+                  d.text(text = "Reputations:", xy = (135, 340), font = credits_reps_font)
+                  d.text(text = "-", xy = (435, 340), font = credits_reps_font, align = 'RIGHT')
+
+                  d.rectangle([135, 400, 480, 490])
+                  d.text(text = note, xy = (145, 405), font = note_font)
+                  back.save(str(mem.name) + '.png')
+                  await ctx.send(file = discord.File(str(mem.name) + '.png'))
+                  os.remove(str(mem.name) + '.png')
+                  os.remove('TEMPava.png')
+
+        if not found:
             await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s)", (mem.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
             await ctx.invoke(bot.get_command("profile"), mem)
        
         
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
-    async def note(self, ctx, option="show", newNote = None):
+    async def note(self, ctx, option="show", *, newNote = None):
          '''Set your profile's note'''
+         if ctx.message.author.bot:
+           return 
          if option == "show":
              await aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.message.author.id,))                      
              note =  (await aio.cursor.fetchall())[0][5]
-             await ctx.send("Your current note is:\n" + note)
+             await ctx.send("Your current note is:\n" + "```" + note + "```")
          elif option == "set" and newNote is not None:
              await aio.execute("UPDATE profile SET note = %s WHERE id = %s", (newNote, ctx.message.author.id, ))
-             await ctx.send("Your current note is:\n" + newNote)
+             await ctx.send("Your current note is:\n" + "```" + newNote + "```")
          elif option == "reset":
              await aio.execute("UPDATE profile SET note = %s WHERE id = %s", ('I am imperfectly perfect...', ctx.message.author.id, ))  
-             await ctx.send("Your profile's note has been reset to:\n" + 'I am imperfectly perfect...')
+             await ctx.send("Your profile's note has been reset to:\n" + '```I am imperfectly perfect...```')
                                    
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
@@ -330,6 +331,9 @@ class Economy:
     @commands.command(aliases=['daily'])
     async def dailies(self, ctx):
         '''Get your free ₹200'''
+        if ctx.message.author.bot:
+            await ctx.send("Sorry, bot have nothing to do with money")
+            return 
         found = False
         await aio.execute("SELECT * FROM Dailies WHERE id=(%s)", (str(ctx.message.author.id), ))
         for i in await aio.cursor.fetchall():
@@ -357,6 +361,9 @@ class Economy:
     @commands.command()
     async def credits(self, ctx, otherMem: discord.Member = None):
         '''Check your or someone else's credits'''
+        if ctx.message.author.bot or (otherMember is not None and otherMember.bot):
+            await ctx.send("Sorry, bot have nothing to do with money")
+            return 
         found_in_db = False
         if otherMem is None:
             await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
