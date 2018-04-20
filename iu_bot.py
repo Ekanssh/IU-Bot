@@ -107,7 +107,7 @@ async def on_message(msg):
                     level = (await aio.cursor.fetchall())[0][4]
                     if xp % 100 == 0:
                         await aio.execute("UPDATE profile SET level = %s WHERE id = %s", (level + 1, msg.author.id, ))
-                        await bot.get_guild(281793428793196544).get_channel(436865374173003786).send("Congratulations, " + msg.author.mention + " you advanced to level {}".format(level + 1))
+                        await msg.channel.send("Congratulations, " + msg.author.mention + " you advanced to level {}".format(level + 1),delete_after=10)
     if not found:
         if not msg.author.bot:
             await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s)", (msg.author.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
