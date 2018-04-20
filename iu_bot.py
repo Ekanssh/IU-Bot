@@ -272,6 +272,7 @@ class General:
             em = discord.Embed(title = "Scoreboard for " + ctx.guild.name, 
                                     color = 0x00FFFF,
                                     description = '')
+            position = 0
             for l in await aio.cursor.fetchall():
                 try:
                     name = (await bot.get_user_info(l[0])).name
