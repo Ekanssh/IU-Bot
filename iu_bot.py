@@ -261,7 +261,7 @@ class General:
     @commands.command()
     async def top(self, ctx):
         '''Check who tops the local server's Scoreboard'''
-        msg = await ctx.send("*Please wait for the help message to load*")
+        msg = await ctx.send("*Please wait until I gather people's information*")
         page_index = 1
         embed_list = []
         await aio.execute("SELECT id, xp FROM profile")
@@ -292,7 +292,7 @@ class General:
                                    description = "\u23EA:  Go to the first page\n\u25C0:  Go to the previous page\n\u23F9:  Stop the help command\n\u25B6:  Go to the next page\n\u23E9:  Go to the last page\n\U0001f522:  Asks for a page number\n\u2139:  Shows this info", 
                                    colour = 0x2279DE)  
         embed_list.append(info_embed)
-        await bot.edit_message(msg, embed = embed_list[0])
+        await msg.edit(embed = embed_list[0])
         pa = Paginator(bot, msg, ctx.message.author, 0)
         await pa.paginate(embed_list)
         
