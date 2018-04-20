@@ -31,6 +31,7 @@ if creds.access_token_expired:
     client.login()
 
 db = client.open("IU DB").sheet1
+dsn = "dbname = 'd1b1qi3p5efneq' user='ynhburlpfyrfon' password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8' host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com'"
 
 class aiopg_commands:
     async def connect(self):
@@ -256,17 +257,26 @@ class General:
          elif option == "reset":
              await aio.execute("UPDATE profile SET note = %s WHERE id = %s", ('I am imperfectly perfect...', ctx.message.author.id, ))  
              await ctx.send("Your profile's note has been reset to:\n" + '```I am imperfectly perfect...```')
-            
+    '''        
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def top(self, ctx):
-        '''Check who tops the local server's Scoreboard'''
+        #Check who tops the local server's Scoreboard
         msg = await ctx.send("*Please wait until I gather people's information*")
         page_index = 1
         embed_list = []
         await aio.execute("SELECT id, xp FROM profile")
         rows_count = len(await aio.cursor.fetchall())
         row_index = 1
+        async with aiopg.create_pool(dsn) as pool:
+            async with pool.acquire() as conn:
+                async with conn.cursor() as c:
+                    await c.execute("SELECT id, xp FROM profile ORDER BY xp DESC LIMIT %s OFFSET %s", (10, 10-10))
+                    for l in await c.fetchall():
+                        name = (await bot.get_user_info(l[0])).name
+                        await ctx.send(name)
+
+
         for i in range (10, rows_count, 10):
             await aio.execute("SELECT id, xp FROM profile ORDER BY xp DESC LIMIT %s OFFSET %s", (i, i-10))
             em = discord.Embed(title = "Scoreboard for " + ctx.guild.name, 
@@ -295,7 +305,7 @@ class General:
         await msg.edit(embed = embed_list[0])
         pa = Paginator(bot, msg, ctx.message.author, 0)
         await pa.paginate(embed_list)
-        
+    '''    
         
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
