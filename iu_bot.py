@@ -268,16 +268,19 @@ class General:
         rows_count = len(await aio.cursor.fetchall())
         row_index = 1
         for i in range (10, rows_count, 10):
-            await aio.execute("SELECT * FROM profile ORDER BY xp LIMIT %s OFFSET %s", (i, i-10))
+            await aio.execute("SELECT id, xp FROM profile ORDER BY xp DESC LIMIT %s OFFSET %s", (i, i-10))
             em = discord.Embed(title = "Scoreboard for " + ctx.guild.name, 
                                     color = 0x00FFFF,
                                     description = '')
             for l in await aio.cursor.fetchall():
-                name = (await bot.get_user_info(l[0])).name
-                em.description += name + ' ' * (29 - len(name)) + ':: ' + str(l[6]) + '\n'
-                if l[0] == ctx.message.author.id:
-                    position = row_index
-                row_index += 1
+                try:
+                    name = (await bot.get_user_info(l[0])).name
+                    em.description += name + ' ' * (29 - len(name)) + ':: ' + str(l[6]) + '\n'
+                    if l[0] == ctx.message.author.id:
+                        position = row_index
+                    row_index += 1
+                except:
+                    em.description += "Couldn't find user. Discord id: `{}`".format(l[0])
             em.add_field(name = ctx.message.author.name, value = "\n\nYour position in " + ctx.guild.name + " is " + str(position))
             em.set_footer(text="Page {0} of {1}".format(page_index, int(rows_count/10)))
             page_index += 1
