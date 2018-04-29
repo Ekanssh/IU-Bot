@@ -6,8 +6,6 @@ If you can see this text then congrats 🎉 you're officially a collaborator !
 I hope to see your contributions! :)
 
 # Quick start
-Better make updates else I will sack you.
-
 #Level system
 Level   0 :      0
 Level   1 :     20
