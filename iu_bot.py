@@ -17,6 +17,10 @@ import aiopg
 import logging, signal
 from PIL import Image, ImageFont, ImageDraw
 from Paginator import Paginator
+from time import localtime, strftime
+import bs4 as bs 
+import requests
+
 # import bs4
 # from bs4 import BeautifulSoup as bs
 
