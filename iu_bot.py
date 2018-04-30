@@ -158,7 +158,16 @@ class Admin:
             await ctx.message.add_reaction('\u2705')
         except:
             await ctx.message.add_reaction('\u274C')
-            
+                    
+    @commands.command()
+    @commands.has_permissions(manage_messages=True)
+    async def purge(self, ctx, number: int):
+        '''Clears specified number of messages, ranging from 2 to 100'''
+        await ctx.channel.purge(limit=number)
+
+
+class General:
+    '''General commands'''   
     @commands.command(aliases=['iplscores','scores'])
     async def ipl(ctx) :
         '''Lets you see latest IPL Scores ...'''
@@ -176,17 +185,7 @@ class Admin:
 	    curr = data[0]
 	    em = Embed(title = "{0} vs {1}".format(tm[0],tm[1]) , description = "{5} ... \nCurrent Inning : {0} \n{1} : {2}\n{3} : {4}".format(curr,tm[0],inn[0],tm[1],inn[1],tossres)+"\n*Score Updated at* "+str(strftime("%a, %d %H:%M:%S", localtime())), colour = int(hex(random.randint(0,16777215)),16))
 	    await bot.say(embed = em)
-        
-    @commands.command()
-    @commands.has_permissions(manage_messages=True)
-    async def purge(self, ctx, number: int):
-        '''Clears specified number of messages, ranging from 2 to 100'''
-        await ctx.channel.purge(limit=number)
-
-
-class General:
-    '''General commands'''   
-    
+		
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def profile(self, ctx, mem: discord.Member = None):
