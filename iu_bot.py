@@ -173,7 +173,7 @@ class Admin:
 class General:
     '''General commands'''   
     @commands.command(aliases=['iplscores','scores'])
-    async def ipl(ctx) :
+    async def ipl(self,ctx) :
         '''Lets you see latest IPL Scores ...'''
         data = requests.get("http://www.cricbuzz.com/")
 	soup = bs.BeautifulSoup(data.text,"lxml")
@@ -191,7 +191,7 @@ class General:
 	await bot.say(embed = em)
 		
     @bot.command(aliases = ['scoretable','ipltable','ipl_table','points','points_table','pt'])
-    async def pointstable() :
+    async def pointstable(self) :
         """Displays the IPL Points Table """
         data = requests.get("http://www.cricbuzz.com//cricket-series/2676/indian-premier-league-2018/points-table")
         soup = bs.BeautifulSoup(data.text,"lxml")
