@@ -175,7 +175,7 @@ class General:
     @commands.command(aliases=['iplscores','scores'])
     async def ipl(self,ctx) :
         '''Lets you see latest IPL Scores ...'''
-        data = requests.get("http://www.cricbuzz.com/")
+	data = requests.get("http://www.cricbuzz.com/")
 	soup = bs.BeautifulSoup(data.text,"lxml")
 	data = []
 	for link in soup.find_all('div') :
