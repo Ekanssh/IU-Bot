@@ -172,23 +172,23 @@ class Admin:
 
 class General:
     '''General commands'''   
-    @commands.command(aliases=['iplscores','scores'])
-    async def ipl(self,ctx) :
-        '''Lets you see latest IPL Scores ...'''
-	data = requests.get("http://www.cricbuzz.com/")
-	soup = bs.BeautifulSoup(data.text,"lxml")
-	data = []
-	for link in soup.find_all('div') :
-	    l = link.get('class')
-	    if l == None : continue
-	    if "cb-ovr-flo" in l :
-	        data.append(link.text)
-	tossres = data[5]
-	inn = [ data[2] , data[4] ]
-	tm = [ data[1] , data[3] ]
-	curr = data[0]
-	em = Embed(title = "{0} vs {1}".format(tm[0],tm[1]) , description = "{5} ... \nCurrent Inning : {0} \n{1} : {2}\n{3} : {4}".format(curr,tm[0],inn[0],tm[1],inn[1],tossres)+"\n*Score Updated at* "+str(strftime("%a, %d %H:%M:%S", localtime())), colour = int(hex(random.randint(0,16777215)),16))
-	await bot.say(embed = em)
+    @commands.command(aliases=['iplscores', 'scores'])
+    async def ipl(self, ctx) :
+    '''Lets you see latest IPL Scores ...'''
+    data = requests.get("http://www.cricbuzz.com/")
+    soup = bs.BeautifulSoup(data.text,"lxml")
+    data = []
+    for link in soup.find_all('div') :
+        l = link.get('class')
+        if l is None : continue
+        if "cb-ovr-flo" in l:
+        data.append(link.text)
+        tossres = data[5]
+        inn = [ data[2] , data[4] ]
+        tm = [ data[1] , data[3] ]
+        curr = data[0]
+        em = Embed(title = "{0} vs {1}".format(tm[0],tm[1]) , description = "{5} ... \nCurrent Inning : {0} \n{1} : {2}\n{3} : {4}".format(curr,tm[0],inn[0],tm[1],inn[1],tossres)+"\n*Score Updated at* "+str(strftime("%a, %d %H:%M:%S", localtime())), colour = int(hex(random.randint(0,16777215)),16))
+        await bot.say(embed = em)
 		
     @bot.command(aliases = ['scoretable','ipltable','ipl_table','points','points_table','pt'])
     async def pointstable(self) :
