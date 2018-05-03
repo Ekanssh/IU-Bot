@@ -19,6 +19,7 @@ from PIL import Image, ImageFont, ImageDraw
 from Paginator import Paginator
 from time import localtime, strftime
 import bs4 as bs 
+from time import localtime, strftime
 import requests
 
 # import bs4
@@ -182,7 +183,7 @@ class General:
         l = link.get('class')
         if l is None : continue
         if "cb-ovr-flo" in l:
-        data.append(link.text)
+          data.append(link.text)
         tossres = data[5]
         inn = [ data[2] , data[4] ]
         tm = [ data[1] , data[3] ]
