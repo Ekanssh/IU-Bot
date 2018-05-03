@@ -177,7 +177,7 @@ class General:
     async def ipl(self, ctx) :
       '''Lets you see latest IPL Scores ...'''
       data = requests.get("http://www.cricbuzz.com/")
-      soup = bs.BeautifulSoup(data.text,"lxml")
+      soup = bs.BeautifulSoup(data.text,"html.parser")
       data = []
       for link in soup.find_all('div') :
         l = link.get('class')
