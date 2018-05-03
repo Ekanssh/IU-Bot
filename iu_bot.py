@@ -87,6 +87,7 @@ async def on_member_remove(member):
     if member.guild.id == 281793428793196544:
         channel = bot.get_channel(429618676875001856)
         await channel.send('We are feeling bad to see you leaving %s!' %(member.name))
+def calculate_level(lvl: 'current level') -> 'xp to reach next level': return 5 * (lvl ** 2) + 50 * lvl + 100
 
 @bot.event
 async def on_message(msg):
@@ -106,11 +107,12 @@ async def on_message(msg):
     
                     await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
                     xp = (await aio.cursor.fetchall())[0][6]
-                    await aio.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 5, msg.author.id, ))
+                    await aio.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 1, msg.author.id, ))
         
                     await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
                     level = (await aio.cursor.fetchall())[0][4]
-                    if xp % 100 == 0:
+		
+                    if xp == int(calculate_level(level)):
                         await aio.execute("UPDATE profile SET level = %s WHERE id = %s", (level + 1, msg.author.id, ))
                         await msg.channel.send("Congratulations, " + msg.author.mention + " you advanced to level {}".format(level + 1),delete_after=10)
     if not found:
@@ -192,10 +194,10 @@ class General:
         await bot.say(embed = em)
 		
     @bot.command(aliases = ['scoretable','ipltable','ipl_table','points','points_table','pt'])
-    async def pointstable(self) :
+    async def pointstable(self, ctx) :
         """Displays the IPL Points Table """
         data = requests.get("http://www.cricbuzz.com//cricket-series/2676/indian-premier-league-2018/points-table")
-        soup = bs.BeautifulSoup(data.text,"lxml")
+        soup = bs.BeautifulSoup(data.text,"html.parser")
         data,tmd = [],[]
         teams = ['Delhi Daredevils','Royal Challengers Bangalore','Rajasthan Royals','Kolkata Knight Riders','Mumbai Indians','Chennai Super Kings','Sunrisers Hyderabad','Kings XI Punjab']
         i = 0
