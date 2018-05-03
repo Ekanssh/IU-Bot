@@ -190,10 +190,10 @@ class General:
         inn = [ data[2] , data[4] ]
         tm = [ data[1] , data[3] ]
         curr = data[0]
-        em = Embed(title = "{0} vs {1}".format(tm[0],tm[1]) , description = "{5} ... \nCurrent Inning : {0} \n{1} : {2}\n{3} : {4}".format(curr,tm[0],inn[0],tm[1],inn[1],tossres)+"\n*Score Updated at* "+str(strftime("%a, %d %H:%M:%S", localtime())), colour = int(hex(random.randint(0,16777215)),16))
-        await bot.say(embed = em)
+        em = discord.Embed(title = "{0} vs {1}".format(tm[0],tm[1]) , description = "{5} ... \nCurrent Inning : {0} \n{1} : {2}\n{3} : {4}".format(curr,tm[0],inn[0],tm[1],inn[1],tossres)+"\n*Score Updated at* "+str(strftime("%a, %d %H:%M:%S", localtime())), colour = int(hex(random.randint(0,16777215)),16))
+        await ctx.send(embed = em)
 		
-    @bot.command(aliases = ['scoretable','ipltable','ipl_table','points','points_table','pt'])
+    @commands.command(aliases = ['scoretable','ipltable','ipl_table','points','points_table','pt'])
     async def pointstable(self, ctx) :
         """Displays the IPL Points Table """
         data = requests.get("http://www.cricbuzz.com//cricket-series/2676/indian-premier-league-2018/points-table")
@@ -215,8 +215,8 @@ class General:
             rank = str(tmd.index(t)+1)
             name,plyed,won,lost,points,NRR = t[0],t[1] , t[2] , t[3] , t[-2] , t[-1]
             table += str("\n"+rank + ") " + name + "\n\tP : " + plyed + "\t\tW : "+won+"\t\tL : "+lost+"\n\tP : "+points+"\t\tNRR = "+NRR)
-        em = Embed(title = "Points Table IPL 2018" , description = table , colour = int(hex(random.randint(0,16777215)),16) )
-        await bot.say(embed = em )
+        em = discord.Embed(title = "Points Table IPL 2018" , description = table , colour = int(hex(random.randint(0,16777215)),16) )
+        await ctx.send(embed = em )
 	
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
