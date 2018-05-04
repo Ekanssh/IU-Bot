@@ -187,7 +187,7 @@ class General:
 			soup = bs(html, 'html.parser')
 		t = soup.find_all(attrs={'class':'cb-ovr-flo'})
 		for u in t: 
-			if u not None :
+			if u is not None :
 				data.append(u.text)
 		tossres = data[5]
 		inn = [ data[2] , data[4] ]
