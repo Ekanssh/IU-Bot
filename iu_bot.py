@@ -515,4 +515,4 @@ class Miscellaneous:
         
 
 bot.loop.create_task(dailiesCounter())
-bot.run(globalvars.TOKEN)
+bot.run(globalvars.sTOKEN)
