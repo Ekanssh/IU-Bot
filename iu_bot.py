@@ -18,7 +18,8 @@ import logging, signal
 from PIL import Image, ImageFont, ImageDraw
 from Paginator import Paginator
 from time import localtime, strftime
-import bs4 as bs 
+from bs4 import BeautifulSoup as bs 
+import aiohttp 
 from time import localtime, strftime
 import requests
 
@@ -177,9 +178,15 @@ class General:
 	'''General commands'''   
 	@commands.command(aliases=['iplscores', 'scores'])
 	async def ipl(self , ctx) :
-		data = requests.get("http://www.cricbuzz.com/")
-		soup = bs.BeautifulSoup(data.text,"lxml")
-		data = []
+url = "http://www.cricbuzz.com/"
+async with aiohttp.ClientSession() as cs: 
+  async with cs.get(url) as r:
+    html = await r.read()
+soup = bs(html, 'html.parser')
+t = soup.find_all(attrs={'class':'cb-ovr-flo'})
+for u in t: 
+  text = u.text.strip()
+  print(text if len(t) < 2000 else "too big")
 		for link in soup.find_all('div') :
 			l = link.get('class')
 			if l == None : continue
