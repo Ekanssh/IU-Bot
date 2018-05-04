@@ -180,6 +180,7 @@ class General:
 	@commands.command(aliases=['iplscores', 'scores'])
 	async def ipl(self , ctx) :
 		url = "http://www.cricbuzz.com/"
+		data = []
 		async with aiohttp.ClientSession() as cs: 
 		async with cs.get(url) as r:
 			html = await r.read()
