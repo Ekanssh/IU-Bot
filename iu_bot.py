@@ -175,23 +175,19 @@ class Admin:
 
 
 class General:
-	'''General commands'''   
+	'''General commands'''  
+
 	@commands.command(aliases=['iplscores', 'scores'])
 	async def ipl(self , ctx) :
-url = "http://www.cricbuzz.com/"
-async with aiohttp.ClientSession() as cs: 
-  async with cs.get(url) as r:
-    html = await r.read()
-soup = bs(html, 'html.parser')
-t = soup.find_all(attrs={'class':'cb-ovr-flo'})
-for u in t: 
-  text = u.text.strip()
-  print(text if len(t) < 2000 else "too big")
-		for link in soup.find_all('div') :
-			l = link.get('class')
-			if l == None : continue
-			if "cb-ovr-flo" in l :
-				data.append(link.text)
+		url = "http://www.cricbuzz.com/"
+		async with aiohttp.ClientSession() as cs: 
+		async with cs.get(url) as r:
+		    html = await r.read()
+			soup = bs(html, 'html.parser')
+		t = soup.find_all(attrs={'class':'cb-ovr-flo'})
+		for u in t: 
+			if u not None :
+				data.append(u.text)
 		tossres = data[5]
 		inn = [ data[2] , data[4] ]
 		tm = [ data[1] , data[3] ]
