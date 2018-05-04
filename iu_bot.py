@@ -1,5 +1,6 @@
 from discord.ext import commands
-from oauth2client.service_account import ServiceAccountCredentials
+#from oauth2client.service_account import ServiceAccountCredentials
+
 from contextlib import redirect_stdout
 import gspread
 import io, os
