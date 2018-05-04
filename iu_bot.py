@@ -182,7 +182,7 @@ class General:
 		url = "http://www.cricbuzz.com/"
 		async with aiohttp.ClientSession() as cs: 
 		async with cs.get(url) as r:
-		    html = await r.read()
+			html = await r.read()
 			soup = bs(html, 'html.parser')
 		t = soup.find_all(attrs={'class':'cb-ovr-flo'})
 		for u in t: 
