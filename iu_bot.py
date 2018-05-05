@@ -442,8 +442,11 @@ class Economy:
 		searchable=str(person.id)
 		await aio.execute("SELECT * FROM profile WHERE id = {}".format(searchable))
 		xp = (await aio.cursor.fetchall())[0][6]
-		await ctx.send(embed=discord.Embed(title=person.name+"'s XP",description=str(xp)+" xp"))
-		
+		if xp<1000:embed=discord.Embed(title=person.name+"'s XP",description=str(xp)+" xp",colour=discord.Colour.from_rgb(205, 127, 50))
+		elif xp<5000:embed=discord.Embed(title=person.name+"'s XP",description=str(xp)+" xp",colour=discord.Colour.from_rgb(218, 218, 218))
+		elif xp<10000:embed=discord.Embed(title=person.name+"'s XP",description=str(xp)+" xp",colour=discord.Colour.gold())
+		else:embed=discord.Embed(title=person.name+"'s XP",description=str(xp)+" xp",colour=discord.Colour.from_rgb(20, 30, 179))
+		await ctx.send(embed=embed)
 	@commands.cooldown(rate=1, per=15, type=commands.BucketType.user)
 	@commands.command(aliases=['daily'])
 	async def dailies(self, ctx):
