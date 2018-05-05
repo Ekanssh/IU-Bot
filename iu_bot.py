@@ -470,16 +470,16 @@ class Economy:
 
             for i in await aio.cursor.fetchall():
                   if i is not None:
-                        if i[0] == str(ctx.message.author.id):
+                        if i[0] == ctx.message.author.id:
                               found = True
                               previous_msg_timestamp = (await aio.cursor.fetchall())[0][2]
-                              await aio.execute("SELECT * FROM Dailies WHERE id= %s", (str(ctx.message.author.id), ))
+                              await aio.execute("SELECT * FROM Dailies WHERE id= %s", (ctx.message.author.id, ))
 
                               remaining_timestamp = previous_msg_timestamp - msg_timestamp
 
-                              await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
+                              await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
                               currentDaily = int((await aio.cursor.fetchall())[0][1])
-                              await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
+                              await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
 
                               secondsRemaining = remaining_timestamp.seconds
                               time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
