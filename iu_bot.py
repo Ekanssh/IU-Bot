@@ -436,17 +436,19 @@ class General:
 
 class Economy:
 	@commands.command()
-	async def xp(self,ctx,person:discord.Member=None):
-		'''get your XP stats'''
+	async def level(self,ctx,person:discord.Member=None):
+		'''get your XP and level stats'''
 		if person is None:person=ctx.author
 		searchable=str(person.id)
 		await aio.execute("SELECT * FROM profile WHERE id = {}".format(searchable))
+		level = (await aio.cursor.fetchall())[0][4]
 		xp = (await aio.cursor.fetchall())[0][6]
-		if xp<1000:embed=discord.Embed(title=person.name+"'s XP",description=str(xp)+" xp",colour=discord.Colour.from_rgb(205, 127, 50))
-		elif xp<5000:embed=discord.Embed(title=person.name+"'s XP",description=str(xp)+" xp",colour=discord.Colour.from_rgb(218, 218, 218))
-		elif xp<10000:embed=discord.Embed(title=person.name+"'s XP",description=str(xp)+" xp",colour=discord.Colour.gold())
-		else:embed=discord.Embed(title=person.name+"'s XP",description=str(xp)+" xp",colour=discord.Colour.from_rgb(20, 30, 179))
+		if xp<1000:embed=discord.Embed(title=person.name+"'s level",description="Level"+str(level)+"\n"+str(xp)+" xp",colour=discord.Colour.from_rgb(205, 127, 50))
+		elif xp<5000:embed=discord.Embed(title=person.name+"'s level",description="Level"+str(level)+"\n"+str(xp)+" xp",colour=discord.Colour.from_rgb(218, 218, 218))
+		elif xp<10000:embed=discord.Embed(title=person.name+"'s level",description="Level"+str(level)+"\n"+str(xp)+" xp",colour=discord.Colour.gold())
+		else:embed=discord.Embed(title=person.name+"'s level",description="Level"+str(level)+"\n"+str(xp)+" xp",colour=discord.Colour.from_rgb(20, 30, 179))
 		await ctx.send(embed=embed)
+		
 	@commands.cooldown(rate=1, per=15, type=commands.BucketType.user)
 	@commands.command(aliases=['daily'])
 	async def dailies(self, ctx):
