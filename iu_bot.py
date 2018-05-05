@@ -439,7 +439,7 @@ class Economy:
 	async def xp(self,ctx,person:discord.Member=None):
 		'''get your XP stats'''
 		if person is None:person=ctx.author
-		searchable=person.id
+		searchable=str(person.id)
 		await aio.execute("SELECT * FROM profile WHERE id = %s", (searchable))
 		xp = (await aio.cursor.fetchall())[0][6]
 		await ctx.send(embed=discord.Embed(title=person.name+"'s XP",description=str(xp)+" xp"))
