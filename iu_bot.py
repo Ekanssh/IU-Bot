@@ -79,6 +79,10 @@ async def on_ready():
 	bot.add_cog(Admin())
 	bot.add_cog(Economy())
 	bot.add_cog(Miscellaneous())
+	await aio.connect()
+	await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id BIGINT, dailiesCount INT, remaining_timestamp TIMESTAMP)")
+	await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT)")
+	
 	await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
 	 
 @bot.event
@@ -453,8 +457,8 @@ class Economy:
 		await ctx.send(embed=embed)
 		
 	@commands.cooldown(rate=1, per=15, type=commands.BucketType.user)
-      @commands.command(aliases=['daily'])
-      async def dailies(self, ctx):
+        @commands.command(aliases=['daily'])
+        async def dailies(self, ctx):
             '''Get your free ₹200'''
             if ctx.message.author.bot:
                   await ctx.send("Sorry, bot have nothing to do with money")
