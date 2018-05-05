@@ -58,8 +58,8 @@ aio = aiopg_commands()
 def tdm(td):
 	return ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
 
-def calculate_level(lvl: 'current level') -> 'xp to reach next level': 
-	return 5 * (lvl ** 2) + 50 * lvl + 100
+def calculate_level(level: 'current level') -> 'xp to reach next level': 
+	return (level**2+level)/2*100-(level*100) 
 
 
 '''
@@ -462,11 +462,11 @@ class Economy:
 	async def dailies(self, ctx):
             '''Get your free ₹200'''
             if ctx.message.author.bot:
-                  await ctx.send("Sorry, bot have nothing to do with money")
+                  await ctx.send("Sorry, bots have nothing to do with money")
                   return 
             msg_timestamp = ctx.message.created_at
             found = False
-            await aio.execute("SELECT * FROM Dailies WHERE id=(%s)", (str(ctx.message.author.id), ))
+            await aio.execute("SELECT * FROM Dailies WHERE id= %s", (ctx.message.author.id, ))
 
             for i in await aio.cursor.fetchall():
                   if i is not None:
