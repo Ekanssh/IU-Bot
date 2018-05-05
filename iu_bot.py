@@ -115,7 +115,7 @@ async def on_message(msg):
 	
 					await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
 					xp = (await aio.cursor.fetchall())[0][6]
-					await aio.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 1, msg.author.id, ))
+					await aio.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 5, msg.author.id, ))
 		
 					await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
 					level = (await aio.cursor.fetchall())[0][4]
@@ -472,15 +472,14 @@ class Economy:
                   if i is not None:
                         if i[0] == ctx.message.author.id:
                               found = True
-                              previous_msg_timestamp = (await aio.cursor.fetchall())[0][2]
                               await aio.execute("SELECT * FROM Dailies WHERE id= %s", (ctx.message.author.id, ))
-
+                              previous_msg_timestamp = (await aio.cursor.fetchall())[0][2]
+                              
                               remaining_timestamp = previous_msg_timestamp - msg_timestamp
-
-                              await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
+			
+                              await aio.execute("SELECT * FROM Dailies WHERE id= %s", (ctx.message.author.id, ))
                               currentDaily = int((await aio.cursor.fetchall())[0][1])
-                              await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
-
+                             
                               secondsRemaining = remaining_timestamp.seconds
                               time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
                               
