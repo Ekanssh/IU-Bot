@@ -441,8 +441,8 @@ class Economy:
 		if person is None:person=ctx.author
 		searchable=str(person.id)
 		await aio.execute("SELECT * FROM profile WHERE id = {}".format(searchable))
-		level = (await aio.cursor.fetchall())[0][4]
-		xp = (await aio.cursor.fetchall())[0][6]
+		temp = (await aio.cursor.fetchall())[0]
+		level, xp = temp[4],temp[6]
 		if xp<1000:embed=discord.Embed(title=person.name+"'s level",description="Level"+str(level)+"\n"+str(xp)+" xp",colour=discord.Colour.from_rgb(205, 127, 50))
 		elif xp<5000:embed=discord.Embed(title=person.name+"'s level",description="Level"+str(level)+"\n"+str(xp)+" xp",colour=discord.Colour.from_rgb(218, 218, 218))
 		elif xp<10000:embed=discord.Embed(title=person.name+"'s level",description="Level"+str(level)+"\n"+str(xp)+" xp",colour=discord.Colour.gold())
