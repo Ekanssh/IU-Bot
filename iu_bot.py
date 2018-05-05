@@ -549,5 +549,4 @@ class Miscellaneous:
 		await ctx.message.add_reaction('\u2705')
 		
 
-bot.loop.create_task(dailiesCounter())
 bot.run(globalvars.TOKEN)
