@@ -456,9 +456,10 @@ class Economy:
 		else:embed=discord.Embed(title=person.name+"'s level",description="Level "+str(level)+"\n"+str(xp)+" xp",colour=discord.Colour.from_rgb(20, 30, 179))
 		await ctx.send(embed=embed)
 		
+		
 	@commands.cooldown(rate=1, per=15, type=commands.BucketType.user)
-        @commands.command(aliases=['daily'])
-        async def dailies(self, ctx):
+	@commands.command(aliases=['daily'])
+	async def dailies(self, ctx):
             '''Get your free ₹200'''
             if ctx.message.author.bot:
                   await ctx.send("Sorry, bot have nothing to do with money")
