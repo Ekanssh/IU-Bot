@@ -435,6 +435,16 @@ class General:
 		return await ctx.send('**Bot**: %s\n**You**: %s\n%s'%(guess, value, res))
 
 class Economy:
+	@commands.command()
+	async def xp(self,ctx,*,member:str):
+		'''get your XP stats'''
+		if member is not false:person=discord.utils.get(ctx.guild.members,name=member)
+		else:person=ctx.author
+		searchable=person.id
+		await aio.execute("SELECT * FROM profile WHERE id = %s", (searchable))
+		xp = (await aio.cursor.fetchall())[0][6]
+		await ctx.send(embed=discord.Embed(title=person.name+"'s XP",description=str(xp)+" xp"))
+		
 	@commands.cooldown(rate=1, per=15, type=commands.BucketType.user)
 	@commands.command(aliases=['daily'])
 	async def dailies(self, ctx):
