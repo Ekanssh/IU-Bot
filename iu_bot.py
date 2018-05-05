@@ -436,10 +436,9 @@ class General:
 
 class Economy:
 	@commands.command()
-	async def xp(self,ctx,*,member:str):
+	async def xp(self,ctx,person:discord.Member=None):
 		'''get your XP stats'''
-		if member is not False:person=discord.utils.get(ctx.guild.members,name=member)
-		else:person=ctx.author
+		if person is None:person=ctx.author
 		searchable=person.id
 		await aio.execute("SELECT * FROM profile WHERE id = %s", (searchable))
 		xp = (await aio.cursor.fetchall())[0][6]
