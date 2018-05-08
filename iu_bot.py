@@ -38,6 +38,7 @@ if creds.access_token_expired:
 
 db = client.open("IU DB").sheet1
 dsn = "dbname = 'd1b1qi3p5efneq' user='ynhburlpfyrfon' password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8' host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com'"
+ownerid = [360022804357185537, 315728369369088003, 270898185961078785, 341958485724102668, 371673235395182592, 388984732156690433]
 
 class aiopg_commands:
 	async def connect(self):
@@ -179,6 +180,14 @@ class Admin:
 	async def purge(self, ctx, number: int):
 		'''Clears specified number of messages, ranging from 2 to 100'''
 		await ctx.channel.purge(limit=number)
+        @commands.command(hidden = True, name="sql")
+        async def _sql(self, ctx, statement, *args):
+            if not ctx.author.id in ownerid: return
+            try: 
+                if len(args) > 0: await aio.execute(statement, *args)
+                else: await aio.execute(statement)
+            except Exception as e: 
+                await ctx.send(embed = discord.Embed(title="ERROR", description = "```" + e + "```")
 
 
 class General:
