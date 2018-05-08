@@ -189,7 +189,7 @@ class Admin:
 			if len(args) > 0: await aio.execute(statement, *args)
 			else: await aio.execute(statement)
 		except Exception as e: 
-			await ctx.send(embed = discord.Embed(title="ERROR", description = "```" + e + "```")
+			await ctx.send(embed = discord.Embed(title="ERROR", description = "```" + e + "```"))
 
 
 class General:
