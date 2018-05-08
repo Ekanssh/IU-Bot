@@ -180,15 +180,16 @@ class Admin:
 	async def purge(self, ctx, number: int):
 		'''Clears specified number of messages, ranging from 2 to 100'''
 		await ctx.channel.purge(limit=number)
-
-        @commands.command(hidden = True, name="sql")
-        async def _sql(self, ctx, statement, *args):
-            if not ctx.author.id in ownerid: return
-            try: 
-                if len(args) > 0: await aio.execute(statement, *args)
-                else: await aio.execute(statement)
-            except Exception as e: 
-                await ctx.send(embed = discord.Embed(title="ERROR", description = "```" + e + "```")
+	
+	
+	@commands.command(hidden = True, name="sql")
+	async def _sql(self, ctx, statement, *args):
+		if not ctx.author.id in ownerid: return
+		try: 
+			if len(args) > 0: await aio.execute(statement, *args)
+			else: await aio.execute(statement)
+		except Exception as e: 
+			await ctx.send(embed = discord.Embed(title="ERROR", description = "```" + e + "```")
 
 
 class General:
