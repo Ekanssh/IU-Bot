@@ -24,20 +24,9 @@ from time import localtime, strftime
 import requests
 
 
-# import bs4
-# from bs4 import BeautifulSoup as bs
 
 bot = commands.Bot(description='The offical bot overwatching Indians United.', command_prefix=['iu_', 'iu ', 'IU ', 'IU_', 'Iu ','Iu_'])
 
-scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
-http = creds.authorize(httplib2.Http())
-creds.refresh(http)
-client = gspread.authorize(creds)
-if creds.access_token_expired:
-	client.login()
-
-db = client.open("IU DB").sheet1
 dsn = "dbname = 'd1b1qi3p5efneq' user='ynhburlpfyrfon' password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8' host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com'"
 ownerid = [360022804357185537, 315728369369088003, 270898185961078785, 341958485724102668, 371673235395182592, 388984732156690433]
 
@@ -86,6 +75,18 @@ async def on_ready():
 	await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT)")
 	
 	await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
+	
+	async def dbauth():
+	while True:
+		scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+		creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+		http = creds.authorize(httplib2.Http())
+		creds.refresh(http)
+		client = gspread.authorize(creds)
+		if creds.access_token_expired:
+			client.login()
+		await asyncio.sleep(timeout)
+		bot.loop.create_task(dbauth())
 	 
 @bot.event
 async def on_member_join(member):
@@ -397,6 +398,7 @@ class General:
 	@commands.command()
 	#dont dare to touch this command
 	async def bday(self, ctx, bDay):
+		db = client.open("IU DB").sheet1
 		try:
 			db.find(str(ctx.message.author.id))
 			await ctx.message.add_reaction('\u274C')
