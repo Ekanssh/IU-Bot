@@ -77,16 +77,16 @@ async def on_ready():
 	await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
 	
 	async def dbauth():
-	while True:
-		scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-		creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
-		http = creds.authorize(httplib2.Http())
-		creds.refresh(http)
-		client = gspread.authorize(creds)
-		if creds.access_token_expired:
-			client.login()
-		await asyncio.sleep(3000)
-		bot.loop.create_task(dbauth())
+		while True:
+			scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+			creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+			http = creds.authorize(httplib2.Http())
+			creds.refresh(http)
+			client = gspread.authorize(creds)
+			if creds.access_token_expired:
+				client.login()
+			await asyncio.sleep(3000)
+	bot.loop.create_task(dbauth())
 	 
 @bot.event
 async def on_member_join(member):
