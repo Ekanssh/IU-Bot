@@ -85,7 +85,7 @@ async def on_ready():
 		client = gspread.authorize(creds)
 		if creds.access_token_expired:
 			client.login()
-		await asyncio.sleep(timeout)
+		await asyncio.sleep(3000)
 		bot.loop.create_task(dbauth())
 	 
 @bot.event
