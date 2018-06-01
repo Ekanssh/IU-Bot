@@ -110,6 +110,11 @@ async def on_member_remove(member):
 
 @bot.event
 async def on_message(msg):
+	if msg.author.id==279318185524723712:
+		content=msg.content.lower()
+		await msg.delete()
+		await ctx.send("**Emp.ketan said: **"+content)
+		
 	if msg.channel.name is globalvars.memesChannel:
 		for chr in list(string.ascii_letters):
 			if chr in str(msg.content):
