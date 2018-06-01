@@ -210,8 +210,8 @@ class Admin:
 class General:
 	'''General commands'''  
 
-	@commands.command(aliases=['iplscores', 'scores'])
-	async def ipl(self , ctx) :
+	@commands.command(aliases=['cricket', 'scores','cric','score'])
+	async def cricbuzz(self , ctx) :
 		url = "http://www.cricbuzz.com/"
 		data = []
 		async with aiohttp.ClientSession() as cs: 
@@ -228,7 +228,7 @@ class General:
 		curr = data[0]
 		em = discord.Embed(title = "{0} vs {1}".format(tm[0],tm[1]) , description = "{5} ... \nCurrent Inning : {0} \n{1} : {2}\n{3} : {4}".format(curr,tm[0],inn[0],tm[1],inn[1],tossres)+"\n*Score Updated at* "+str(strftime("%a, %d %H:%M:%S", localtime())), colour = int(hex(random.randint(0,16777215)),16))
 		await ctx.send(embed = em)
-		
+	'''	
 	@commands.command(aliases = ['scoretable','ipltable','ipl_table','points','points_table','pt'])
 	async def pointstable(self, ctx) :
 		"""Displays the IPL Points Table """
@@ -253,6 +253,7 @@ class General:
 			table += str("\n"+rank + ") " + name + "\n\tP : " + plyed + "\t\tW : "+won+"\t\tL : "+lost+"\n\tP : "+points+"\t\tNRR = "+NRR)
 		em = discord.Embed(title = "Points Table IPL 2018" , description = table , colour = int(hex(random.randint(0,16777215)),16) )
 		await ctx.send(embed = em )
+		'''
 	
 	@commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
 	@commands.command()
