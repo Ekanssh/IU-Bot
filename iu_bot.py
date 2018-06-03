@@ -279,59 +279,59 @@ class General:
         for i in await aio.cursor.fetchall():
             if i is not None:
                 if i[0] == mem.id:
-                      found = True
-                      await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(mem.id), ))
-                      if len(await aio.cursor.fetchall()) > 0:
-                          await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(mem.id), ))
-                          currentDaily = int((await aio.cursor.fetchall())[0][1])
-                      else :
-                          currentDaily = 0
+                    found = True
+                    await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(mem.id), ))
+                    if len(await aio.cursor.fetchall()) > 0:
+                        await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(mem.id), ))
+                        currentDaily = int((await aio.cursor.fetchall())[0][1])
+                    else :
+                        currentDaily = 0
 
-                      await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id,))
-                      level = (await aio.cursor.fetchall())[0][4]
+                    await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id,))
+                    level = (await aio.cursor.fetchall())[0][4]
 
-                      await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id,))
-                      note = (await aio.cursor.fetchall())[0][5]
+                    await aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id,))
+                    note = (await aio.cursor.fetchall())[0][5]
 
-                      back = Image.open("Images/background.png")
-                      background = Image.open("Images/milky-way.jpg")
-                      background = background.crop((0, 0, 500, 215))
-                      back.paste(background, box = (0, 0))
-                      font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 45)
-                      badges_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 25)
-                      level_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 25)
-                      credits_reps_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 20)
-                      note_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 20)
+                    back = Image.open("Images/background.png")
+                    background = Image.open("Images/milky-way.jpg")
+                    background = background.crop((0, 0, 500, 215))
+                    back.paste(background, box = (0, 0))
+                    font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 45)
+                    badges_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 25)
+                    level_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 25)
+                    credits_reps_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 20)
+                    note_font = ImageFont.truetype("Fronts/Quicksand-Regular.otf", 20)
 
-                      d = ImageDraw.Draw(back)
-                      d.rectangle([0, 160, 110, 270], fill = (255, 255, 255))
-                      async with aiohttp.ClientSession() as cs:
-                          async with cs.get(mem.avatar_url) as r:
-                              with open("TEMPava.png", 'wb') as ava:
-                                  ava.write(await r.read())
-                      avatar = Image.open("TEMPava.png")
-                      avatar = avatar.resize((100, 100))
-                      back.paste(avatar, (5, 165))
-                      d.text(text = str(mem), xy = (125, 215), font = font)
-                      d.line([(113, 219), (113, 500)], fill = (50, 50, 50), width = 3) #line beside ava
+                    d = ImageDraw.Draw(back)
+                    d.rectangle([0, 160, 110, 270], fill = (255, 255, 255))
+                    async with aiohttp.ClientSession() as cs:
+                        async with cs.get(mem.avatar_url) as r:
+                            with open("TEMPava.png", 'wb') as ava:
+                                ava.write(await r.read())
+                    avatar = Image.open("TEMPava.png")
+                    avatar = avatar.resize((100, 100))
+                    back.paste(avatar, (5, 165))
+                    d.text(text = str(mem), xy = (125, 215), font = font)
+                    d.line([(113, 219), (113, 500)], fill = (50, 50, 50), width = 3) #line beside ava
 
-                      d.line([(11, 302), (100, 302)], fill = (50, 50, 50), width = 3)
-                      d.text(text = "Badges", xy = (10, 275), font = badges_font)
-                      d.text(text = "Level:", xy = (360, 265), font = level_font)
-                      d.text(text = str(level), xy = (435, 265), font = level_font)
+                    d.line([(11, 302), (100, 302)], fill = (50, 50, 50), width = 3)
+                    d.text(text = "Badges", xy = (10, 275), font = badges_font)
+                    d.text(text = "Level:", xy = (360, 265), font = level_font)
+                    d.text(text = str(level), xy = (435, 265), font = level_font)
 
-                      d.text(text = "Credits:", xy = (135, 310), font = credits_reps_font)
-                      d.text(text = str(currentDaily), xy = (435, 310), font = credits_reps_font, align = 'RIGHT')
+                    d.text(text = "Credits:", xy = (135, 310), font = credits_reps_font)
+                    d.text(text = str(currentDaily), xy = (435, 310), font = credits_reps_font, align = 'RIGHT')
 
-                      d.text(text = "Reputations:", xy = (135, 340), font = credits_reps_font)
-                      d.text(text = "-", xy = (435, 340), font = credits_reps_font, align = 'RIGHT')
+                    d.text(text = "Reputations:", xy = (135, 340), font = credits_reps_font)
+                    d.text(text = "-", xy = (435, 340), font = credits_reps_font, align = 'RIGHT')
 
-                      d.rectangle([135, 400, 480, 490])
-                      d.text(text = note, xy = (145, 405), font = note_font)
-                      back.save(str(mem.name) + '.png')
-                      await ctx.send(file = discord.File(str(mem.name) + '.png'))
-                      os.remove(str(mem.name) + '.png')
-                      os.remove('TEMPava.png')
+                    d.rectangle([135, 400, 480, 490])
+                    d.text(text = note, xy = (145, 405), font = note_font)
+                    back.save(str(mem.name) + '.png')
+                    await ctx.send(file = discord.File(str(mem.name) + '.png'))
+                    os.remove(str(mem.name) + '.png')
+                    os.remove('TEMPava.png')
 
         if not found:
             await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s)", (mem.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
