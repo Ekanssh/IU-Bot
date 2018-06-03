@@ -505,30 +505,29 @@ class Economy:
                 return
             msg_timestamp = ctx.message.created_at
             found = False
-            await aio.execute("SELECT * FROM Dailies WHERE id= %s", (ctx.message.author.id, ))
+            await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
 
             for i in await aio.cursor.fetchall():
-                  if i is not None:
-                        if i[0] == ctx.message.author.id:
-                            found = True
-                            await aio.execute("SELECT * FROM Dailies WHERE id= %s", (ctx.message.author.id, ))
-                            previous_msg_timestamp = (await aio.cursor.fetchall())[0][2]
+                if i is not None:
+                    found = True
+                    await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
+                    previous_msg_timestamp = (await aio.cursor.fetchall())[0][2]
 
-                            remaining_timestamp = previous_msg_timestamp - msg_timestamp
+                    remaining_timestamp = previous_msg_timestamp - msg_timestamp
 
-                            await aio.execute("SELECT * FROM Dailies WHERE id= %s", (ctx.message.author.id, ))
-                            currentDaily = int((await aio.cursor.fetchall())[0][1])
+                    await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
+                    currentDaily = int((await aio.cursor.fetchall())[0][1])
 
-                            secondsRemaining = remaining_timestamp.seconds
-                            time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
+                    secondsRemaining = abs(remaining_timestamp.seconds)
+                    time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
 
-                            if secondsRemaining >= 86400:
-                                currentDaily += 200
-                                await aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
-                                await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
+                    if secondsRemaining >= 86400:
+                        currentDaily += 200
+                        await aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
+                        await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
 
-                            else:
-                                await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
+                    else:
+                        await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
 
             if not found:
                 await aio.execute("INSERT INTO Dailies VALUES (%s, '200', %s)", (ctx.message.author.id, msg_timestamp))
