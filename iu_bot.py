@@ -119,7 +119,7 @@ async def on_message(msg):
 			except:
 				await msg.delete()
   		if last_nos[0] != last_nos[1]+1 :
-				await msg.delete()
+			await msg.delete()
 	'''
 	if msg.author.id==279318185524723712: # restricting Emp.ketan
 		content=msg.content.lower()
