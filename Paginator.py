@@ -23,29 +23,29 @@ class Paginator:
         while True:
             r, u = await self.bot.wait_for('reaction_add', check = check)
             
-            if r.reaction.emoji == emoji_list[0]:
+            if r.emoji == emoji_list[0]:
                 self.index = 0
 
-            elif r.reaction.emoji == emoji_list[1]:
+            elif r.emoji == emoji_list[1]:
                 if not self.index <= 0:
                     self.index -= 1
                 else:
                     self.index = 0
 
-            elif r.reaction.emoji == emoji_list[2]:
+            elif r.emoji == emoji_list[2]:
                 await self.message.delete()
                 break
 
-            elif r.reaction.emoji == emoji_list[3]:
+            elif r.emoji == emoji_list[3]:
                 if not self.index >= len(list_to_paginate) - 2:
                     self.index += 1
                 else:
                     self.index = len(list_to_paginate) - 2
 
-            elif r.reaction.emoji == emoji_list[4]:
+            elif r.emoji == emoji_list[4]:
                 self.index = len(list_to_paginate) - 2
 
-            elif r.reaction.emoji == emoji_list[5]:
+            elif r.emoji == emoji_list[5]:
                 bot_msg = await c.send("Choose a number between 0 to {} to move to that page.".format(len(list_to_paginate)))
                 def check_msg(message):
                     return message.author == self.user                    
