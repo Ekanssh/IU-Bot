@@ -114,7 +114,7 @@ async def on_message(msg):
  		try:
   			last_nos=[]
   			async for i in ctx.channel.history(limit=2):
-   			last_nos.append(int(i.content))
+   				last_nos.append(int(i.content))
   			if last_nos[0]!=last_nos[1]+1:await message.delete()
  		except:
   			await message.delete()
