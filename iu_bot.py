@@ -113,12 +113,12 @@ async def on_message(msg):
 	if msg.channel.id == 434664516991844352: #counting channel
 		last_nos = []
 		async for i in ctx.channel.history(limit=2):
- 			try:
+			try:
 				number = int(i.content)
-   				last_nos.append(number)
+				last_nos.append(number)
 			except:
 				await msg.delete()
-  		if last_nos[0] != last_nos[1]+1 :
+		if last_nos[0] != last_nos[1]+1 :
 			await msg.delete()
 	'''
 	if msg.author.id==279318185524723712: # restricting Emp.ketan
