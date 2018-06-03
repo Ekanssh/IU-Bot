@@ -110,20 +110,22 @@ async def on_member_remove(member):
 
 @bot.event
 async def on_message(msg):
-	if msg.channel.id==434664516991844352: #counting channel
- 		try:
-  			last_nos=[]
-  			async for i in ctx.channel.history(limit=2):
-   				last_nos.append(int(i.content))
-  			if last_nos[0]!=last_nos[1]+1:await msg.delete()
- 		except:
-  			await msg.delete()
+	if msg.channel.id == 434664516991844352: #counting channel
+		last_nos = []
+		async for i in ctx.channel.history(limit=2):
+ 			try:
+				number = int(i.content)
+   				last_nos.append(number)
+			except:
+				await msg.delete()
+  		if last_nos[0] != last_nos[1]+1 :
+				await msg.delete()
 	'''
 	if msg.author.id==279318185524723712: # restricting Emp.ketan
 		content=msg.content.lower()
 		await msg.delete()
 		await msg.channel.send("**Emp.ketan said: **"+content)
-'''
+	'''
 	if msg.channel.name is globalvars.memesChannel:
 		for chr in list(string.ascii_letters):
 			if chr in str(msg.content):
