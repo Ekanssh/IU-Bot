@@ -542,22 +542,22 @@ class Economy:
             return
         found_in_db = False
         if otherMem is None:
-            await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
+            await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id,))
             for i in await aio.cursor.fetchall():
                 if i is not None:
-                    if i[0] == str(ctx.message.author.id):
+                    if i[0] == ctx.message.author.id:
                         found_in_db = True
-                        await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(ctx.message.author.id),))
+                        await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id,))
                         await ctx.send(":moneybag: | You currently have ₹{0}".format((await aio.cursor.fetchall())[0][1]))
             if not found_in_db:
                 await ctx.send(":moneybag: | You currently have ₹0")
         else:
-            await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(otherMem.id),))
+            await aio.execute("SELECT * FROM Dailies WHERE id = %s", (otherMem.id,))
             for i in await aio.cursor.fetchall():
                 if i is not None:
-                    if i[0] == str(otherMem.id):
+                    if i[0] == otherMem.id:
                         found_in_db = True
-                        await aio.execute("SELECT * FROM Dailies WHERE id = %s", (str(otherMem.id),))
+                        await aio.execute("SELECT * FROM Dailies WHERE id = %s", (otherMem.id,))
                         await ctx.send(":moneybag: | {0} currently has ₹{1}".format(otherMem.name, (await aio.cursor.fetchall())[0][1]))
             if not found_in_db:
                 await ctx.send(":moneybag: | {0} currently has ₹0".format(otherMem.name))
