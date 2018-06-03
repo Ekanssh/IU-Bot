@@ -86,8 +86,8 @@ class Paginator:
                 pass
             
             #edit message everytime
-            if isinstance(embed_list[self.index], discord.Embed):
-                await self.message.edit(new_content = '', embed = embed_list[self.index])
+            if isinstance(list_to_paginate[self.index], discord.Embed):
+                await self.message.edit(new_content = '', embed = list_to_paginate[self.index])
             else:
-                await self.message.edit(new_content = embed_list[self.index])
+                await self.message.edit(new_content = list_to_paginate[self.index])
 
