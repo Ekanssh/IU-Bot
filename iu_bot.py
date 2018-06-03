@@ -158,7 +158,7 @@ async def on_message(msg):
 
 @bot.event
 async def on_message_edit(before, after):
-  await bot.process_commands(after)
+    await bot.process_commands(after)
 
 
 class Admin:
@@ -343,7 +343,7 @@ class General:
     async def note(self, ctx, option="show", *, newNote = None):
         '''Set your profile's note'''
         if ctx.message.author.bot:
-          return
+            return
         if option == "show":
             await aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.message.author.id,))
             note =  (await aio.cursor.fetchall())[0][5]
