@@ -77,11 +77,11 @@ class Paginator:
                     await c.send("You did not chose a number :<\nI got bored")
 
 
-            elif r.reaction.emoji == emoji_list[6]:
+            elif r.emoji == emoji_list[6]:
                 self.index = len(list_to_paginate) - 1
 
             try:
-                await self.message.remove_reaction(r.reaction.emoji, self.user)
+                await self.message.remove_reaction(r.emoji, self.user)
             except:
                 pass
             

@@ -112,7 +112,7 @@ async def on_member_remove(member):
 async def on_message(msg):
     if msg.channel.id == 434664516991844352: #counting channel
         last_nos = []
-        async for i in ctx.channel.history(limit=2):
+        async for i in msg.channel.history(limit=2):
             try:
                 number = int(i.content)
                 last_nos.append(number)
