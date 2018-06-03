@@ -118,11 +118,12 @@ async def on_message(msg):
   			if last_nos[0]!=last_nos[1]+1:await message.delete()
  		except:
   			await message.delete()
+	'''
 	if msg.author.id==279318185524723712: # restricting Emp.ketan
 		content=msg.content.lower()
 		await msg.delete()
 		await msg.channel.send("**Emp.ketan said: **"+content)
-
+'''
 	if msg.channel.name is globalvars.memesChannel:
 		for chr in list(string.ascii_letters):
 			if chr in str(msg.content):
