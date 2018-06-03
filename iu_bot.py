@@ -341,19 +341,19 @@ class General:
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def note(self, ctx, option="show", *, newNote = None):
-         '''Set your profile's note'''
-         if ctx.message.author.bot:
-           return
-         if option == "show":
-             await aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.message.author.id,))
-             note =  (await aio.cursor.fetchall())[0][5]
-             await ctx.send("Your current note is:\n" + "```" + note + "```")
-         elif option == "set" and newNote is not None:
-             await aio.execute("UPDATE profile SET note = %s WHERE id = %s", (newNote, ctx.message.author.id, ))
-             await ctx.send("Your current note is:\n" + "```" + newNote + "```")
-         elif option == "reset":
-             await aio.execute("UPDATE profile SET note = %s WHERE id = %s", ('I am imperfectly perfect...', ctx.message.author.id, ))
-             await ctx.send("Your profile's note has been reset to:\n" + '```I am imperfectly perfect...```')
+        '''Set your profile's note'''
+        if ctx.message.author.bot:
+          return
+        if option == "show":
+            await aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.message.author.id,))
+            note =  (await aio.cursor.fetchall())[0][5]
+            await ctx.send("Your current note is:\n" + "```" + note + "```")
+        elif option == "set" and newNote is not None:
+            await aio.execute("UPDATE profile SET note = %s WHERE id = %s", (newNote, ctx.message.author.id, ))
+            await ctx.send("Your current note is:\n" + "```" + newNote + "```")
+        elif option == "reset":
+            await aio.execute("UPDATE profile SET note = %s WHERE id = %s", ('I am imperfectly perfect...', ctx.message.author.id, ))
+            await ctx.send("Your profile's note has been reset to:\n" + '```I am imperfectly perfect...```')
     '''
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
