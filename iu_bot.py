@@ -521,7 +521,7 @@ class Economy:
                     secondsRemaining = abs(remaining_timestamp.seconds)
                     time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
 
-                    if secondsRemaining >= 86400:
+                    if secondsRemaining >= 60:
                         currentDaily += 200
                         await aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
                         await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
