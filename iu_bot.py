@@ -512,12 +512,12 @@ class Economy:
                 if i is not None:
                     found = True
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
-                    previous_msg_timestamp = (await aio.cursor.fetchall())[0][1]
+                    previous_msg_timestamp = (await aio.cursor.fetchall())[0][2]
 
                     remaining_timestamp = msg_timestamp - previous_msg_timestamp
 
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
-                    currentDaily = int((await aio.cursor.fetchall())[0][1])
+                    currentDaily = int((await aio.cursor.fetchall())[0][2])
 
                     secondsRemaining = abs(remaining_timestamp.seconds)
                     time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
@@ -531,7 +531,7 @@ class Economy:
                         await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
 
             if not found:
-                await aio.execute("INSERT INTO Dailies VALUES (%s, '200', %s)", (ctx.message.author.id, msg_timestamp))
+                await aio.execute("INSERT INTO Dailies VALUES (%s, '200', %s)",k (ctx.message.author.id, msg_timestamp))
                 await ctx.send(":moneybag: | You got your 200 dialies!\nYou have ₹200")
 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
