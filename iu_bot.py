@@ -516,7 +516,7 @@ class Economy:
                     remaining_timestamp = previous_msg_timestamp - msg_timestamp
 
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
-                    currentDaily = int((await aio.cursor.fetchall())[0][2])
+                    currentDaily = int((await aio.cursor.fetchall())[0][1])
 
                     secondsRemaining = abs(remaining_timestamp.seconds)
                     time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
