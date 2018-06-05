@@ -422,6 +422,7 @@ class General:
 
     @commands.command()
     #dont dare to touch this command
+    # shit i touched it
     async def bday(self, ctx, bDay):
         db = client.open("IU DB").sheet1
         try:
@@ -511,7 +512,7 @@ class Economy:
                 if i is not None:
                     found = True
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
-                    previous_msg_timestamp = (await aio.cursor.fetchall())[0][2]
+                    previous_msg_timestamp = (await aio.cursor.fetchall())[0][1]
 
                     remaining_timestamp = msg_timestamp - previous_msg_timestamp
 
