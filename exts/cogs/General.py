@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from discord.ext import commands
-import discord 
+import discord
 import aiohttp
 from bs4 import BeautifulSoup as bs
-from PIL import Image, ImageFont, ImageDraw #used in profile command 
+from PIL import Image, ImageFont, ImageDraw #used in profile command
 import time, datetime
 from time import localtime, strftime
 import random
@@ -90,7 +90,7 @@ class General:
             await ctx.send("Sorry, bots don't have a profile...")
             return
 
-        
+
         await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id, ))
         for i in await self.bot.aio.cursor.fetchall():
             if i is not None:
@@ -224,11 +224,11 @@ class General:
     @commands.command()
     async def ping(self, ctx):
         '''Call the bot'''
-        msg = await ctx.send(ctx.author.mention+', Pong!')
+        msg = await ctx.send('Pong!')
         res = msg.created_at - ctx.message.created_at
         tdm = lambda td: ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
         res = tdm(res)
-        await msg.edit(content=ctx.author.mention+', Pong! :ping_pong: Took {} ms'.format(res))
+        await msg.edit(content='Pong! :ping_pong: Took {} ms'.format(res))
 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
