@@ -30,8 +30,8 @@ aio = aiopg_commands() #used for database purposes
 @bot.event
 async def on_ready():
 
-    botLogChannel = await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID)
-    devBotLogChannel = await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logDevID)
+    botLogChannel = bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID)
+    devBotLogChannel = bot.get_guild(globalvars.devServerID).get_channel(globalvars.logDevID)
     if bot.user.id == 453748284834447361: #iu bot dev 
         devBotLogChannel.send("IU Bot **DEV** load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
     else:
