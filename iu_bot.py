@@ -7,7 +7,7 @@ import discord
 
 from time import localtime, strftime
 import os
-import globalvars
+import ext.cogs.globalvars
 from ext.cogs.CustomAiopg import aiopg_commands #used to handle database
 import time, datetime
 import random
