@@ -513,12 +513,12 @@ class Economy:
                     found = True
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
                     previous_msg_timestamp = (await aio.cursor.fetchall())[0][2]
-                    remaining_timestamp = 43200 - (msg_timestamp - previous_msg_timestamp)
+                    remaining_timestamp = (msg_timestamp - previous_msg_timestamp)
 
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
                     currentDaily = int((await aio.cursor.fetchall())[0][1])
 
-                    secondsRemaining = abs(remaining_timestamp.seconds)
+                    secondsRemaining = 43200 - abs(remaining_timestamp.seconds)
                     time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
 
                     if secondsRemaining >= 43200:
