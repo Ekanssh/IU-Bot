@@ -29,8 +29,14 @@ aio = aiopg_commands() #used for database purposes
 
 @bot.event
 async def on_ready():
-    await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID).send("IU Bot **DEV** load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
-        
+
+    botLogChannel = await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID)
+    devBotLogChannel = await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logDevID)
+    if bot.user.id == 453748284834447361: #iu bot dev 
+        devBotLogChannel.send("IU Bot **DEV** load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
+    else:
+        botLogChannel.send("IU Bot load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
+           
     await aio.connect()
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id BIGINT, dailiesCount INT, remaining_timestamp TIMESTAMP)")
     await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT)")
@@ -40,10 +46,11 @@ async def on_ready():
         try:
             bot.load_extension("exts.cogs.{}".format(i))
         except Exception as e:
-            await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID).send("Erorr occurred in loading {}".format(i) + "\n" + "```{}```".format(e))
+            if bot.user.id == 453748284834447361: #iu bot dev 
+                devBotLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
+            else:
+                botLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
     
-    
-
     await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
 
 

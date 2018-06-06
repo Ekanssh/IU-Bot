@@ -14,7 +14,7 @@ from exts.cogs import globalvars
 import asyncio, aiohttp #various needs
 
 def calculate_level(level: 'current level') -> 'xp to reach next level':
-            return (level**2+level)/2*100-(level*100)
+	return (level**2+level)/2*100-(level*100)
   
 
 class Events:
@@ -30,7 +30,7 @@ class Events:
 
 	async def on_member_remove(self, member):
 	    if member.guild.id == 281793428793196544:
-	        channel = bot.get_channel(429618676875001856)
+	        channel = self.bot.get_channel(429618676875001856)
 	        await channel.send('We are feeling bad to see you leaving %s!' %(member.name))
 
 	async def on_message(self, msg):
@@ -52,28 +52,28 @@ class Events:
 
 	    found = False
 	    if not msg.author.bot:
-	        await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
-	        for i in await aio.cursor.fetchall():
+	        await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
+	        for i in await self.bot.aio.cursor.fetchall():
 	            if i is not None:
 	                if i[0] == msg.author.id:
 
 	                    found = True
 
-	                    await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
-	                    xp = (await aio.cursor.fetchall())[0][6]
-	                    await aio.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 5, msg.author.id, ))
+	                    await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
+	                    xp = (await self.bot.aio.cursor.fetchall())[0][6]
+	                    await self.bot.aio.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 5, msg.author.id, ))
 
-	                    await aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
-	                    level = (await aio.cursor.fetchall())[0][4]
+	                    await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
+	                    level = (await self.bot.aio.cursor.fetchall())[0][4]
 
 	                    if xp == int(calculate_level(level)):
-	                        await aio.execute("UPDATE profile SET level = %s WHERE id = %s", (level + 1, msg.author.id, ))
+	                        await self.bot.aio.execute("UPDATE profile SET level = %s WHERE id = %s", (level + 1, msg.author.id, ))
 	                        await msg.channel.send("Congratulations, " + msg.author.mention + " you advanced to level {}".format(level + 1),delete_after=10)
 	    if not found:
 	        if not msg.author.bot:
-	            await aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s)", (msg.author.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
+	            await self.bot.aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s)", (msg.author.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
 
-	    await bot.process_commands(msg)
+	    await self.bot.process_commands(msg)
 
 	async def on_message_edit(self, before, after):
 	    await self.bot.process_commands(after)

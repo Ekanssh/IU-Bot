@@ -7,6 +7,7 @@ import aiohttp
 from bs4 import BeautifulSoup as bs
 from PIL import Image, ImageFont, ImageDraw #used in profile command 
 import time, datetime
+from time import localtime, strftime
 import random
 
 from oauth2client.service_account import ServiceAccountCredentials
