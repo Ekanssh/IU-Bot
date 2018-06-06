@@ -38,7 +38,7 @@ async def on_ready():
         extentions = ("Admin", "Economy", "Events", "General", "repl", "Miscellaneous")
         for i in extentions:
             try:
-                bot.load_extension("exts/cogs/{}".format(i))
+                bot.load_extension("exts.cogs.{}".format(i))
             except Exception as e:
                 await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID).send("Erorr occurred in loading {}".format(i) + "\n" + "```{}```".format(e))
         
