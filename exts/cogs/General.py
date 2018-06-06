@@ -298,8 +298,4 @@ class General:
         return await ctx.send('**Bot**: %s\n**You**: %s\n%s'%(guess, value, res))
 
 def setup(bot):
-<<<<<<< HEAD
     bot.add_cog(General(bot))
-=======
-    bot.add_cog(General(bot))
->>>>>>> 90451a333f30bf954e6d975de94115e16e84f1d5
