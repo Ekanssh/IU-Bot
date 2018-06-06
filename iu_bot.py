@@ -29,22 +29,22 @@ aio = aiopg_commands() #used for database purposes
 
 @bot.event
 async def on_ready():
-        await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID).send("IU Bot **DEV** load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
+    await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID).send("IU Bot **DEV** load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
         
-        await aio.connect()
-        await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id BIGINT, dailiesCount INT, remaining_timestamp TIMESTAMP)")
-        await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT)")
-        bot.aio = aio
-        extentions = ("Admin", "Economy", "Events", "General", "repl", "Miscellaneous")
-        for i in extentions:
-            try:
-                bot.load_extension("exts.cogs.{}".format(i))
-            except Exception as e:
-                await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID).send("Erorr occurred in loading {}".format(i) + "\n" + "```{}```".format(e))
-        
-        
+    await aio.connect()
+    await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id BIGINT, dailiesCount INT, remaining_timestamp TIMESTAMP)")
+    await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT)")
+    bot.aio = aio
+    extentions = ("Admin", "Economy", "Events", "General", "repl", "Miscellaneous")
+    for i in extentions:
+        try:
+            bot.load_extension("exts.cogs.{}".format(i))
+        except Exception as e:
+            await bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID).send("Erorr occurred in loading {}".format(i) + "\n" + "```{}```".format(e))
+    
+    
 
-        await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
+    await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
 
 
 bot.run(globalvars.TOKEN)
