@@ -4,4 +4,4 @@ git+https://github.com/google/oauth2client.git
 aiopg
 pillow
 bs4
-aiohttp
+aiohttp>=3.2.1
