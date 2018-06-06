@@ -34,28 +34,6 @@ ownerid = {360022804357185537: "Pegasus",
 aio = aiopg_commands() #used for database purposes
 
 
-from time import localtime, strftime
-import os
-from exts.cogs import globalvars
-from exts.cogs.CustomAiopg import aiopg_commands #used to handle database
-import time, datetime
-import random
-import gspread
-
-
-bot = commands.Bot(description='IU Bot Dev build', command_prefix=['iu ', 'Iu ', 'IU', 'iu_', 'IU_', 'Iu_'])
-
-
-ownerid = {360022804357185537: "Pegasus",
-            315728369369088003: "Ekansh", 
-            270898185961078785: "Shirious", 
-            341958485724102668: "UniQ", 
-            388984732156690433: "Yash", 
-            341171182227161088: "Oxide", 
-            443961507051601931: "Uday"}
-
-aio = aiopg_commands() #used for database purposes
-
 @bot.event
 async def on_ready():
 
