@@ -9,6 +9,7 @@ from PIL import Image, ImageFont, ImageDraw #used in profile command
 import time, datetime
 from time import localtime, strftime
 import random
+import os
 
 from oauth2client.service_account import ServiceAccountCredentials
 import httplib2 #DO NOT USE THIS EKANSH! --used in bday command *use aiohttp*
