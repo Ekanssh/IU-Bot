@@ -14,7 +14,7 @@ import random
 import gspread
 
 
-bot = commands.Bot(description='IU Bot Dev build', command_prefix=['dev ', 'iu_dev '])
+bot = commands.Bot(description='IU Bot Dev build', command_prefix=['iu ', 'Iu ', 'IU', 'iu_', 'IU_', 'Iu_'])
 
 
 ownerid = {360022804357185537: "Pegasus",
