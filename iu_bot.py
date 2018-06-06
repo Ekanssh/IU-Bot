@@ -53,7 +53,5 @@ async def on_ready():
     
     await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
 
-if bot.user.id == 453748284834447361: #iu bot dev 
-    bot.run(globalvars.DEV_BOT_TOKEN)
-else:
-    bot.run(globalvars.TOKEN)
+
+bot.run(globalvars.TOKEN)
