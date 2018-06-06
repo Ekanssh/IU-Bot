@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.6
+﻿#usr/bin/env python3.6
 # -*- coding: utf-8 -*-
 
 
@@ -7,7 +7,7 @@ import discord
 
 from time import localtime, strftime
 import os
-import exts.cogs.globalvars
+from exts.cogs import globalvars
 from exts.cogs.CustomAiopg import aiopg_commands #used to handle database
 import time, datetime
 import random
@@ -17,7 +17,13 @@ import gspread
 bot = commands.Bot(description='IU Bot Dev build', command_prefix=['dev ', 'iu_dev '])
 
 
-__ownerid__ = [360022804357185537, 315728369369088003, 270898185961078785, 341958485724102668, 371673235395182592, 388984732156690433]
+ownerid = {360022804357185537: "Pegasus",
+            315728369369088003: "Ekansh", 
+            270898185961078785: "Shirious", 
+            341958485724102668: "UniQ", 
+            388984732156690433: "Yash", 
+            341171182227161088: "Oxide", 
+            443961507051601931: "Uday"}
 
 aio = aiopg_commands() #used for database purposes
 
