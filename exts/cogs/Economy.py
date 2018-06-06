@@ -50,24 +50,24 @@ class Economy:
                 return
             msg_timestamp = ctx.message.created_at
             found = False
-            await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
+            await bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
 
-            for i in await aio.cursor.fetchall():
+            for i in await bot.aio.cursor.fetchall():
                 if i is not None:
                     found = True
-                    await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
-                    previous_msg_timestamp = (await aio.cursor.fetchall())[0][2]
+                    await bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
+                    previous_msg_timestamp = (await bot.aio.cursor.fetchall())[0][2]
                     remaining_timestamp = (msg_timestamp - previous_msg_timestamp)
 
-                    await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
-                    currentDaily = int((await aio.cursor.fetchall())[0][1])
+                    await bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
+                    currentDaily = int((await bot.aio.cursor.fetchall())[0][1])
 
                     secondsRemaining = 86400 - abs(remaining_timestamp.seconds)
                     time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
 
                     if secondsRemaining <= 0:
                         currentDaily += 200
-                        await aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
+                        await bot.aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
                         await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
 
                     else:
