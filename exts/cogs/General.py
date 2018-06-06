@@ -14,6 +14,7 @@ import httplib2 #DO NOT USE THIS EKANSH! --used in bday command *use aiohttp*
 import gspread  #Ekansh's bday command
 
 import asyncio, aiohttp #various needs
+from exts.cogs import globalvars
 
 
 #bday command

@@ -23,17 +23,17 @@ class Events:
 		self.bot = bot
 
 	
-	async def on_member_join(member):
+	async def on_member_join(self, member):
 	    if member.guild.id == 281793428793196544:
 	        channel = self.bot.get_channel(429618676875001856)
 	        await channel.send('Welcome to Indians United, '+member.mention+'! Please enjoy your time here and hope you check #rules! :)')
 
-	async def on_member_remove(member):
+	async def on_member_remove(self, member):
 	    if member.guild.id == 281793428793196544:
 	        channel = bot.get_channel(429618676875001856)
 	        await channel.send('We are feeling bad to see you leaving %s!' %(member.name))
 
-	async def on_message(msg):
+	async def on_message(self, msg):
 	    if msg.channel.id == 434664516991844352: #counting channel
 	        last_nos = []
 	        async for i in msg.channel.history(limit=2):
@@ -75,7 +75,7 @@ class Events:
 
 	    await bot.process_commands(msg)
 
-	async def on_message_edit(before, after):
+	async def on_message_edit(self, before, after):
 	    await self.bot.process_commands(after)
 
 def setup(bot):
