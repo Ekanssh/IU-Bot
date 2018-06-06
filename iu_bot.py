@@ -513,7 +513,7 @@ class Economy:
                     found = True
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
                     previous_msg_timestamp = (await aio.cursor.fetchall())[0][2]
-                    remaining_timestamp = msg_timestamp - previous_msg_timestamp
+                    remaining_timestamp = previous_msg_timestamp - msg_timestamp
 
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
                     currentDaily = int((await aio.cursor.fetchall())[0][1])
