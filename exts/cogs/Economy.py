@@ -16,9 +16,9 @@ class Economy:
         person = person or ctx.author
 
         searchable = person.id
-        await aio.execute("SELECT * FROM profile WHERE id = %s", (searchable, ))
+        await bot.aio.execute("SELECT * FROM profile WHERE id = %s", (searchable, ))
 
-        temp = (await aio.cursor.fetchall())[0]
+        temp = (await bot.aio.cursor.fetchall())[0]
 
         level, xp = temp[4], temp[6]
         if xp < 1000:
@@ -49,25 +49,25 @@ class Economy:
             return
         msg_timestamp = ctx.message.created_at
         found = False
-        await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
+        await bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
 
-        for i in await aio.cursor.fetchall():
+        for i in await bot.aio.cursor.fetchall():
             if i is not None:
                 found = True
-                await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
-                previous_msg_timestamp = (await aio.cursor.fetchall())[0][2]
+                await bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
+                previous_msg_timestamp = (await bot.aio.cursor.fetchall())[0][2]
 
                 remaining_timestamp = previous_msg_timestamp - msg_timestamp
 
-                await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
-                currentDaily = int((await aio.cursor.fetchall())[0][1])
+                await bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
+                currentDaily = int((await bot.aio.cursor.fetchall())[0][1])
 
                 secondsRemaining = abs(remaining_timestamp.seconds)
                 time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
 
                 if secondsRemaining >= 43200:
                     currentDaily += 200
-                    await aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
+                    await bot.aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
                     await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
 
                 else:
@@ -75,7 +75,7 @@ class Economy:
 
         if not found:
             await ctx.send("Member not found in the database. Registering new user with id {0}".format(ctx.author.id))
-            await aio.execute("INSERT INTO Dailies VALUES (%s, '200', %s)", (ctx.message.author.id, msg_timestamp, ))
+            await bot.aio.execute("INSERT INTO Dailies VALUES (%s, '200', %s)", (ctx.message.author.id, msg_timestamp, ))
             await ctx.send(":moneybag: | You got your 200 dialies!\nYou have ₹200")
 
 
@@ -89,23 +89,23 @@ class Economy:
             return
         found_in_db = False
         if otherMem is None:
-            await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id,))
-            for i in await aio.cursor.fetchall():
+            await bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id,))
+            for i in await bot.aio.cursor.fetchall():
                 if i is not None:
                     if i[0] == ctx.message.author.id:
                         found_in_db = True
-                        await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id,))
-                        await ctx.send(":moneybag: | You currently have ₹{0}".format((await aio.cursor.fetchall())[0][1]))
+                        await bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id,))
+                        await ctx.send(":moneybag: | You currently have ₹{0}".format((await bot.aio.cursor.fetchall())[0][1]))
             if not found_in_db:
                 await ctx.send(":moneybag: | You currently have ₹0")
         else:
-            await aio.execute("SELECT * FROM Dailies WHERE id = %s", (otherMem.id,))
-            for i in await aio.cursor.fetchall():
+            await bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (otherMem.id,))
+            for i in await bot.aio.cursor.fetchall():
                 if i is not None:
                     if i[0] == otherMem.id:
                         found_in_db = True
-                        await aio.execute("SELECT * FROM Dailies WHERE id = %s", (otherMem.id,))
-                        await ctx.send(":moneybag: | {0} currently has ₹{1}".format(otherMem.name, (await aio.cursor.fetchall())[0][1]))
+                        await bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (otherMem.id,))
+                        await ctx.send(":moneybag: | {0} currently has ₹{1}".format(otherMem.name, (await bot.aio.cursor.fetchall())[0][1]))
             if not found_in_db:
                 await ctx.send(":moneybag: | {0} currently has ₹0".format(otherMem.name))
 
