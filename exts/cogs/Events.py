@@ -10,7 +10,7 @@ Except the on_ready event because it is needed to lead other extentions
 from discord.ext import commands
 import discord 
 import string #needed for counting channel
-import globalvars
+from exts.cogs import globalvars
 import asyncio, aiohttp #various needs
 
 def calculate_level(level: 'current level') -> 'xp to reach next level':
