@@ -518,10 +518,10 @@ class Economy:
                     await aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
                     currentDaily = int((await aio.cursor.fetchall())[0][1])
 
-                    secondsRemaining = 43200 - abs(remaining_timestamp.seconds)
+                    secondsRemaining = 86400 - abs(remaining_timestamp.seconds)
                     time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
 
-                    if secondsRemaining >= 43200:
+                    if secondsRemaining >= 86400:
                         currentDaily += 200
                         await aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
                         await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
