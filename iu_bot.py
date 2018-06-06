@@ -12,9 +12,14 @@ from exts.cogs.CustomAiopg import aiopg_commands #used to handle database
 import time, datetime
 import random
 import gspread
+import json
 
+with open("config.json") as fp:
+    config = json.load(fp)
 
-bot = commands.Bot(description='IU Bot Dev build', command_prefix=['dev ', 'iu_dev '])
+prefixes = config['prefix'].split('|')
+
+bot = commands.Bot(description = 'IU Bot Dev build', command_prefix = prefixes)
 
 
 ownerid = {360022804357185537: "Pegasus",
@@ -27,12 +32,17 @@ ownerid = {360022804357185537: "Pegasus",
 
 aio = aiopg_commands() #used for database purposes
 
+
 @bot.event
 async def on_ready():
 
     botLogChannel = bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID)
     devBotLogChannel = bot.get_guild(globalvars.devServerID).get_channel(globalvars.logDevID)
-    if bot.user.id == 453748284834447361: #iu bot dev 
+
+    with open("config.json") as fp:
+        bot.config = json.load(fp)
+
+    if bot.config['maintenance'] == "True": #To check if the branch is development or not
         devBotLogChannel.send("IU Bot **DEV** load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
     else:
         botLogChannel.send("IU Bot load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
@@ -46,12 +56,15 @@ async def on_ready():
         try:
             bot.load_extension("exts.cogs.{}".format(i))
         except Exception as e:
-            if bot.user.id == 453748284834447361: #iu bot dev 
+            if bot.config['maintenance'] == "True": #iu bot dev 
                 devBotLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
             else:
                 botLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
     
-    await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
+    await bot.change_presence(status = discord.Status.dnd, 
+                                activity = discord.Game(name="on Indians United [iu_help reveals commands]"))
 
-
-bot.run(globalvars.TOKEN)
+if config['maintenance'] == "True":
+    bot.run(globalvars.DEV_BOT_TOKEN)
+else:
+    bot.run(globalvars.TOKEN)
