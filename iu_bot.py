@@ -43,9 +43,9 @@ async def on_ready():
         bot.config = json.load(fp)
 
     if bot.config['maintenance'] == "True": #To check if the branch is development or not
-        devBotLogChannel.send("IU Bot **DEV** load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
+        await devBotLogChannel.send("IU Bot **DEV** load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
     else:
-        botLogChannel.send("IU Bot load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
+        await botLogChannel.send("IU Bot load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
            
     await aio.connect()
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id BIGINT, dailiesCount INT, remaining_timestamp TIMESTAMP)")
@@ -57,9 +57,9 @@ async def on_ready():
             bot.load_extension("exts.cogs.{}".format(i))
         except Exception as e:
             if bot.config['maintenance'] == "True": #iu bot dev 
-                devBotLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
+                await devBotLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
             else:
-                botLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
+                await botLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
     
     await bot.change_presence(status = discord.Status.dnd, 
                                 activity = discord.Game(name="on Indians United [iu_help reveals commands]"))
