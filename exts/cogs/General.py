@@ -11,20 +11,9 @@ from time import localtime, strftime
 import random
 import os
 
-from oauth2client.service_account import ServiceAccountCredentials
-import httplib2 #DO NOT USE THIS EKANSH! --used in bday command *use aiohttp*
-import gspread  #Ekansh's bday command
 
 import asyncio, aiohttp #various needs
 from exts.cogs import globalvars
-
-
-#bday command
-scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
-http = creds.authorize(httplib2.Http())
-creds.refresh(http)
-client = gspread.authorize(creds)
 
 
 
@@ -236,18 +225,6 @@ class General:
         '''The bot becomes your copycat'''
         await ctx.send(something)
         await ctx.message.delete()
-
-    @commands.command()
-    #dont dare to touch this command
-    async def bday(self, ctx, bDay):
-        db = client.open("IU DB").sheet1
-        try:
-            db.find(str(ctx.message.author.id))
-            await ctx.message.add_reaction('\u274C')
-        except:
-            userID = str(ctx.message.author.id)
-            db.insert_row([userID, bDay], index=1, value_input_option='RAW')
-            await ctx.message.add_reaction('\u2705')
 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
