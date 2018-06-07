@@ -57,25 +57,24 @@ class Economy:
                     found = True
                     await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
                     previous_msg_timestamp = (await self.bot.aio.cursor.fetchall())[0][2]
-                    remaining_timestamp = (msg_timestamp - previous_msg_timestamp)
-
+                    difference_timestamp = (msg_timestamp - previous_msg_timestamp)
                     await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
                     currentDaily = int((await self.bot.aio.cursor.fetchall())[0][1])
 
-                    secondsRemaining = 86400 - abs(remaining_timestamp.seconds)
-                    time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
-
-                    if secondsRemaining <= 0:
+                    if abs(difference_timestamp.seconds) >= 86400 :
                         currentDaily += 200
                         await self.bot.aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
                         await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
 
                     else:
+                        secondsRemaining = 86400 - abs(difference_timestamp.seconds)
+                        time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
                         await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
 
             if not found:
                 await self.bot.aio.execute("INSERT INTO Dailies VALUES (%s, '200', %s)", (ctx.message.author.id, msg_timestamp))
                 await ctx.send(":moneybag: | You got your 200 dialies!\nYou have ₹200")
+
 
 
 
