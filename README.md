@@ -8,7 +8,7 @@ I hope to see your contributions! :)
 ## Quick start
 ### Leveling system
 Level | Points
---------------
+----------|--------
 Level   0 |      0
 Level   1 |     20
 Level   2 |     80
