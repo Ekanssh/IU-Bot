@@ -67,7 +67,7 @@ class Economy:
                         await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
 
                     else:
-                        secondsRemaining = 86400 - abs(difference_timestamp.seconds)
+                        secondsRemaining = 600 - abs(difference_timestamp.seconds)
                         time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
                         await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
 
