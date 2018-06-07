@@ -31,10 +31,10 @@ class Economy:
                                     description="Level " + str(level) + "\n" + str(xp) + " xp",
                                     colour = discord.Colour.from_rgb(218, 218, 218))
         elif xp < 10000:
-            embed = discord.Embed(title = person.name + "'s level", 
+            embed = discord.Embed(title = person.name + "'s level",
                                     description = "Level " + str(level) + "\n" + str(xp) + " xp",
                                     colour=discord.Colour.gold())
-        else: 
+        else:
             embed = discord.Embed(title = person.name + "'s level",
                                     description = "Level " + str(level) + "\n" + str(xp) + " xp",
                                     colour = discord.Colour.from_rgb(20, 30, 179))
@@ -44,40 +44,36 @@ class Economy:
     @commands.cooldown(rate=1, per=15, type=commands.BucketType.user)
     @commands.command(aliases=['daily'])
     async def dailies(self, ctx):
-        '''Get your free ₹200'''
-        if ctx.message.author.bot:
-            await ctx.send("Sorry, bots have nothing to do with money")
-            return
-        msg_timestamp = ctx.message.created_at
-        found = False
-        await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
+            '''Get your free ₹200'''
+            if ctx.message.author.bot:
+                await ctx.send("Sorry, bots have nothing to do with money")
+                return
+            msg_timestamp = ctx.message.created_at
+            found = False
+            await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
 
-        for i in await self.bot.aio.cursor.fetchall():
-            if i is not None:
-                found = True
-                await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
-                previous_msg_timestamp = (await self.bot.aio.cursor.fetchall())[0][2]
+            for i in await self.bot.aio.cursor.fetchall():
+                if i is not None:
+                    found = True
+                    await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
+                    previous_msg_timestamp = (await self.bot.aio.cursor.fetchall())[0][2]
+                    difference_timestamp = (msg_timestamp - previous_msg_timestamp)
 
-                remaining_timestamp = previous_msg_timestamp - msg_timestamp
+                    if abs(difference_timestamp.seconds) >= 600 :
+                        await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
+                        currentDaily = int((await self.bot.aio.cursor.fetchall())[0][1])
+                        currentDaily += 200
+                        await self.bot.aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
+                        await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
 
-                await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
-                currentDaily = int((await self.bot.aio.cursor.fetchall())[0][1])
+                    else:
+                        secondsRemaining = 86400 - abs(difference_timestamp.seconds)
+                        time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
+                        await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
 
-                secondsRemaining = abs(remaining_timestamp.seconds)
-                time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
-
-                if secondsRemaining >= 43200:
-                    currentDaily += 200
-                    await self.bot.aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
-                    await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
-
-                else:
-                    await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
-
-        if not found:
-            await ctx.send("Member not found in the database. Registering new user with id {0}".format(ctx.author.id))
-            await self.bot.aio.execute("INSERT INTO Dailies VALUES (%s, '200', %s)", (ctx.message.author.id, msg_timestamp, ))
-            await ctx.send(":moneybag: | You got your 200 dialies!\nYou have ₹200")
+            if not found:
+                await self.bot.aio.execute("INSERT INTO Dailies VALUES (%s, '200', %s)", (ctx.message.author.id, msg_timestamp))
+                await ctx.send(":moneybag: | You got your 200 dialies!\nYou have ₹200")
 
 
 
