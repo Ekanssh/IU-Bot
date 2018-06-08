@@ -278,7 +278,7 @@ class General:
     @commands.command()
     async def poll(ctx, *, msg:str = None):
         if msg is not None:
-            channel = self.bot.get_channel(314799585761427457) #poll channel
+            channel = bot.get_channel(314799585761427457) #poll channel
             await channel.send(msg)
             await ctx.message.add_reaction(emoji = discord.utils.get(bot.guilds[1].emojis, name='check'))
             await ctx.message.add_reaction(emoji = discord.utils.get(bot.guilds[1].emojis, name='neutraly'))
