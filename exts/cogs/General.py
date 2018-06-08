@@ -185,7 +185,7 @@ class General:
         if found_author and found_mem:
             await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (mem.id, ))
             currentRep = int((await self.bot.aio.cursor.fetchall())[0][1])
-            await self.aio.execute("SELECT * FROM rep WHERE id = %s", (ctx.message.author.id, ))
+            await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (ctx.message.author.id, ))
             repFlag = await self.bot.aio.cursor.fetchall()[0][2]
             if repFlag is "False":
                 await ctx.send("Reputation point already given.")
