@@ -170,6 +170,8 @@ class General:
     async def rep(self, ctx, mem:discord.Member):
         if ctx.author.bot or mem.bot:
             return
+        if ctx.author.id is mem.id:
+            await ctx.send("You can not give reputation point to yourself.")
         found_author = False
         found_mem = False
         await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (ctx.message.author.id, ))
