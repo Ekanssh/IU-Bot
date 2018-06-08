@@ -274,5 +274,17 @@ class General:
                 res = 'You won'
         return await ctx.send('**Bot**: %s\n**You**: %s\n%s'%(guess, value, res))
 
+    @commands.cooldown(rate=1, per=100, type=commands.BucketType.user)
+    @commands.command()
+    async def poll(ctx, *, msg:str = None):
+        if msg is not None:
+            channel = self.bot.get_channel(314799585761427457) #poll channel
+            await channel.send(msg)
+            await ctx.message.add_reaction(emoji = discord.utils.get(bot.guilds[1].emojis, name='check'))
+            await ctx.message.add_reaction(emoji = discord.utils.get(bot.guilds[1].emojis, name='neutraly'))
+            await ctx.message.add_reaction(emoji = discord.utils.get(bot.guilds[1].emojis, name='xmark'))
+        else:
+            await ctx.send("You can not make empty poll.")
+
 def setup(bot):
     bot.add_cog(General(bot))
