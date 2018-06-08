@@ -181,6 +181,7 @@ class General:
             if i is not None:
                 found_mem = True
         if found_author and found_mem:
+            await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (mem.id, ))
             currentRep = int((await self.bot.aio.cursor.fetchall())[0][1])
             await self.aio.execute("SELECT * FROM rep WHERE id = %s", (ctx.author.id, ))
             repFlag = await self.bot.aio.cursor.fetchall()[0][2]
