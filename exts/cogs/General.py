@@ -167,7 +167,7 @@ class General:
 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
-    async def rep(self, mem:discord.Member):
+    async def rep(self, ctx, mem:discord.Member):
         if ctx.author.bot or mem.bot:
             return
         found_author = False
