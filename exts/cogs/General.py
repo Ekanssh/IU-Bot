@@ -19,12 +19,6 @@ import asyncio, aiohttp #various needs
 from exts.cogs import globalvars
 
 
-#bday command
-scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
-http = creds.authorize(httplib2.Http())
-creds.refresh(http)
-client = gspread.authorize(creds)
 
 
 
@@ -170,6 +164,52 @@ class General:
         elif option == "reset":
             await self.bot.aio.execute("UPDATE profile SET note = %s WHERE id = %s", ('I am imperfectly perfect...', ctx.message.author.id, ))
             await ctx.send("Your profile's note has been reset to:\n" + '```I am imperfectly perfect...```')
+
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
+    @commands.command()
+    async def rep(self, mem:discord.Member):
+        if ctx.author.bot or mem.bot:
+            return
+        found_author = False
+        found_mem = False
+        await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (ctx.author.id, ))
+        for i in await self.bot.aio.cursor.fetchall():
+            if i is not None:
+                found_author = True
+        await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (mem.id, ))
+        for i in await self.bot.aio.cursor.fetchall():
+            if i is not None:
+                found_mem = True
+        if found_author and found_mem:
+            currentRep = int((await self.bot.aio.cursor.fetchall())[0][1])
+            await self.aio.execute("SELECT * FROM rep WHERE id = %s", (ctx.author.id, ))
+            repFlag = await self.bot.aio.cursor.fetchall()[0][2]
+            if repFlag is "False":
+                await ctx.send("Reputation point already given.")
+            else:
+                await self.bot.aio.execute("UPDATE rep SET flag = %s WHERE id = %s", ('True', ctx.author.id, ))
+                await self.bot.aio.execute("UPDATE rep SET reps = %s WHERE id = %s", (currentRep + 1, mem.id, ))
+                await ctx.send("You have given reputation point to" + mem.mention)
+        elif found_author:
+            await self.aio.execute("SELECT * FROM rep WHERE id = %s", (ctx.author.id, ))
+            repFlag = await self.bot.aio.cursor.fetchall()[0][2]
+            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 1, 'False')", (mem.id, ))
+            if repFlag is "False":
+                await ctx.send("Reputation point already given.")
+            else:
+                await self.bot.aio.execute("UPDATE rep SET flag = %s WHERE id = %s", ('True', ctx.author.id, ))
+                await ctx.send("You have given reputation point to" + mem.mention)
+        elif found_mem:
+            await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (mem.id, ))
+            currentRep = int((await self.bot.aio.cursor.fetchall())[0][1])
+            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 0, 'True')", (ctx.author.id, ))
+            await self.bot.aio.execute("UPDATE rep SET reps = %s WHERE id = %s", (currentRep + 1, mem.id, ))
+            await ctx.send("You have given reputation point to" + mem.mention)
+        else:
+            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 0, 'True')", (ctx.author.id, ))
+            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 1, 'False')", (mem.id, ))
+            await ctx.send("You have given reputation point to" + mem.mention)
+
     '''
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
@@ -236,18 +276,6 @@ class General:
         '''The bot becomes your copycat'''
         await ctx.send(something)
         await ctx.message.delete()
-
-    @commands.command()
-    #dont dare to touch this command
-    async def bday(self, ctx, bDay):
-        db = client.open("IU DB").sheet1
-        try:
-            db.find(str(ctx.message.author.id))
-            await ctx.message.add_reaction('\u274C')
-        except:
-            userID = str(ctx.message.author.id)
-            db.insert_row([userID, bDay], index=1, value_input_option='RAW')
-            await ctx.message.add_reaction('\u2705')
 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()

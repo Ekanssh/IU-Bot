@@ -1,4 +1,4 @@
-#usr/bin/env python3.6
+﻿#usr/bin/env python3.6
 # -*- coding: utf-8 -*-
 
 
@@ -12,7 +12,6 @@ from exts.cogs import globalvars
 from exts.cogs.CustomAiopg import aiopg_commands #used to handle database
 import time, datetime
 import random
-import gspread
 import json
 
 with open("config.json") as fp:
