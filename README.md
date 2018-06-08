@@ -1,4 +1,5 @@
 # IU Bot
+
 The official bot overwatching Indians United 🇮🇳 discord server.
 
 If you can see this text then congrats 🎉 you're officially a collaborator !
@@ -6,7 +7,9 @@ If you can see this text then congrats 🎉 you're officially a collaborator !
 I hope to see your contributions! :)
 
 ## Quick start
+
 ### Leveling system
+
 Level | Points
 ----------|--------
 Level   0 |      0
@@ -118,7 +121,5 @@ Level 100 |3434000
 - [ ] #bday
 - [x] welcoming
 - [ ] rep
-
-# Commands
-* level system
-* paginated help
+- [ ] leaderboard
+- [ ] admin & mod tools

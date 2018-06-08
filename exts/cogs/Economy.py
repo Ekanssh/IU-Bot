@@ -12,7 +12,7 @@ class Economy:
     @commands.command()
     async def level(self, ctx, person: discord.Member=None):
 
-        '''get your XP and level stats'''
+        '''Get your XP and level stats'''
 
         person = person or ctx.author
 

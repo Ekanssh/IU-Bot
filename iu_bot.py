@@ -11,7 +11,6 @@ from exts.cogs import globalvars
 from exts.cogs.CustomAiopg import aiopg_commands #used to handle database
 import time, datetime
 import random
-import gspread
 import json
 
 with open("config.json") as fp:
@@ -19,7 +18,7 @@ with open("config.json") as fp:
 
 prefixes = config['prefix'].split('|')
 
-bot = commands.Bot(description = 'IU Bot Dev build', command_prefix = prefixes)
+bot = commands.Bot(description = 'The official bot overwatching Indians United discord server.', command_prefix = prefixes)
 
 
 ownerid = {360022804357185537: "Pegasus",
@@ -58,9 +57,9 @@ async def on_ready():
             bot.load_extension("exts.cogs.{}".format(i))
         except Exception as e:
             if bot.config['maintenance'] == "True": #iu bot dev 
-                await devBotLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
+                await devBotLogChannel.send("Error occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
             else:
-                await botLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
+                await botLogChannel.send("Error occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
     
     await bot.change_presence(status = discord.Status.dnd, 
                                 activity = discord.Game(name="on Indians United [iu_help reveals commands]"))
