@@ -17,7 +17,6 @@ class Miscellaneous:
         await self.bot.get_guild(381052278708240385).get_channel(435375286385770497).send(embed=discord.Embed(color=eval(hex(ctx.author.color.value)),title=author,description="#"+ctx.channel.name+":\n"+message))
         await ctx.message.add_reaction('\u2705')
 
-    @commands.add_command('help')
     @commands.command(aliases=["h"])
     async def help(self,ctx):
         '''bot help message'''

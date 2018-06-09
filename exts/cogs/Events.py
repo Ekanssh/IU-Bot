@@ -87,7 +87,7 @@ class Events:
         if any([i in message.content for i in banned]):
             await message.delete()
             await message.channel.send("Bannned word said by "+message.author)
-        await bot.process_commands(message)
+        await self.bot.process_commands(message)
 
 def setup(bot):
     bot.add_cog(Events(bot))
