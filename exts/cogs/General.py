@@ -190,7 +190,7 @@ class General:
                 await self.bot.aio.execute("UPDATE rep SET reps = %s WHERE id = %s", (currentRep + 1, mem.id, ))
                 await ctx.send("You have given reputation point to " + mem.mention)
         elif found_author:
-            await self.aio.execute("SELECT * FROM rep WHERE id = %s", (ctx.message.author.id, ))
+            await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (ctx.message.author.id, ))
             repFlag = (await self.bot.aio.cursor.fetchall())[0][2]
             await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 1, 'False')", (mem.id, ))
             if repFlag is "False":
