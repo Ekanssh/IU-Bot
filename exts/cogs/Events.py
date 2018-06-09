@@ -81,6 +81,12 @@ class Events:
             msg=await ctx.send("❌ | Sorry, you're on a cooldown, try again in " + str(err.retry_after))
             await asyncio.sleep(5)
             await msg.delete()
+            
+    async def on_message(self, message):
+        banned = ['fuck','shit','fck','cunt','bitch']
+        if any([i in message.content for i in banned]):
+            await message.delete()
+            await message.channel.send("Bannned word said by "+message.author
 
 def setup(bot):
     bot.add_cog(Events(bot))
