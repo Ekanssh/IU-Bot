@@ -159,27 +159,29 @@ class Profile:
     @commands.cooldown(1, 15, commands.BucketType.user)
     @commands.command() 
     async def top(self, ctx):
-        msg = await ctx.send("Wait until i gather all the users...") 
+        msg = await ctx.send("***Wait until i gather all the users...***") 
         await self.bot.aio.execute("SELECT * FROM profile")
         rowcount = len(await self.bot.aio.cursor.fetchall())
         ems = []
         counter, rank = 0, 0
-        for n in range(10, rowcount, 10):
-            await self.bot.aio.execute("SELECT id, xp FROM profile ORDER BY xp DESC LIMIT %s OFFSET %s", (n, n-10))
-            em = discord.Embed(title = "Top", description = "```\n", color = 0x00FFFF)
-            for i in await self.bot.aio.cursor.fetchall():
-                counter += 1
-                if i[0] == ctx.author.id: 
-                    rank = counter
-                mem = await self.bot.get_user_info(i[0])
-                data = (mem.name, str(i[1])) 
-                em.description += f"{data [0]:<20} : {data[1]}\n"
+        async with ctx.typing():
+            for n in range(10, rowcount, 10):
+                await self.bot.aio.execute("SELECT id, xp FROM profile ORDER BY xp DESC LIMIT %s OFFSET %s", (n, n-10))
+                em = discord.Embed(title = "Top", description = "```\n", color = 0x00FFFF)
+                for i in await self.bot.aio.cursor.fetchall():
+                    counter += 1
+                    if i[0] == ctx.author.id: 
+                        rank = counter
+                    mem = await self.bot.get_user_info(i[0])
+                    data = (mem.name, str(i[1])) 
+                    em.description += f"{data [0]:<20} : {data[1]}\n"
                 em.description += "```"
                 ems.append(em)
         info_embed = discord.Embed(title = "Help Info", description = "\u23EA:  Go to the first page\n\u25C0:  Go to the previous page\n\u23F9:  Stop the help command\n\u25B6:  Go to the next page\n\u23E9:  Go to the last page\n\U0001f522:  Asks for a page number\n\u2139:  Shows this info", colour = 0x00FFFF)
         for e in ems: 
             e.add_field(name = "Your guild rank", value = str(rank))
         ems.append (info_embed)
+        await msg.edit(embed = ems[0])
         pa = Paginator(self.bot, msg, ctx.author, 0)
         await pa.paginate(ems)
 
@@ -196,7 +198,7 @@ class Profile:
             if option == "show":
                 await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
                 current_banner = (await self.bot.aio.cursor.fetchall())[0][2]
-                em = discord.Embed(title = "Your current profile banner is: ").set_image(url = banners[current_banner], color = 0x00FFFF)
+                em = discord.Embed(title = "Your current profile banner is: ", color = 0x00FFFF).set_image(url = banners[current_banner])
                 await ctx.send(embed = em)
 
             elif option == "buy":
@@ -206,7 +208,7 @@ class Profile:
                     msg = await ctx.send("Making the deck ready...")
                     ems = []
                     await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
-                    purchased_banners = ((await self.bot.aio.fetchall())[0][-1]).split() #last column is banners purchased, is a string
+                    purchased_banners = ((await self.bot.aio.cursor.fetchall())[0][-1]).split() #last column is banners purchased, is a string
                     
                     for i in banners:
                         if not i in purchased_banners:
@@ -240,7 +242,7 @@ class Profile:
                     await ctx.send("No such banner found.")
                 else:
                     await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
-                    purchased_banners = ((await self.bot.aio.fetchall())[0][-1]).split() #last column is banners purchased, is a string
+                    purchased_banners = ((await self.bot.aio.cursor.fetchall())[0][-1]).split() #last column is banners purchased, is a string
                     if arg in purchased_banners:
                         return await ctx.send("You have already purchased this item.")
                     else:
@@ -268,7 +270,7 @@ class Profile:
 
             elif option == "list":
                 await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
-                purchased_banners = ((await self.bot.aio.fetchall())[0][-1]).split() #last column is banners purchased, is a string
+                purchased_banners = ((await self.bot.aio.cursor.fetchall())[0][-1]).split() #last column is banners purchased, is a string
                 await ctx.send("Banners that you own are: `{}`".format(', '.join(purchased_banners)))
             elif option == "set":
                 if arg is None:
@@ -277,7 +279,7 @@ class Profile:
                     await ctx.send("No such banner found.")
                 else:
                     await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
-                    purchased_banners = ((await self.bot.aio.fetchall())[0][-1]).split() #last column is banners purchased, is a string
+                    purchased_banners = ((await self.bot.aio.cursor.fetchall())[0][-1]).split() #last column is banners purchased, is a string
                     if arg not in purchased_banners:
                         await ctx.send("You don't own this banner. To purchase it, type `IU banner buy {}`.".format(arg))
                     else:
