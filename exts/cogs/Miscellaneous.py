@@ -73,9 +73,9 @@ class Miscellaneous:
                         await mess.edit(embed=embeds[curr])
                 elif waiting[0].emoji=="\u2139":
                         await mess.edit(embed=info_embed)
-            except asyncio.TimeoutError:
+    	    except asyncio.TimeoutError:
                 break
-        await mess.edit(embed=discord.Embed(title="You have just used IU Bot's help message",description="Thank you!",colour=ctx.author.colour))
+	await mess.edit(embed=discord.Embed(title="You have just used IU Bot's help message",description="Thank you!",colour=ctx.author.colour))
 
 def setup(bot):
     bot.add_cog(Miscellaneous(bot))
