@@ -215,7 +215,7 @@ class Profile:
                             em = discord.Embed(title = i, color = 0x00FFFF).set_image(url = banners[i])
                             em.add_field(name = "Price", value = "1000/- Rupees")
                             ems.append(em)
-                    pa = Paginator(bot, msg, ctx.author, 0)
+                    pa = Paginator(self.bot, msg, ctx.author, 0)
                     await pa.paginate(ems) 
                     if pa.item_purchased == True:
                         item = "banner-" + str(pa.index + 1)
