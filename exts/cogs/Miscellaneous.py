@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from discord.ext import commands
-import discord 
+import discord
 
 
 class Miscellaneous:
-    
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -16,7 +16,7 @@ class Miscellaneous:
         author = ctx.message.author.name + " said in " + "'" + ctx.guild.name + "'"
         await self.bot.get_guild(381052278708240385).get_channel(435375286385770497).send(embed=discord.Embed(color=eval(hex(ctx.author.color.value)),title=author,description="#"+ctx.channel.name+":\n"+message))
         await ctx.message.add_reaction('\u2705')
-        
+
     @commands.command(aliases=["h"])
     async def help(self,ctx):
         '''bot help message'''
@@ -39,7 +39,7 @@ class Miscellaneous:
         \u23F9 to stop looking through the commands
         \u25B6 to scroll forward
         \u23E9 to view the very last help message
-        \U0001f522 to search by page 
+        \U0001f522 to search by page
         \u2139 to view this help message""",colour=ctx.author.colour)
         curr=0
         reactions=['\u23EA','\u25C0','\u23F9','\u25B6','\u23E9','\U0001f522','\u2139']
@@ -73,7 +73,7 @@ class Miscellaneous:
                         await mess.edit(embed=embeds[curr])
                 elif waiting[0].emoji=="\u2139":
                         await mess.edit(embed=info_embed)
-    	    except asyncio.TimeoutError:
+            except asyncio.TimeoutError:
                 break
 	await mess.edit(embed=discord.Embed(title="You have just used IU Bot's help message",description="Thank you!",colour=ctx.author.colour))
 
