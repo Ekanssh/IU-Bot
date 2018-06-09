@@ -289,3 +289,6 @@ class Profile:
             #if person is not in db, insert a row with data and invoke the command again with respective arguments.
             await self.bot.aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (ctx.author.id, 0, 'banner-9', 'None', 1, 'I am imperfectly perfect...', 0, "banner-9"))
             await ctx.invoke(self.bot.get_command("bannner"), option, arg)
+
+def setup(bot):
+    bot.add_cog(Profile(bot))
