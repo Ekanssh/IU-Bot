@@ -6,19 +6,19 @@ import discord
 
 
 class Miscellaneous:
-	
-	def __init__(self, bot):
-		self.bot = bot
+    
+    def __init__(self, bot):
+        self.bot = bot
 
-	@commands.command(aliases=['fb'])
-	async def feedback(self,ctx,*,message):
-		'''Please provide any feedback and report any bugs.'''
-		author = ctx.message.author.name + " said in " + "'" + ctx.guild.name + "'"
-		await self.bot.get_guild(381052278708240385).get_channel(435375286385770497).send(embed=discord.Embed(color=eval(hex(ctx.author.color.value)),title=author,description="#"+ctx.channel.name+":\n"+message))
-		await ctx.message.add_reaction('\u2705')
-		
-	@commands.command(aliases=["h"])
-    	async def help(self,ctx):
+    @commands.command(aliases=['fb'])
+    async def feedback(self,ctx,*,message):
+        '''Please provide any feedback and report any bugs.'''
+        author = ctx.message.author.name + " said in " + "'" + ctx.guild.name + "'"
+        await self.bot.get_guild(381052278708240385).get_channel(435375286385770497).send(embed=discord.Embed(color=eval(hex(ctx.author.color.value)),title=author,description="#"+ctx.channel.name+":\n"+message))
+        await ctx.message.add_reaction('\u2705')
+        
+    @commands.command(aliases=["h"])
+        async def help(self,ctx):
         '''bot help message'''
         command_list={}
         message={}
@@ -78,4 +78,4 @@ class Miscellaneous:
         await mess.edit(embed=discord.Embed(title="You have just used IU Bot's help message",description="Thank you!",colour=ctx.author.colour))
 
 def setup(bot):
-	bot.add_cog(Miscellaneous(bot))
+    bot.add_cog(Miscellaneous(bot))
