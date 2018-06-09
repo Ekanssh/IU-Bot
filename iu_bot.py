@@ -33,7 +33,7 @@ aio = aiopg_commands() #used for database purposes
 
 @bot.event
 async def on_ready():
-    
+    bot.remove_command('help')
     botLogChannel = bot.get_guild(globalvars.devServerID).get_channel(globalvars.logID)
     devBotLogChannel = bot.get_guild(globalvars.devServerID).get_channel(globalvars.logDevID)
 
