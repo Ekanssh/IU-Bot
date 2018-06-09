@@ -64,7 +64,7 @@ class Economy:
                     if abs(difference_timestamp.seconds) >= 600 :
                         currentDaily += 200
                         await self.bot.aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
-                        await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
+                        await ctx.send(":moneybag: | You got your 200 dailies!\n You have ₹{}".format(currentDaily))
 
                     else:
                         secondsRemaining = 600 - abs(difference_timestamp.seconds)

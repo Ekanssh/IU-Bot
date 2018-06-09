@@ -18,8 +18,12 @@ with open("config.json") as fp:
     config = json.load(fp)
 
 prefixes = config['prefix'].split('|')
+maintenance = config['maintenance'] == "True"
 
-bot = commands.Bot(description = 'IU Bot Dev build', command_prefix = prefixes)
+if maintenance:
+    bot = commands.Bot(description = 'IU Bot Dev build', command_prefix = prefixes)
+else:
+    bot = commands.Bot(description = 'The official bot overwatching Indians United discord server.', command_prefix = prefixes)
 
 
 ownerid = {360022804357185537: "Pegasus",
@@ -42,21 +46,21 @@ async def on_ready():
     with open("config.json") as fp:
         bot.config = json.load(fp)
 
-    if bot.config['maintenance'] == "True": #To check if the branch is development or not
+    if maintenance: #To check if the branch is development or not
         await devBotLogChannel.send("IU Bot **DEV** load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
     else:
         await botLogChannel.send("IU Bot load at:" + f"{datetime.datetime.now(): %B %d, %Y at %H:%M:%S GMT}"+" :D")
            
     await aio.connect()
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id BIGINT, dailiesCount INT, remaining_timestamp TIMESTAMP)")
-    await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT)")
+    await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT, banners_buyed TEXT)")
     bot.aio = aio
-    extentions = ("Admin", "Economy", "Events", "General", "repl", "Miscellaneous")
+    extentions = ("Admin", "Economy", "Events", "General", "repl", "Miscellaneous", "Profile")
     for i in extentions:
         try:
             bot.load_extension("exts.cogs.{}".format(i))
         except Exception as e:
-            if bot.config['maintenance'] == "True": #iu bot dev 
+            if maintenance: #iu bot dev 
                 await devBotLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
             else:
                 await botLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
@@ -65,7 +69,7 @@ async def on_ready():
     await bot.change_presence(status = discord.Status.dnd, 
                                 activity = discord.Game(name="on Indians United [iu_help reveals commands]"))
 
-if config['maintenance'] == "True":
+if maintenance:
     bot.run(globalvars.DEV_BOT_TOKEN)
 else:
     bot.run(globalvars.TOKEN)
