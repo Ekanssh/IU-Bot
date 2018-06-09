@@ -49,7 +49,7 @@ async def on_ready():
     await aio.connect()
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id BIGINT, dailiesCount INT, remaining_timestamp TIMESTAMP)")
     await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT)")
-    await aio.execute("CREATE TABLE IF NOT EXISTS rep(id BIGINT, reps INT, flag TEXT")
+    await aio.execute("CREATE TABLE IF NOT EXISTS rep(id BIGINT, reps INT, flag TEXT)")
     bot.aio = aio
     extentions = ("Admin", "Economy", "Events", "General", "repl", "Miscellaneous")
     for i in extentions:
