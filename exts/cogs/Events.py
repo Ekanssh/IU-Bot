@@ -81,9 +81,6 @@ class Events:
             msg=await ctx.send("❌ | Sorry, you're on a cooldown, try again in " + str(err.retry_after))
             await asyncio.sleep(5)
             await msg.delete()
-
-    async def on_message(self, message):
-            print("Message sent by: {}".format(message.author.name))
             
 def setup(bot):
     bot.add_cog(Events(bot))
