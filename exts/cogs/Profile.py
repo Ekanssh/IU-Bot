@@ -205,7 +205,7 @@ class Profile:
                 if arg is None:
                     await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.author.id, ))
                     currentCredits = int((await self.bot.aio.cursor.fetchall())[0][1])
-                    msg = await ctx.send("Making the deck ready...")
+                    msg = await ctx.send("**Making the deck ready...**")
                     ems = []
                     await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
                     purchased_banners = ((await self.bot.aio.cursor.fetchall())[0][-1]).split() #last column is banners purchased, is a string
@@ -215,6 +215,7 @@ class Profile:
                             em = discord.Embed(title = i, color = 0x00FFFF).set_image(url = banners[i])
                             em.add_field(name = "Price", value = "1000/- Rupees")
                             ems.append(em)
+                    await msg.edit(embed = ems[0])
                     pa = Paginator(self.bot, msg, ctx.author, 0)
                     await pa.paginate(ems) 
                     if pa.item_purchased == True:

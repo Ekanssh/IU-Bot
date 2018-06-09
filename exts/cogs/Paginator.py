@@ -89,7 +89,7 @@ class Paginator:
                 self.index = len(list_to_paginate) - 1
 
             if len(emoji_list) == 8:
-                if r.emoji == emoji[7]:
+                if r.emoji == emoji_list[7]:
                     self.item_purchased = True
                     try:
                         await self.message.delete()
