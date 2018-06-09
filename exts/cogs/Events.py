@@ -72,7 +72,7 @@ class Events:
 	    if not found:
 	        if not msg.author.bot:
 	            await self.bot.aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s)", (msg.author.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
-				await self.bot.process_commands(msg)
+		await self.bot.process_commands(msg)
 
 	async def on_message_edit(self, before, after):
 	    await self.bot.process_commands(after)
