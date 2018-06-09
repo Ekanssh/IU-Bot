@@ -185,8 +185,8 @@ class General:
             repFlag = (await self.bot.aio.cursor.fetchall())[0][2]
             if repFlag is "False":
                 await ctx.send("Reputation point already given.")
-            else:
-                await self.bot.aio.execute("UPDATE rep SET flag = %s WHERE id = %s", ('True', ctx.message.author.id, ))
+            elif repFlag is "True":
+                await self.bot.aio.execute("UPDATE rep SET flag = %s WHERE id = %s", ('False', ctx.message.author.id, ))
                 await self.bot.aio.execute("UPDATE rep SET reps = %s WHERE id = %s", (currentRep + 1, mem.id, ))
                 await ctx.send("You have given reputation point to " + mem.mention)
         elif found_author:
@@ -195,18 +195,18 @@ class General:
             await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 1, 'False')", (mem.id, ))
             if repFlag is "False":
                 await ctx.send("Reputation point already given.")
-            else:
-                await self.bot.aio.execute("UPDATE rep SET flag = %s WHERE id = %s", ('True', ctx.message.author.id, ))
+            elif repFlag is "True":
+                await self.bot.aio.execute("UPDATE rep SET flag = %s WHERE id = %s", ('False', ctx.message.author.id, ))
                 await ctx.send("You have given reputation point to " + mem.mention)
         elif found_mem:
             await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (mem.id, ))
             currentRep = int((await self.bot.aio.cursor.fetchall())[0][1])
-            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 0, 'True')", (ctx.message.author.id, ))
+            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 0, 'False')", (ctx.message.author.id, ))
             await self.bot.aio.execute("UPDATE rep SET reps = %s WHERE id = %s", (currentRep + 1, mem.id, ))
             await ctx.send("You have given reputation point to " + mem.mention)
         else:
-            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 0, 'True')", (ctx.message.author.id, ))
-            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 1, 'False')", (mem.id, ))
+            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 0, 'False')", (ctx.message.author.id, ))
+            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 1, 'True')", (mem.id, ))
             await ctx.send("You have given reputation point to " + mem.mention)
 
     '''
