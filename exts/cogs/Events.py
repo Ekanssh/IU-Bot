@@ -71,12 +71,10 @@ class Events:
 	                        await msg.channel.send("Congratulations, " + msg.author.mention + " you advanced to level {}".format(level + 1),delete_after=10)
 	    if not found:
 	        if not msg.author.bot:
-	            await self.bot.aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s)", (msg.author.id, 0, 'banner-9', 'None', 1, 'I am imperfectly perfect...', 0))
-	           
-		await bot.process_commands(msg)
-
+				await self.bot.aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (msg.author.id, 0, 'banner-9', 'None', 1, 'I am imperfectly perfect...', 0, 'banner-9'))	           
+		
 	async def on_message_edit(self, before, after):
-	    await self.bot.process_commands(after)
+		await self.bot.process_commands(after)
 
 def setup(bot):
 	bot.add_cog(Events(bot))
