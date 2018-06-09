@@ -18,8 +18,7 @@ class Miscellaneous:
 		await ctx.message.add_reaction('\u2705')
 		
 	@commands.command(aliases=["h"])
-
-    async def help(self,ctx):
+    	async def help(self,ctx):
         '''bot help message'''
         command_list={}
         message={}
