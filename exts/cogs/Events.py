@@ -83,10 +83,7 @@ class Events:
             await msg.delete()
 
     async def on_message(self, message):
-            banned = ['fuck','shit','fck','cunt','bitch']
-            if any([i in message.content.lower() for i in banned]):
-                await message.delete()
-                await message.channel.send("**{}**, you have used an offensive word. Mind your language.".format(message.author.name),delete_after=4)
+            print("Message sent by: {}".format(message.author.name))
             
 def setup(bot):
     bot.add_cog(Events(bot))
