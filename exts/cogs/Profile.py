@@ -216,6 +216,8 @@ class Profile:
                             em.add_field(name = "Price", value = "1000/- Rupees")
                             ems.append(em)
                     await msg.edit(embed = ems[0])
+                    info_embed = discord.Embed(title = "Help Info", description = "\u23EA:  Go to the first page\n\u25C0:  Go to the previous page\n\u23F9:  Stop the help command\n\u25B6:  Go to the next page\n\u23E9:  Go to the last page\n\U0001f522:  Asks for a page number\n\u2139:  Shows this info", colour = 0x00FFFF)
+                    ems.append(info_embed)
                     pa = Paginator(self.bot, msg, ctx.author, 0)
                     await pa.paginate(ems) 
                     if pa.item_purchased == True:

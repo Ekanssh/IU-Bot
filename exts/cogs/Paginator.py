@@ -17,7 +17,7 @@ class Paginator:
 
         #just a hack to see if the pagination is being done for the banner command, in which case, we need an additional 
         #'tick' emoji to buy a banner 
-        if self.message.content == "Making the deck ready...":
+        if self.message.content == "**Making the deck ready...**":
             emoji_list.append("\u2714")
 
         await self.message.edit(content = '** **')
