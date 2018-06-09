@@ -30,11 +30,11 @@ class Miscellaneous:
         for i in bot.commands:
                 f=inspect.getsource(bot.get_command(str(i)).callback)
                 message.update({str(i):f.split("\n")[2].strip()[3:-3]})
-        em=discord.Embed(title="Quantum Bot Help Message",color=eval(hex(ctx.author.color.value)))
+        em=discord.Embed(title="IU Bot Help Message",color=eval(hex(ctx.author.color.value)))
         for i in command_list.keys():
                 embeds.append(discord.Embed(title=i+" help",description="\n".join([m+": "+message[m] for m in command_list[i]]),inline=False,colour=ctx.author.colour))
         #till now we got the embeds, now for paginator
-        info_embed=discord.Embed(title="Quantum Bot help message",description="""Please press:
+        info_embed=discord.Embed(title="IU Bot help message",description="""Please press:
         \u23EA to view the very first help message.
         \u25C0 to scroll backward
         \u23F9 to stop looking through the commands
@@ -76,7 +76,7 @@ class Miscellaneous:
                         await mess.edit(embed=info_embed)
             except asyncio.TimeoutError:
                 break
-        await mess.edit(embed=discord.Embed(title="You have just used Quantum Bot's help message",description="Thank you!",colour=ctx.author.colour))
+        await mess.edit(embed=discord.Embed(title="You have just used IU Bot's help message",description="Thank you!",colour=ctx.author.colour))
 
 def setup(bot):
 	bot.add_cog(Miscellaneous(bot))
