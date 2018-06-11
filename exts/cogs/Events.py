@@ -69,12 +69,13 @@ class Events:
 	                    if xp == int(calculate_level(level)):
 	                        await self.bot.aio.execute("UPDATE profile SET level = %s WHERE id = %s", (level + 1, msg.author.id, ))
 	                        await msg.channel.send("Congratulations, " + msg.author.mention + " you advanced to level {}".format(level + 1),delete_after=10)
-	    if not found:
-	        if not msg.author.bot:
-	            await self.bot.aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s)", (msg.author.id, 0, 'milky-way', 'None', 1, 'I am imperfectly perfect...', 0))
 
+		if not found:
+	    	if not msg.author.bot:
+	        	await self.bot.aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (msg.author.id, 0, 'banner-9', 'None', 1, 'I am imperfectly perfect...', 0, 'banner-9'))	           
+		
 	async def on_message_edit(self, before, after):
-	    await self.bot.process_commands(after)
+		await self.bot.process_commands(after)
 
 	async def on_command_error(self, ctx, err):
 		if isinstance(err, commands.CommandOnCooldown):

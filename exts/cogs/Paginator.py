@@ -14,12 +14,18 @@ class Paginator:
     async def paginate(self, list_to_paginate: list):
         c = await self.bot.get_context(self.message)
         emoji_list = "\u23EA \u25C0 \u23F9 \u25B6 \u23E9 \U0001f522 \u2139".split()
+
+        #just a hack to see if the pagination is being done for the banner command, in which case, we need an additional 
+        #'tick' emoji to buy a banner 
+        if self.message.content == "**Making the deck ready...**":
+            emoji_list.append("\u2714")
+
         await self.message.edit(content = '** **')
         for i in emoji_list:
             await self.message.add_reaction(i)
             await asyncio.sleep(0.3)
         def check(reaction, user):
-            return user == self.user and reaction.emoji in emoji_list
+            return user == self.user and reaction.emoji in emoji_list and reaction.message.id == self.message.id
         while True:
             r, u = await self.bot.wait_for('reaction_add', check = check)
             
@@ -34,6 +40,8 @@ class Paginator:
 
             elif r.emoji == emoji_list[2]:
                 await self.message.delete()
+                if len(emoji_list) == 8: #if pagination is for banner command
+                    self.item_purchased = False
                 break
 
             elif r.emoji == emoji_list[3]:
@@ -52,10 +60,10 @@ class Paginator:
                 msg = await self.bot.wait_for('message', timeout = 10, check = check_msg)
                 await msg.delete()
 
-                if msg is not None:
+                try:
                     try:
                         msg_index = int(msg.content)- 1
-                        if not msg_index > 0 and msg_index < len(list_to_paginate):
+                        if not msg_index >= 0 and msg_index < len(list_to_paginate):
                             bot_msg = await c.send("Wrong input. Choose a number between 0 to {} to move to that page.".format(len(list_to_paginate)))
                             await asyncio.sleep(4)
                             await bot_msg.delete()
@@ -73,12 +81,20 @@ class Paginator:
                     except:
                         pass
 
-                else: 
+                except asyncio.TimeoutError: 
                     await c.send("You did not chose a number :<\nI got bored")
 
 
             elif r.emoji == emoji_list[6]:
                 self.index = len(list_to_paginate) - 1
+
+            if len(emoji_list) == 8:
+                if r.emoji == emoji_list[7]:
+                    self.item_purchased = True
+                    try:
+                        await self.message.delete()
+                    except: pass
+                    break 
 
             try:
                 await self.message.remove_reaction(r.emoji, self.user)
