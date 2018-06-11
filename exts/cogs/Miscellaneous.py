@@ -4,6 +4,7 @@
 from discord.ext import commands
 import aiohttp
 import discord
+import urllib.request
 
 async def getjson(url):
         """
