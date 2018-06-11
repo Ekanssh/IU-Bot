@@ -61,13 +61,13 @@ class Economy:
                     await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
                     currentDaily = int((await self.bot.aio.cursor.fetchall())[0][1])
 
-                    if abs(difference_timestamp.total_seconds) >= 43200 :
+                    if abs(difference_timestamp.total_seconds()) >= 43200 :
                         currentDaily += 200
                         await self.bot.aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
                         await ctx.send(":moneybag: | You got your 200 dailies!\n You have ₹{}".format(currentDaily))
 
                     else:
-                        secondsRemaining = 43200 - abs(difference_timestamp.total_seconds)
+                        secondsRemaining = 43200 - abs(difference_timestamp.total_seconds())
                         time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
                         await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
 
