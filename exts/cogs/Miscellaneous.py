@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from discord.ext import commands
+import aiohttp
 import discord
 
 async def getjson(url):
