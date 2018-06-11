@@ -106,18 +106,21 @@ class Miscellaneous:
                     await ctx.send(embed=embed)
         except Exception as e:
                 await ctx.send("An error occurred. Please try again.\n Error:{}".format(e),delete_after=6)
-'''
+
     @commands.command()
     async def google(self, ctx, *, anything):
             '''"Search Google for something, experimental"'''
             content=[]
-            async with ctx.typing():
-                m=await getjson("http://api.tanvis.xyz/search/"+urllib.request.pathname2url(anything))
-            for i in m:
-                content.append(i['link'])
-            embed=discord.Embed(title="'%s' search results:"%anything,description="\n".join(content),colour=discord.Colour.from_rgb(66, 133, 244))
-            embed.set_footer(text="using tanvis.xyz API")
-            await ctx.send(embed=embed)
-'''
+            try:
+                async with ctx.typing():
+                    m=await getjson("http://api.tanvis.xyz/search/"+urllib.request.pathname2url(anything))
+                for i in m:
+                    content.append(i['link'])
+                embed=discord.Embed(title="'%s' search results:"%anything,description="\n".join(content),colour=discord.Colour.from_rgb(66, 133, 244))
+                embed.set_footer(text="using tanvis.xyz API")
+                await ctx.send(embed=embed)
+            except Exception as e:
+                await ctx.send(f"Error: {e}")
+
 def setup(bot):
     bot.add_cog(Miscellaneous(bot))
