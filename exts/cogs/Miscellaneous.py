@@ -13,7 +13,7 @@ async def getjson(url):
                 async with session.get(url) as response:
                         f = await response.json(encoding='utf8')
         return f
-    
+
 class Miscellaneous:
 
     def __init__(self, bot):
@@ -85,7 +85,7 @@ class Miscellaneous:
             except asyncio.TimeoutError:
                 break
         await mess.edit(embed=discord.Embed(title="You have just used IU Bot's help message",description="Thank you!",colour=ctx.author.colour))
-'''
+
     @commands.cooldown(rate=1,per=8,type=commands.BucketType.guild)
     @commands.command()
     async def weather(self,ctx,*,location):
@@ -103,9 +103,9 @@ class Miscellaneous:
                     embed.add_field(name="Wind Speed",value=f['windSpeed']);embed.set_thumbnail(url=f['icon'])
                     embed.set_footer(text="using **tanvis.xyz** API")
                     await ctx.send(embed=embed)
-        except:
-                await ctx.send("An error occurred. Please try again.",delete_after=3)
-                
+        except Exception as e:
+                await ctx.send("An error occurred. Please try again.\n Error:{}".format(e),delete_after=6)
+'''
     @commands.command()
     async def google(self, ctx, *, anything):
             '''"Search Google for something, experimental"'''
