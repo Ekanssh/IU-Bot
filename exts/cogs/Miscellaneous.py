@@ -24,7 +24,7 @@ class Miscellaneous:
 		async with aiohttp.ClientSession() as cs:
 			async with cs.get('http://api.tanvis.xyz/weather/{}'.format(location)) as res:
 				res = await res.json(encoding = 'utf-8')
-		em = discord.Embed(title = "Current weather of {}".format(location), 
+		em = discord.Embed(title = "Current weather of {}".format(location),
 							color = 0x00FFFF)
 		for i in res:
 			if i != 'error':
