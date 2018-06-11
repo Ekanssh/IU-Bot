@@ -4,7 +4,15 @@
 from discord.ext import commands
 import discord
 
-
+async def getjson(url):
+        """
+        This command helps get the json automatically without extra code
+        """
+        async with aiohttp.ClientSession() as session:
+                async with session.get(url) as response:
+                        f = await response.json(encoding='utf8')
+        return f
+    
 class Miscellaneous:
 
     def __init__(self, bot):
