@@ -1,5 +1,4 @@
 {
-	"token" : "NDUzNzQ4Mjg0ODM0NDQ3MzYx.DfjZlw.o6ZJUqUzQUnLcmWS5p9j68KVBJY",
-	"maintenance" : "True",
-	"prefix" : "dev |Dev |iu_dev "
+	"maintenance" : "False",
+	"prefix" : "iu |IU |Iu |iu_|IU_|Iu_"
 }
