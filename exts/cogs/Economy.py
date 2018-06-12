@@ -69,7 +69,7 @@ class Economy:
                     else:
                         secondsRemaining = 43200 - abs(difference_timestamp.total_seconds())
                         time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
-                        await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
+                        await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], int(time[2]), currentDaily))
 
             if not found:
                 await self.bot.aio.execute("INSERT INTO Dailies VALUES (%s, '200', %s)", (ctx.message.author.id, msg_timestamp))
