@@ -78,7 +78,7 @@ class Events:
 
     async def on_command_error(self, ctx, err):
         if isinstance(err, commands.CommandOnCooldown):
-            msg=await ctx.send("❌ | Sorry, you're on a cooldown, try again in " + str(int(err.retry_after)))
+            msg=await ctx.send("❌ | Sorry, you're on a cooldown, try again in {}s".format(str(int(err.retry_after))))
             await asyncio.sleep(5)
             await msg.delete()
 
