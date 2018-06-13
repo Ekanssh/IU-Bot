@@ -45,7 +45,7 @@ class aiopg_commands:
     async def execute(self, statement, args:tuple = None):
         #async with self.pool.acquire() as conn: 
         #    async with conn.cursor() as cur: 
-        conn = self.pool.acquire()
+        conn = await self.pool.acquire()
         cur = conn.cursor()
         self.cursor = cur
         if args is None:
