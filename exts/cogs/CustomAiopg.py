@@ -43,7 +43,7 @@ class aiopg_commands:
         self.pool = await aiopg.create_pool(self.dsn)
 
     async def execute(self, statement, args:tuple = None):
-        async with self.pool.aquire() as conn: 
+        async with self.pool.acquire() as conn: 
             async with conn.cursor() as cur: 
                 if args is None:
                     await cur.execute(statement)
