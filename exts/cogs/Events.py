@@ -54,7 +54,7 @@ class Events:
         if not msg.author.bot:
             dsn = "dbname=d1b1qi3p5efneq user=ynhburlpfyrfon password=14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8 host=ec2-79-125-117-53.eu-west-1.compute.amazonaws.com"
             async with aiopg.create_pool(dsn) as pool: 
-                async with pool.aquire() as conn: 
+                async with pool.acquire() as conn: 
                     async with conn.cursor () as cur: 
                         await cur.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
                         l = await cur.fetchall() 
@@ -66,7 +66,7 @@ class Events:
                         xp = l[0][6]     
                         level = l[0][4]
                         async with aiopg.create_pool(dsn) as pool:
-                            async with pool.aquire() as conn: 
+                            async with pool.acquire() as conn: 
                                 async with conn.cursor () as cur:
                                     await cur.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 5, msg.author.id, ))
                                     if xp == int(calculate_level(level)):
