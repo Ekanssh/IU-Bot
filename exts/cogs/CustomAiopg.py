@@ -34,21 +34,19 @@ import aiopg
 
 class aiopg_commands:
     async def connect(self):
-        self.dsn = "dbname=d1b1qi3p5efneq user=ynhburlpfyrfon password=14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8 host=ec2-79-125-117-53.eu-west-1.compute.amazonaws.com"
+        #self.dsn = "dbname=d1b1qi3p5efneq user=ynhburlpfyrfon password=14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8 host=ec2-79-125-117-53.eu-west-1.compute.amazonaws.com"
         self.conn = await aiopg.connect(database='d1b1qi3p5efneq',
                                         user='ynhburlpfyrfon',
                                         password='14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8',
                                         host='ec2-79-125-117-53.eu-west-1.compute.amazonaws.com')
         self.cursor = await self.conn.cursor()
-        self.pool = await aiopg.create_pool(self.dsn)
+        #self.pool = await aiopg.create_pool(self.dsn)
 
     async def execute(self, statement, args:tuple = None):
-        #async with self.pool.acquire() as conn: 
-        #    async with conn.cursor() as cur: 
-        conn = await self.pool.acquire()
-        cur = await conn.cursor()
-        self.cursor = cur
-        if args is None:
-            await cur.execute(statement)
-        else:
-            await cur.execute(statement, args)
+         if args is None:
+
+-            await self.cursor.execute(statement)
+
+-        else:
+
+-            await self.cursor.execute(statement, args) 
