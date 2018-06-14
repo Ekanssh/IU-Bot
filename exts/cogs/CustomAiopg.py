@@ -44,9 +44,6 @@ class aiopg_commands:
 
     async def execute(self, statement, args:tuple = None):
          if args is None:
-
--            await self.cursor.execute(statement)
-
--        else:
-
--            await self.cursor.execute(statement, args) 
+             await self.cursor.execute(statement)
+         else:
+             await self.cursor.execute(statement, args) 
