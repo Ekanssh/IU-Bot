@@ -253,19 +253,19 @@ class Profile:
                         currentCredits = int((await self.bot.aio.cursor.fetchall())[0][1])
                     
                         item = arg
-                        await ctx.send("**You are about to buy {} for ₹1000/-.**\nType 'confirm' to confirm the purchase or 'cancel' to cancel it.".format(item))
+                        await ctx.send("**You are about to buy {} for ₹1000/-.**\nType 'CONFIRM' to confirm the purchase or 'cancel' to cancel it.".format(item))
                         def check(m):
                             return m.author.id == ctx.author.id and m.channel == ctx.channel
                         try:
                             response = await self.bot.wait_for('message', timeout = 20, check = check)
-                            if response.content == "confirm":
+                            if response.content == "CONFIRM":
                                 if currentCredits < 1000:
                                     return await ctx.send("You don't have enough money to buy a banner.")
                                 else:
                                     purchased_banners.append(item)
                                     await self.bot.aio.execute("UPDATE profile SET banners_buyed = %s", (' '.join(purchased_banners)))
                                     await self.bot.aio.execute("UPDATE Dailies SET dailiesCount = %s", (currentCredits - 1000, ))
-                                    await ctx.send("You successfully buyed {}.\nSay `iu banner set <banner name> to set the respective banner.".format(item))
+                                    await ctx.send("You successfully bought {}.\nSay `iu banner set <banner name>` to set the respective banner.".format(item))
                             else:
                                 await ctx.send("Your purchase is cancelled.")
                         except asyncio.TimeoutError:
