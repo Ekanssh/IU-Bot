@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from discord.ext import commands
-import discord 
-from exts.cogs.Paginator import Paginator 
-from PIL import Image, ImageFont, ImageDraw #used in profile command 
+import discord
+from exts.cogs.Paginator import Paginator
+from PIL import Image, ImageFont, ImageDraw #used in profile command
 import aiohttp
 import os
 import json
@@ -25,7 +25,7 @@ class Profile:
             await ctx.send("Sorry, bots don't have a profile...")
             return
 
-        
+
         await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id, ))
         for i in await self.bot.aio.cursor.fetchall():
             if i is not None:
@@ -110,56 +110,73 @@ class Profile:
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def rep(self, ctx, mem:discord.Member):
+        msg_ts = ctx.message.created_at
         if ctx.author.bot or mem.bot:
+            await ctx.send("Sorry!, Humans Only")
             return
         if ctx.author.id is mem.id:
             await ctx.send("You can not give reputation point to yourself.")
+            return
+
         found_author = False
         found_mem = False
+        last_given_ts = None
+        difference_ts = None
+        repFlag = False
+        currentRep = 0
+
+        # fetching author and member
         await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (ctx.message.author.id, ))
-        for i in await self.bot.aio.cursor.fetchall():
-            if i is not None:
-                found_author = True
+        author_data = await self.bot.aio.cursor.fetchone()
+        if author_data is not None:
+            found_author = True
+            last_given_ts = author_data[2]
+            if last_given_ts is not None:
+                difference_ts= msg_ts-last_given_ts
+                repFlag = (abs(difference_ts.total_seconds()) >= 18000)
+            else:
+                repFlag= True
         await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (mem.id, ))
-        for i in await self.bot.aio.cursor.fetchall():
-            if i is not None:
-                found_mem = True
+        mem_data = await self.bot.aio.cursor.fetchone()
+        if mem_data is not None:
+            found_mem = True
+            currentRep = mem_data[1]
+
+        # now comes function
         if found_author and found_mem:
-            await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (mem.id, ))
-            currentRep = int((await self.bot.aio.cursor.fetchall())[0][1])
-            await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (ctx.message.author.id, ))
-            repFlag = (await self.bot.aio.cursor.fetchall())[0][2]
-            if repFlag is "False":
-                await ctx.send("Reputation point already given.")
-            else:
-                await self.bot.aio.execute("UPDATE rep SET flag = %s WHERE id = %s", ('True', ctx.message.author.id, ))
+            if repFlag:
                 await self.bot.aio.execute("UPDATE rep SET reps = %s WHERE id = %s", (currentRep + 1, mem.id, ))
+                await self.bot.aio.execute("UPDATE rep SET last_given = %s WHERE id = %s", (msg_ts, ctx.author.id, ))
                 await ctx.send("You have given reputation point to " + mem.mention)
-        elif found_author:
-            await self.aio.execute("SELECT * FROM rep WHERE id = %s", (ctx.message.author.id, ))
-            repFlag = (await self.bot.aio.cursor.fetchall())[0][2]
-            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 1, 'False')", (mem.id, ))
-            if repFlag is "False":
-                await ctx.send("Reputation point already given.")
             else:
-                await self.bot.aio.execute("UPDATE rep SET flag = %s WHERE id = %s", ('True', ctx.message.author.id, ))
+                remaining_seconds = 18000 - abs(difference_ts.seconds)
+                time = str(datetime.timedelta(seconds=remaining_seconds)).split(":")
+                await ctx.send("Sorry, you can award more reputation in {0}hrs, {1}mins".format(time[0], time[1]))
+
+        elif found_author and not found_mem:
+            if repFlag:
+                await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 1, %s)", (mem.id, None,))
+                await self.bot.aio.execute("UPDATE rep SET last_given = %s WHERE id = %s", (msg_ts, ctx.author.id, ))
                 await ctx.send("You have given reputation point to " + mem.mention)
-        elif found_mem:
-            await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (mem.id, ))
-            currentRep = int((await self.bot.aio.cursor.fetchall()))[0][1]
-            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 0, 'True')", (ctx.message.author.id, ))
+            else:
+                remaining_seconds = 18000 - abs(difference_ts.seconds)
+                time = str(datetime.timedelta(seconds=remaining_seconds)).split(":")
+                await ctx.send("Sorry, you can award more reputation in {0}hrs, {1}mins".format(time[0], time[1]))
+
+        elif found_mem and not found_author:
+            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 0, %s)", (ctx.author.id, msg_ts,))
             await self.bot.aio.execute("UPDATE rep SET reps = %s WHERE id = %s", (currentRep + 1, mem.id, ))
             await ctx.send("You have given reputation point to " + mem.mention)
         else:
-            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 0, 'True')", (ctx.message.author.id, ))
-            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 1, 'False')", (mem.id, ))
+            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 0, %s)", (ctx.message.author.id, msg_ts,))
+            await self.bot.aio.execute("INSERT INTO rep VALUES (%s, 1, %s)", (mem.id, None,))
             await ctx.send("You have given reputation point to " + mem.mention)
 
 
     @commands.cooldown(1, 15, commands.BucketType.user)
-    @commands.command() 
+    @commands.command()
     async def top(self, ctx):
-        msg = await ctx.send("***Wait until i gather all the users...***") 
+        msg = await ctx.send("***Wait until i gather all the users...***")
         await self.bot.aio.execute("SELECT * FROM profile")
         rowcount = len(await self.bot.aio.cursor.fetchall())
         ems = []
@@ -170,15 +187,15 @@ class Profile:
                 em = discord.Embed(title = "Top", description = "```\n", color = 0x00FFFF)
                 for i in await self.bot.aio.cursor.fetchall():
                     counter += 1
-                    if i[0] == ctx.author.id: 
+                    if i[0] == ctx.author.id:
                         rank = counter
                     mem = await self.bot.get_user_info(i[0])
-                    data = (mem.name, str(i[1])) 
+                    data = (mem.name, str(i[1]))
                     em.description += f"{data [0]:<20} : {data[1]}\n"
                 em.description += "```"
                 ems.append(em)
         info_embed = discord.Embed(title = "Help Info", description = "\u23EA:  Go to the first page\n\u25C0:  Go to the previous page\n\u23F9:  Stop the help command\n\u25B6:  Go to the next page\n\u23E9:  Go to the last page\n\U0001f522:  Asks for a page number\n\u2139:  Shows this info", colour = 0x00FFFF)
-        for e in ems: 
+        for e in ems:
             e.add_field(name = "Your guild rank", value = str(rank))
         ems.append (info_embed)
         await msg.edit(embed = ems[0])
@@ -191,7 +208,7 @@ class Profile:
         '''Sets, shows, buys. or lists banners'''
         with open('exts/HelperFiles/banner_list.json') as fp:
             banners = json.load(fp)
-        
+
         await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
 
         if len(await self.bot.aio.cursor.fetchall()) > 0: #found in db
@@ -209,7 +226,7 @@ class Profile:
                     ems = []
                     await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
                     purchased_banners = ((await self.bot.aio.cursor.fetchall())[0][-1]).split() #last column is banners purchased, is a string
-                    
+
                     for i in banners:
                         if not i in purchased_banners:
                             em = discord.Embed(title = i, color = 0x00FFFF).set_image(url = banners[i])
@@ -219,7 +236,7 @@ class Profile:
                     info_embed = discord.Embed(title = "Help Info", description = "\u23EA:  Go to the first page\n\u25C0:  Go to the previous page\n\u23F9:  Stop the help command\n\u25B6:  Go to the next page\n\u23E9:  Go to the last page\n\U0001f522:  Asks for a page number\n\u2139:  Shows this info", colour = 0x00FFFF)
                     ems.append(info_embed)
                     pa = Paginator(self.bot, msg, ctx.author, 0)
-                    await pa.paginate(ems) 
+                    await pa.paginate(ems)
                     if pa.item_purchased == True:
                         item = "banner-" + str(pa.index + 1)
                         await ctx.send("**You are about to buy {} for ₹1000/-.**\nType 'confirm' to confirm the purchase or 'cancel' to cancel it.".format(item))
@@ -251,7 +268,7 @@ class Profile:
                     else:
                         await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.author.id, ))
                         currentCredits = int((await self.bot.aio.cursor.fetchall())[0][1])
-                    
+
                         item = arg
                         await ctx.send("**You are about to buy {} for ₹1000/-.**\nType 'CONFIRM' to confirm the purchase or 'cancel' to cancel it.".format(item))
                         def check(m):
@@ -288,7 +305,7 @@ class Profile:
                     else:
                         await self.bot.aio.execute("UPDATE profile SET profile_background = %s", (arg, ))
                         await ctx.send("Your profile background has been set to {}.".format(arg))
-                                    
+
 
         else: #not found in db
             #if person is not in db, insert a row with data and invoke the command again with respective arguments.
