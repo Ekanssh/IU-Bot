@@ -232,8 +232,8 @@ class Profile:
                                     return await ctx.send("You don't have enough money to buy a banner.")
                                 else:
                                     purchased_banners.append(item)
-                                    await self.bot.aio.execute("UPDATE profile SET banners_buyed = %s", (' '.join(purchased_banners)))
-                                    await self.bot.aio.execute("UPDATE Dailies SET dailiesCount = %s", (currentCredits - 1000, ))
+                                    await self.bot.aio.execute("UPDATE profile SET banners_buyed = %s WHERE id = %s", (' '.join(purchased_banners), ctx.author.id))
+                                    await self.bot.aio.execute("UPDATE Dailies SET dailiesCount = %s WHERE id = %s", (currentCredits - 1000, ctx.author.id))
                                     await ctx.send("You successfully buyed {}.\nSay `iu banner set <banner name> to set the respective banner.".format(item))
                             else:
                                 await ctx.send("Your purchase is cancelled.")
