@@ -40,9 +40,8 @@ class Profile:
                         currentDaily = 0
                     await self.bot.aio.execute("SELECT reps from rep where id= %s",(mem.id, ))
                     rep_data= await self.bot.aio.cursor.fetchone()
-                    if rep_data is None:
-                        reps= 0
-                    else:
+                    reps= 0
+                    if rep_data is not None:
                         reps= rep_data[0]
 
                     await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id,))
