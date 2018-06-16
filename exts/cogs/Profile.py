@@ -110,7 +110,7 @@ class Profile:
 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
-    async def rep(self, ctx, mem:discord.Member):
+    async def rep(self, ctx, *,mem:discord.Member):
         msg_ts = ctx.message.created_at
         if ctx.author.bot or mem.bot:
             await ctx.send("Sorry!, Humans Only")
