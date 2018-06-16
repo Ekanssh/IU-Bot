@@ -38,6 +38,12 @@ class Profile:
                         currentDaily = int((await self.bot.aio.cursor.fetchall())[0][1])
                     else :
                         currentDaily = 0
+                    await self.bot.aio.execute("SELECT reps from rep where id= %s",(mem.id, ))
+                    rep_data= await self.bot.aio.cursor.fetchone()
+                    if rep_data is None:
+                        reps= 0
+                    else:
+                        reps= rep_data[0]
 
                     await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (mem.id,))
                     level = (await self.bot.aio.cursor.fetchall())[0][4]
@@ -78,7 +84,7 @@ class Profile:
                     d.text(text = str(currentDaily), xy = (435, 310), font = credits_reps_font, align = 'RIGHT')
 
                     d.text(text = "Reputations:", xy = (135, 340), font = credits_reps_font)
-                    d.text(text = "-", xy = (435, 340), font = credits_reps_font, align = 'RIGHT')
+                    d.text(text = str(reps), xy = (435, 340), font = credits_reps_font, align = 'RIGHT')
 
                     d.rectangle([135, 400, 480, 490])
                     d.text(text = note, xy = (145, 405), font = note_font)
