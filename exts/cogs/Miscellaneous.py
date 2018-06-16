@@ -33,8 +33,12 @@ class Miscellaneous:
                 em.title = "Error"
                 em.description = "Could not find the location, {}".format(location)
         await ctx.send(embed = em)
-
-
-
+    
+    @commands.command()
+    async def think(self, ctx):
+        '''have fun thinking'''
+        await ctx.message.delete()
+        await ctx.send(discord.utils.get(bot.emojis,name='fidgetthink'))
+   
 def setup(bot):
     bot.add_cog(Miscellaneous(bot))
