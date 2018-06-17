@@ -13,6 +13,7 @@ import string #needed for counting channel
 from exts.cogs import globalvars
 import asyncio, aiohttp #various needs
 import aiopg
+import os
 
 def calculate_level(level: 'current level') -> 'xp to reach next level':
     return (level**2+level)/2*100-(level*100)
@@ -52,21 +53,21 @@ class Events:
 
         found = False
         if not msg.author.bot:
-            dsn = "dbname=d1b1qi3p5efneq user=ynhburlpfyrfon password=14e33018bf4991471bae5c11d2d57ab4424120299510a7891e61ee0123e81bc8 host=ec2-79-125-117-53.eu-west-1.compute.amazonaws.com"
-            async with aiopg.create_pool(dsn) as pool: 
-                async with pool.acquire() as conn: 
-                    async with conn.cursor () as cur: 
+            dsn = 'dbname=' + str(os.getenv('DATABASE')) + ' user=' + str(os.getenv('USER')) + ' password=' + str(os.getenv('PASSWORD')) + ' host=' + str(os.getenv('HOST'))
+            async with aiopg.create_pool(dsn) as pool:
+                async with pool.acquire() as conn:
+                    async with conn.cursor () as cur:
                         await cur.execute("SELECT * FROM profile WHERE id = %s", (msg.author.id, ))
-                        l = await cur.fetchall() 
+                        l = await cur.fetchall()
             for i in l:
                 if i is not None:
                     if i[0] == msg.author.id:
 
                         found = True
-                        xp = l[0][6]     
+                        xp = l[0][6]
                         level = l[0][4]
                         async with aiopg.create_pool(dsn) as pool:
-                            async with pool.acquire() as conn: 
+                            async with pool.acquire() as conn:
                                 async with conn.cursor () as cur:
                                     await cur.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 5, msg.author.id, ))
                                     if xp == int(calculate_level(level)):
