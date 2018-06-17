@@ -10,10 +10,8 @@ import textwrap
 from contextlib import redirect_stdout
 import io
 
-ownerid = {360022804357185537: "Pegasus",
-            315728369369088003: "Ekansh",
+ownerid = {315728369369088003: "Ekansh",
             270898185961078785: "Shirious",
-            341958485724102668: "UniQ",
             388984732156690433: "Yash",
             443961507051601931: "Uday"}
 
