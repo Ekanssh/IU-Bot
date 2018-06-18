@@ -1,4 +1,4 @@
 {
-	"maintenance" : "True",
-	"prefix" : "dev |Dev |DEV |beta |Beta "
+	"maintenance" : "False",
+	"prefix" : "iu |IU |Iu |iu_|IU_|Iu_"
 }
