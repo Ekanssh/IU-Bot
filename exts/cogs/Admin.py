@@ -8,7 +8,7 @@ import asyncio, aiohttp #various needs
 
 class Admin:
     '''For administrative purposes'''
-    
+
     def __init__(self, bot):
         self.bot = bot
 

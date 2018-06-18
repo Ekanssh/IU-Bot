@@ -91,7 +91,7 @@ class General:
         '''Get current date and time'''
         m = str(datetime.datetime.now()).split()
         embed = discord.Embed(title='Date-time information',
-                              color=eval(hex(ctx.author.color.value)))
+        color=eval(hex(ctx.author.color.value)))
         embed.add_field(name='Date', value='{}'.format(m[0]))
         embed.add_field(name='Time', value='{}GMT'.format(m[1]))
         await ctx.send(embed=embed)
