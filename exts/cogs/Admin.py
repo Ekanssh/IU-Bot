@@ -3,7 +3,8 @@
 
 from discord.ext import commands
 import discord
-import asyncio, aiohttp #various needs
+import asyncio
+import aiohttp  # various needs
 
 
 class Admin:

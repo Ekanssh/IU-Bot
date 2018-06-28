@@ -5,40 +5,44 @@ from discord.ext import commands
 import discord
 import aiohttp
 from bs4 import BeautifulSoup as bs
-from PIL import Image, ImageFont, ImageDraw #used in profile command
+from PIL import Image, ImageFont, ImageDraw  # used in profile command
 
-import time, datetime
+import time
+import datetime
 from time import localtime, strftime
 import random
 import os
 
-import asyncio, aiohttp #various needs
+import asyncio
+import aiohttp  # various needs
 from exts.cogs import globalvars
 
 
 class General:
     '''General commands'''
+
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=['cricket', 'scores','cric','score'])
-    async def cricbuzz(self, ctx) :
+    @commands.command(aliases=['cricket', 'scores', 'cric', 'score'])
+    async def cricbuzz(self, ctx):
         url = "http://www.cricbuzz.com/"
         data = []
         async with aiohttp.ClientSession() as cs:
             async with cs.get(url) as r:
                 html = await r.read()
             soup = bs(html, 'html.parser')
-        t = soup.find_all(attrs={'class':'cb-ovr-flo'})
+        t = soup.find_all(attrs={'class': 'cb-ovr-flo'})
         for u in t:
-            if u is not None :
+            if u is not None:
                 data.append(u.text)
         tossres = data[5]
-        inn = [ data[2] , data[4] ]
-        tm = [ data[1] , data[3] ]
+        inn = [data[2], data[4]]
+        tm = [data[1], data[3]]
         curr = data[0]
-        em = discord.Embed(title = "{0} vs {1}".format(tm[0],tm[1]) , description = "{5} ... \nCurrent Inning : {0} \n{1} : {2}\n{3} : {4}".format(curr,tm[0],inn[0],tm[1],inn[1],tossres)+"\n*Score Updated at* "+str(strftime("%a, %d %H:%M:%S", localtime())), colour = int(hex(random.randint(0,16777215)),16))
-        await ctx.send(embed = em)
+        em = discord.Embed(title="{0} vs {1}".format(tm[0], tm[1]), description="{5} ... \nCurrent Inning : {0} \n{1} : {2}\n{3} : {4}".format(
+            curr, tm[0], inn[0], tm[1], inn[1], tossres)+"\n*Score Updated at* "+str(strftime("%a, %d %H:%M:%S", localtime())), colour=int(hex(random.randint(0, 16777215)), 16))
+        await ctx.send(embed=em)
     '''
     @commands.command(aliases = ['scoretable','ipltable','ipl_table','points','points_table','pt'])
     async def pointstable(self, ctx) :
@@ -74,7 +78,9 @@ class General:
         '''Call the bot'''
         msg = await ctx.send('Pong!')
         res = msg.created_at - ctx.message.created_at
-        tdm = lambda td: ((td.days * 86400000) + (td.seconds * 1000)) + (td.microseconds / 1000)
+
+        def tdm(td): return ((td.days * 86400000) +
+                             (td.seconds * 1000)) + (td.microseconds / 1000)
         res = tdm(res)
         await msg.edit(content='Pong! :ping_pong: Took {} ms'.format(res))
 
@@ -91,14 +97,14 @@ class General:
         '''Get current date and time'''
         m = str(datetime.datetime.now()).split()
         embed = discord.Embed(title='Date-time information',
-        color=eval(hex(ctx.author.color.value)))
+                              color=eval(hex(ctx.author.color.value)))
         embed.add_field(name='Date', value='{}'.format(m[0]))
         embed.add_field(name='Time', value='{}GMT'.format(m[1]))
         await ctx.send(embed=embed)
 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
-    @commands.command(name = '8ball')
-    async def _func(self, ctx, *, question = ' '):
+    @commands.command(name='8ball')
+    async def _func(self, ctx, *, question=' '):
         '''the bot entertains you with nonsense'''
         if question[-1] == '?':
             return await ctx.send(random.choice(globalvars.ballAnswers))
@@ -109,17 +115,17 @@ class General:
     async def choose(self, ctx, *, options):
         '''randomly gets a choice from a list of choices separated with '|' '''
         if len(options.split('|')) >= 2:
-            return await ctx.send(embed=discord.Embed(title="And the bot has chosen...",description=random.choice(options.split('|')),color=discord.Color.gold()))
-        await ctx.send(embed=discord.Embed(title='You invoked command incorrectly!',description='Give at least two options separated by **|**',color=discord.Color.red()))
+            return await ctx.send(embed=discord.Embed(title="And the bot has chosen...", description=random.choice(options.split('|')), color=discord.Color.gold()))
+        await ctx.send(embed=discord.Embed(title='You invoked command incorrectly!', description='Give at least two options separated by **|**', color=discord.Color.red()))
 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def rps(self, ctx, value):
         '''Play Rock Paper Scissors with the bot'''
-        options = ['Rock', 'Paper', 'Scissors', 'Rock'];
+        options = ['Rock', 'Paper', 'Scissors', 'Rock']
         value = value.title()
         if value not in options:
-            return await ctx.send('You can choose from %s only'%(', '.join(options[:3])))
+            return await ctx.send('You can choose from %s only' % (', '.join(options[:3])))
         guess = random.choice(options[:3])
         i = options.index(value)
         if value is guess:
@@ -131,7 +137,8 @@ class General:
                 res = 'You lost'
             else:
                 res = 'You won'
-        return await ctx.send('**Bot**: %s\n**You**: %s\n%s'%(guess, value, res))
+        return await ctx.send('**Bot**: %s\n**You**: %s\n%s' % (guess, value, res))
+
 
 def setup(bot):
     bot.add_cog(General(bot))

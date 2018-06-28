@@ -2,12 +2,12 @@ from discord.ext import commands
 import discord
 import datetime
 
+
 class Economy:
     '''Economy commands like dailies, credits, level'''
 
     def __init__(self, bot):
         self.bot = bot
-
 
     @commands.command()
     async def level(self, ctx, person: discord.Member=None):
@@ -23,21 +23,25 @@ class Economy:
 
         level, xp = temp[4], temp[6]
         if xp < 1000:
-            embed = discord.Embed(title = person.name + "'s level",
-                                    description = "Level "+ str(level) + "\n" + str(xp) + " xp",
-                                    colour = discord.Colour.from_rgb(205, 127, 50))
+            embed = discord.Embed(title=person.name + "'s level",
+                                  description="Level " +
+                                  str(level) + "\n" + str(xp) + " xp",
+                                  colour=discord.Colour.from_rgb(205, 127, 50))
         elif xp < 5000:
-            embed = discord.Embed(title = person.name+"'s level",
-                                    description="Level " + str(level) + "\n" + str(xp) + " xp",
-                                    colour = discord.Colour.from_rgb(218, 218, 218))
+            embed = discord.Embed(title=person.name+"'s level",
+                                  description="Level " +
+                                  str(level) + "\n" + str(xp) + " xp",
+                                  colour=discord.Colour.from_rgb(218, 218, 218))
         elif xp < 10000:
-            embed = discord.Embed(title = person.name + "'s level",
-                                    description = "Level " + str(level) + "\n" + str(xp) + " xp",
-                                    colour=discord.Colour.gold())
+            embed = discord.Embed(title=person.name + "'s level",
+                                  description="Level " +
+                                  str(level) + "\n" + str(xp) + " xp",
+                                  colour=discord.Colour.gold())
         else:
-            embed = discord.Embed(title = person.name + "'s level",
-                                    description = "Level " + str(level) + "\n" + str(xp) + " xp",
-                                    colour = discord.Colour.from_rgb(20, 30, 179))
+            embed = discord.Embed(title=person.name + "'s level",
+                                  description="Level " +
+                                  str(level) + "\n" + str(xp) + " xp",
+                                  colour=discord.Colour.from_rgb(20, 30, 179))
         await ctx.send(embed=embed)
 
     @commands.cooldown(rate=1, per=15, type=commands.BucketType.user)
@@ -50,7 +54,7 @@ class Economy:
         msg_timestamp = ctx.message.created_at
         found = False
         await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.message.author.id, ))
-        customer_data=await self.bot.aio.cursor.fetchone()
+        customer_data = await self.bot.aio.cursor.fetchone()
         if customer_data is not None:
             found = True
             previous_msg_timestamp = customer_data[2]
@@ -63,7 +67,8 @@ class Economy:
                 await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
             else:
                 secondsRemaining = 43200 - abs(difference_timestamp.seconds)
-                time = str(datetime.timedelta(seconds = secondsRemaining)).split(":")
+                time = str(datetime.timedelta(
+                    seconds=secondsRemaining)).split(":")
                 await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
         if not found:
             await self.bot.aio.execute("INSERT INTO Dailies VALUES (%s, %s, %s)", (ctx.message.author.id, 200, msg_timestamp))
@@ -97,6 +102,7 @@ class Economy:
                         await ctx.send(":moneybag: | {0} currently has ₹{1}".format(otherMem.name, (await self.bot.aio.cursor.fetchall())[0][1]))
             if not found_in_db:
                 await ctx.send(":moneybag: | {0} currently has ₹0".format(otherMem.name))
+
 
 def setup(bot):
     bot.add_cog(Economy(bot))
