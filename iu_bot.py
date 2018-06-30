@@ -1,4 +1,7 @@
-﻿﻿from discord.ext import commands
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+from discord.ext import commands
 import discord
 
 
