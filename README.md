@@ -120,6 +120,6 @@ Level 100 |3434000
 - [x] #count-past-infinity
 - [ ] #bday
 - [x] welcoming
-- [ ] rep
-- [ ] leaderboard
+- [x] rep
+- [x] leaderboard
 - [ ] admin & mod tools

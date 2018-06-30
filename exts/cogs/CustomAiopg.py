@@ -41,9 +41,9 @@ class aiopg_commands:
                                         password=os.getenv('PASSWORD'),
                                         host=os.getenv('HOST'))
         self.cursor = await self.conn.cursor()
-        #self.pool = await aiopg.create_pool(self.dsn)
+        # self.pool = await aiopg.create_pool(self.dsn)
 
-    async def execute(self, statement, args:tuple = None):
+    async def execute(self, statement, args: tuple = None):
         if args is None:
             await self.cursor.execute(statement)
         else:
