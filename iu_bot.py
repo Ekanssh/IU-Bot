@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 from discord.ext import commands
@@ -69,7 +69,7 @@ async def on_ready():
                 await botLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
 
     await bot.change_presence(status=discord.Status.dnd,
-                              activity=discord.Game(name="on Indians United [iu_help reveals commands]"))
+                              activity=discord.Game(name="on IU | IU help"))
 
 
 bot.run(str(os.environ['TOKEN']))
