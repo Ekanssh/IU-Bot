@@ -52,13 +52,18 @@ class Admin:
   
     @commands.command()
     async def warn(ctx, user:discord.Member, *, reason):
-        warn_embed=discord.Embed(title="You've been warned in Indians United",colour=discord.Colour.red())
-        if ctx.author.top_role.name in ["Queens","Lords","Nobles"]:
-            warn_embed.description="You've been warned by {} for the following reason: {}".format(ctx.author.name,reason)
-            await user.send(embed=warn_embed)
-        else:
-            warn_embed=description="You've been warned for trying to warn a user without the permissions."
-            await ctx.author.send(embed=warn_embed)
+        '''Warns an offender'''
+        try:
+            warn_embed=discord.Embed(title="You've been warned in Indians United",colour=discord.Colour.red())
+            if ctx.author.top_role.name in ["Queens","Lords","Nobles"]:
+                warn_embed.description="You've been warned by {} for the following reason: {}".format(ctx.author.name,reason)
+                await user.send(embed=warn_embed)
+            else:
+                warn_embed.description="You've been warned for trying to warn a user without the permissions."
+                await ctx.author.send(embed=warn_embed)
+        except Exception as e:
+            await ctx.send(f"{e}")
+
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
