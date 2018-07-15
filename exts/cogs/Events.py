@@ -89,7 +89,9 @@ class Events:
             msg = await ctx.send("❌ | Sorry, you're on a cooldown, try again in {}s".format(str(int(err.retry_after))))
             await asyncio.sleep(5)
             await msg.delete()
-
+        else:
+            embed=discord.Embed(title=str(type(err))[8:-2],description=str(err),colour=discord.Colour.from_rgb(random.randint(0,255),random.randint(0,255),random.randint(0,255)))
+            await ctx.send("Command raised an error***",embed=embed,delete_after=15)
 
 def setup(bot):
     bot.add_cog(Events(bot))
