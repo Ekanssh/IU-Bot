@@ -52,7 +52,7 @@ class Admin:
 
     @commands.command()
     async def warn(ctx, user:discord.Member, *, reason):
-        '''Warns an offender'''
+        '''warns an offender'''
         try:
             warn_embed=discord.Embed(title="You've been warned in Indians United",colour=discord.Colour.red())
             if ctx.author.top_role.name in ["Queens","Lords","Nobles"]:
