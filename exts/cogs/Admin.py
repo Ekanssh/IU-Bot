@@ -49,7 +49,7 @@ class Admin:
             await ctx.message.add_reaction('\u2705')
         except:
             await ctx.message.add_reaction('\u274C')
-  
+
     @commands.command()
     async def warn(ctx, user:discord.Member, *, reason):
         '''Warns an offender'''
@@ -63,7 +63,6 @@ class Admin:
                 await ctx.author.send(embed=warn_embed)
         except Exception as e:
             await ctx.send(f"{e}")
-
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
