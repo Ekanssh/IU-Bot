@@ -18,7 +18,7 @@ with open("config.json") as fp:
     config = json.load(fp)
 
 prefixes = config['prefix'].split('|')
-maintenance = config['maintenance'] == "False"
+maintenance = config['maintenance'] == "True"
 
 if maintenance:
     bot = commands.Bot(description='IU Bot Dev build', command_prefix=prefixes)
