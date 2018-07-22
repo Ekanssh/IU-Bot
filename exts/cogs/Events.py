@@ -15,7 +15,7 @@ import asyncio
 import aiohttp  # various needs
 import aiopg
 import os
-
+import random
 
 def calculate_level(level: 'current level') -> 'xp to reach next level':
     return (level**2+level)/2*100-(level*100)
