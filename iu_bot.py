@@ -18,7 +18,7 @@ with open("config.json") as fp:
     config = json.load(fp)
 
 prefixes = config['prefix'].split('|')
-maintenance = config['maintenance'] == "True"
+maintenance = config['maintenance'] == "False"
 
 if maintenance:
     bot = commands.Bot(description='IU Bot Dev build', command_prefix=prefixes)
@@ -68,7 +68,7 @@ async def on_ready():
             else:
                 await botLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
 
-    await bot.change_presence(status=discord.Status.dnd,
+    await bot.change_presence(status=discord.Status.online,
                               activity=discord.Game(name="on IU | IU help"))
 
 
