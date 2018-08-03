@@ -84,6 +84,22 @@ class Events:
     async def on_message_edit(self, before, after):
         await self.bot.process_commands(after)
 
+    async def on_reacton_add(self, reaction, user):
+        if reaction.emoji.name in ["star","star2"]:
+            role_list = list(map(lambda x:x.name , user.roles))
+            for i in ["Nobles","Lords", "Queens"]:
+                 if i in role_list:
+                        a = reaction.message.author
+                        c = reaction.message.content
+                        h = reaction.message.channel
+                        if reaction.message.embeds:
+                            embed=reaction.message.embeds[0]
+                            embed.description+="\n\n**"+c+"**"
+                        else:
+                            embed=discord.Embed(title="Message",description=c)
+                        embed.url=reaction.message.jump_url
+                        await bot.get_guild(281793428793196544).get_channel(462294052482711553).send(f"{a.mention} sent an interesting message in {h.mention}",embed=embed)
+
     async def on_command_error(self, ctx, err):
         if isinstance(err, commands.CommandOnCooldown):
             msg = await ctx.send("❌ | Sorry, you're on a cooldown, try again in {}s".format(str(int(err.retry_after))))
