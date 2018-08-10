@@ -64,7 +64,7 @@ class Economy:
             if last_payed_ago >= 43200:
                 currentDaily += 200
                 await self.bot.aio.execute("UPDATE Dailies SET dailiesCount = %s, remaining_timestamp = %s WHERE id = %s", (currentDaily, msg_timestamp, ctx.message.author.id, ))
-                await ctx.send(":moneybag: | You got your 200 dialies!\n You have ₹{}".format(currentDaily))
+                await ctx.send(":moneybag: | You got your 200 dailies!\n You have ₹{}".format(currentDaily))
             else:
                 secondsRemaining = 43200 - abs(difference_timestamp.seconds)
                 time = str(datetime.timedelta(
@@ -72,7 +72,7 @@ class Economy:
                 await ctx.send("Sorry, you can claim your dailies in {0}hrs, {1}mins, {2}s\nYou have ₹{3}:moneybag:".format(time[0], time[1], time[2], currentDaily))
         if not found:
             await self.bot.aio.execute("INSERT INTO Dailies VALUES (%s, %s, %s)", (ctx.message.author.id, 200, msg_timestamp))
-            await ctx.send(":moneybag: | You got your 200 dialies!\nYou have ₹200")
+            await ctx.send(":moneybag: | You got your 200 dailies!\nYou have ₹200")
 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
