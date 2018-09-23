@@ -165,7 +165,7 @@ class Economy:
     async def pay(self, ctx,amount: int,*, mem=None):
         mem=await self.special_user_fetcher(ctx,mem)
         if mem=="cancel":
-            return     
+            return
         if mem is None:
             await ctx.send("Dear {},the user you typed does not seem to exist. Please make sure you provided correct details.".format(ctx.message.author.mention))
             return
@@ -175,6 +175,9 @@ class Economy:
         if ctx.author.id is mem.id:
             await ctx.send("Want to some Credits,try collecting your free dailies")
             return
+        if amount <= 0:
+            failure_embed=discord.Embed(title="Payment Cancelled",description='Enter a valid amount',color=discord.Colour.red())
+            await ctx.send(embed=failure_embed)
         found_author = False
         found_mem = False
         author_bal = None
