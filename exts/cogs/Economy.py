@@ -178,6 +178,7 @@ class Economy:
         if amount <= 0:
             failure_embed=discord.Embed(title="Payment Cancelled",description='Enter a valid amount',color=discord.Colour.red())
             await ctx.send(embed=failure_embed)
+            return
         found_author = False
         found_mem = False
         author_bal = None
