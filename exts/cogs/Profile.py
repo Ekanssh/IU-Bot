@@ -207,7 +207,11 @@ class Profile:
                     counter += 1
                     if i[0] == ctx.author.id:
                         rank = counter
-                    data = (self.bot._memList[i[0]] or "None", str(i[1]))
+                    
+                    if i[0] in self.bot._memList:
+                        data = (self.bot._memList[i[0]] or "None", str(i[1]))
+                    else:
+                        data = (str(i[0]), str(i[1]))
                     em.description += f"{data [0]:<20} : {data[1]}\n"
                 em.description += "```"
                 ems.append(em)
