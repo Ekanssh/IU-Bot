@@ -194,25 +194,25 @@ class Profile:
     @commands.command()
     async def top(self, ctx):
         msg = await ctx.send("***Wait until i gather all the users...***")
-        await self.bot.aio.execute("SELECT * FROM profile")
-        rowcount = len(await self.bot.aio.cursor.fetchall())
+        await self.bot.aio.execute("SELECT id, xp FROM profile")
+        l = await self.bot.aio.cursor.fetchall()
+        rowcount = len(l)
         ems = []
         counter, rank = 0, 0
         async with ctx.typing():
+            l.sort(lambda el: el[1])[::-1]
             for n in range(10, rowcount, 10):
-                await self.bot.aio.execute("SELECT id, xp FROM profile ORDER BY xp DESC LIMIT %s OFFSET %s", (n, n-10))
-                em = discord.Embed(
-                    title="Top", description="```\n", color=0x00FFFF)
-                for i in await self.bot.aio.cursor.fetchall():
-                    counter += 1
+                em = discord.Embed(title="Top", description="```\n", color=0x00FFFF)
+                t = l[n-10, n]
+                for i in t:
                     if i[0] == ctx.author.id:
                         rank = counter
-                    
                     if i[0] in self.bot._memList:
                         data = (self.bot._memList[i[0]] or "None", str(i[1]))
                     else:
                         data = (str(i[0]), str(i[1]))
                     em.description += f"{data [0]:<20} : {data[1]}\n"
+                    counter += 1
                 em.description += "```"
                 ems.append(em)
         info_embed = discord.Embed(
