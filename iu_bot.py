@@ -58,7 +58,7 @@ async def on_ready():
 
     bot.aio = aio
     extentions = ("Admin", "Economy", "Events", "General",
-                  "repl", "Miscellaneous", "Profile")
+                  "repl", "Miscellaneous", "Profile","Roles")
     for i in extentions:
         try:
             bot.load_extension("exts.cogs.{}".format(i))
