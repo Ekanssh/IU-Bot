@@ -6,13 +6,13 @@ class Roles:
         self.bot=bot
 
     @commands.group(aliases=['roleme'], invoke_without_command=True)
-    async def sar(self,ctx,*,iprole:str):
+    async def sar(self,ctx,*,role_name:str):
         roles=[ 'Sololearn', 'PUBG', 'Self Help', 'Happiness Mod']
-        if iprole.lower() not in [i.lower() for i in roles]:
+        if role_name.lower() not in [i.lower() for i in roles]:
             await ctx.send(":x: Error occured.Run `iu sar list` to see list of self assignable roles")
             return
         for role in roles:
-            if role.lower() == iprole.lower():
+            if role.lower() == role_name.lower():
                 r=discord.utils.get(ctx.guild.roles,name=role)
                 if r not in ctx.author.roles:
                     await ctx.author.add_roles(r)
