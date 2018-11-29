@@ -5,6 +5,7 @@ from discord.ext import commands
 import discord
 import asyncio
 import aiohttp  # various needs
+import async_hastebin as hastebin
 
 
 class Admin:
@@ -68,11 +69,19 @@ class Admin:
         '''Clears specified number of messages'''
         if author is not None:
             check = lambda x: x.author == author
-            await ctx.channel.purge(limit=number + 1, check=check)
+            deleted=await ctx.channel.purge(limit=number + 1, check=check)
             await ctx.send("Purged %d messages from %s" % (number, author), delete_after=3)
         else:
-            await ctx.channel.purge(limit=number + 1)
+            deleted=await ctx.channel.purge(limit=number + 1)
             await ctx.send("Purged %d messages in this channel" % number, delete_after=3)
+        messages=''
+        for msg in deleted:
+            messages+=f'{msg.author} on {msg.created_at} :: {msg.content or "Attachment/Embed"}'
+        link=await hastebin.post(messages)
+        result=f"""{ctx.author} cleared {len(deleted)} messages in {ctx.channel.mention}
+        Here is the list of messages cleared
+        {link}"""
+        await bot.get_channel(450997458600984586).send(result)
 
 
 def setup(bot):
