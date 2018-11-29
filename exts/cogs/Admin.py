@@ -52,7 +52,7 @@ class Admin:
 
     @commands.command(hidden=True)
     @commands.has_permissions(manage_messages=True)
-    async def warn(ctx, offender:discord.Member, *, reason):
+    async def warn(self,ctx, offender:discord.Member, *, reason):
         '''warns an offender'''
         try:
             warn_embed=discord.Embed(title=f"You've been warned in {ctx.guild}",colour=discord.Colour.red())
@@ -64,14 +64,15 @@ class Admin:
 
     @commands.command(hidden=True)
     @commands.has_permissions(manage_messages=True)
-    async def purge(self, ctx, number: int):
+    async def purge(self, ctx, number: int,author: discord.Member = None):
         '''Clears specified number of messages'''
-        while number != 0:
-            if number<=99:
-                await ctx.channel.purge(limit=number+1)
-            else:
-                await ctx.channel.purge(limit=100)
-                number-=100
+        if author is not None:
+            check = lambda x: x.author == author
+            await ctx.channel.purge(limit=number + 1, check=check)
+            await ctx.send("Purged %d messages from %s" % (number, author), delete_after=3)
+        else:
+            await ctx.channel.purge(limit=number + 1)
+            await ctx.send("Purged %d messages in this channel" % number, delete_after=3)
 
 
 def setup(bot):
