@@ -52,13 +52,13 @@ class Admin:
 
     @commands.command(hidden=True)
     @commands.has_permissions(manage_messages=True)
-    async def warn(ctx, user:discord.Member, *, reason):
+    async def warn(ctx, offender:discord.Member, *, reason):
         '''warns an offender'''
         try:
-            warn_embed=discord.Embed(title="You've been warned in Indians United",colour=discord.Colour.red())
+            warn_embed=discord.Embed(title=f"You've been warned in {ctx.guild}",colour=discord.Colour.red())
             warn_embed.description=f"You've been warned for the following reason: {reason}"
-            await user.send(embed=warn_embed)
-            await ctx.send(f"Alright! {user.name} has been warned by {ctx.author.name} ")
+            await offender.send(embed=warn_embed)
+            await ctx.send(f"Alright! {offender.name} has been warned by {ctx.author.name} ")
         except Exception as e:
             await ctx.send(f"{e}")
 
