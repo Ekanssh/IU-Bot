@@ -75,7 +75,7 @@ class Admin:
             await ctx.send("Purged %d messages in this channel" % number, delete_after=3)
         messages=''
         for msg in deleted:
-            messages+=f'{msg.author} on {msg.created_at} :: {msg.content or "Attachment/Embed"}'
+            messages+=f'{msg.author} on {msg.created_at} :: {msg.content or "Attachment/Embed"}\n'
         link=await self.haste_post(messages)
         result=f"""{ctx.author} cleared {len(deleted)} messages in {ctx.channel.mention}
         Here is the list of messages cleared
