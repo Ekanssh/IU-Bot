@@ -80,7 +80,7 @@ class Admin:
         result=f"""{ctx.author} cleared {len(deleted)} messages in {ctx.channel.mention}
         Here is the list of messages cleared
         {link}"""
-        await bot.get_channel(450997458600984586).send(result)
+        await self.bot.get_channel(450997458600984586).send(result)
 
     async def haste_post(self,content):
         async with aiohttp.ClientSession() as session:
