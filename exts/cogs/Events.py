@@ -108,7 +108,7 @@ class Events:
         else:
             embed=discord.Embed(title=str(type(err))[8:-2],description=str(err),colour=discord.Colour.from_rgb(random.randint(0,255),random.randint(0,255),random.randint(0,255)))
             await ctx.send("Command raised an error***",embed=embed,delete_after=15)
-            print(err)
+            print(err.__cause__)
 
 def setup(bot):
     bot.add_cog(Events(bot))
