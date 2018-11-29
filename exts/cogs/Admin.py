@@ -85,7 +85,7 @@ class Admin:
     async def haste_post(self,content):
         async with aiohttp.ClientSession() as session:
             async with session.post("https://hastebin.com/documents",data=content.encode('utf-8')) as post:
-                post = await post.json()
+                post = await post.json(content_type='text/html')
                 return "https://hastebin.com/{}".format(post['key'])
 
 
