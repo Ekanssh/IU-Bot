@@ -5,7 +5,7 @@ from discord.ext import commands
 import discord
 import asyncio
 import aiohttp  # various needs
-import async_hastebin as hastebin
+from hastebin import async_hastebin as haste
 
 
 class Admin:
@@ -77,7 +77,7 @@ class Admin:
         messages=''
         for msg in deleted:
             messages+=f'{msg.author} on {msg.created_at} :: {msg.content or "Attachment/Embed"}'
-        link=await hastebin.post(messages)
+        link=await haste.post(messages)
         result=f"""{ctx.author} cleared {len(deleted)} messages in {ctx.channel.mention}
         Here is the list of messages cleared
         {link}"""
