@@ -56,7 +56,7 @@ class Admin:
         '''warns an offender'''
         try:
             warn_embed=discord.Embed(title="You've been warned in Indians United",colour=discord.Colour.red())
-            warn_embed.description=f"You've been warned for the following reason: {reason}")
+            warn_embed.description=f"You've been warned for the following reason: {reason}"
             await user.send(embed=warn_embed)
             await ctx.send(f"Alright! {user.name} has been warned by {ctx.author.name} ")
         except Exception as e:
