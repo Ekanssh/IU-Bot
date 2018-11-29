@@ -5,7 +5,7 @@ from discord.ext import commands
 import discord
 import asyncio
 import aiohttp  # various needs
-
+import json
 
 class Admin:
     '''For administrative purposes'''
@@ -85,8 +85,9 @@ class Admin:
     async def haste_post(self,content):
         async with aiohttp.ClientSession() as session:
             async with session.post("https://hastebin.com/documents",data=content.encode('utf-8')) as post:
-                post = await post.json(content_type='text/html')
-                return "https://hastebin.com/{}".format(post['key'])
+                data=await post.read()
+                jsondata=json.loads(data)
+                return "https://hastebin.com/{}".format(jsondata['key'])
 
 
 def setup(bot):
