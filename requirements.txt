@@ -5,4 +5,3 @@ aiopg
 pillow
 bs4
 aiohttp>=3.2.1
-hastebin.py

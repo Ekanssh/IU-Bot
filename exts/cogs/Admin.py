@@ -5,7 +5,6 @@ from discord.ext import commands
 import discord
 import asyncio
 import aiohttp  # various needs
-from hastebin import async_hastebin as haste
 
 
 class Admin:
@@ -77,11 +76,17 @@ class Admin:
         messages=''
         for msg in deleted:
             messages+=f'{msg.author} on {msg.created_at} :: {msg.content or "Attachment/Embed"}'
-        link=await haste.post(messages)
+        link=await self.haste_post(messages)
         result=f"""{ctx.author} cleared {len(deleted)} messages in {ctx.channel.mention}
         Here is the list of messages cleared
         {link}"""
         await bot.get_channel(450997458600984586).send(result)
+
+    async def haste_post(self,content):
+        async with aiohttp.ClientSession() as session:
+            async with session.post("https://hastebin.com/documents",data=content.encode('utf-8')) as post:
+                post = await post.json()
+                return "https://hastebin.com/{}".format(post['key'])
 
 
 def setup(bot):
