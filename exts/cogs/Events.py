@@ -16,6 +16,7 @@ import aiohttp  # various needs
 import aiopg
 import os
 import random
+import traceback
 
 def calculate_level(level: 'current level') -> 'xp to reach next level':
     return (level**2+level)/2*100-(level*100)
@@ -108,7 +109,7 @@ class Events:
         else:
             embed=discord.Embed(title=str(type(err))[8:-2],description=str(err),colour=discord.Colour.from_rgb(random.randint(0,255),random.randint(0,255),random.randint(0,255)))
             await ctx.send("Command raised an error***",embed=embed,delete_after=15)
-            print(err.__cause__)
+            print_exception(err)
 
 def setup(bot):
     bot.add_cog(Events(bot))
