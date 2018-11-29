@@ -84,10 +84,10 @@ class Admin:
 
     async def haste_post(self,content):
         async with aiohttp.ClientSession() as session:
-            async with session.post("https://hastebin.com/documents",data=content.encode('utf-8')) as post:
+            async with session.post("https://paste.pydis.com/documents",data=content.encode('utf-8')) as post:
                 data=await post.read()
                 jsondata=json.loads(data)
-                return "https://hastebin.com/{}".format(jsondata['key'])
+                return "https://paste.pydis.com/{}".format(jsondata['key'])
 
 
 def setup(bot):
