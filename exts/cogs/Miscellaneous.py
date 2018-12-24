@@ -5,7 +5,8 @@ from discord.ext import commands
 import discord
 import aiohttp
 
-banned = {367740727624466433: "Karan"}
+banned = {367740727624466433: "Karan",
+          341171182227161088: "Oxide"}
 
 class Miscellaneous:
 
