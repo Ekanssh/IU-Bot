@@ -218,7 +218,7 @@ class Profile:
         info_embed = discord.Embed(
             title="Help Info", description="\u23EA:  Go to the first page\n\u25C0:  Go to the previous page\n\u23F9:  Stop the help command\n\u25B6:  Go to the next page\n\u23E9:  Go to the last page\n\U0001f522:  Asks for a page number\n\u2139:  Shows this info", colour=0x00FFFF)
         for e in ems:
-            e.add_field(name="Your guild rank", value=str(rank))
+            e.add_field(name=f"{ctx.author.name}, Your guild rank", value=str(rank))
         ems.append(info_embed)
         await msg.edit(embed=ems[0])
         pa = Paginator(self.bot, msg, ctx.author, 0)
