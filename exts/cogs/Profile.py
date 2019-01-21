@@ -198,7 +198,7 @@ class Profile:
         l = await self.bot.aio.cursor.fetchall()
         rowcount = len(l)
         ems = []
-        counter, rank = 0, 0
+        counter, rank = 0, 1
         async with ctx.typing():
             l.sort(key = lambda el: el[1], reverse = True)
             for n in range(10, rowcount, 10):
