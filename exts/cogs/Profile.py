@@ -76,7 +76,7 @@ class Profile:
                     avatar = Image.open("TEMPava.png")
                     avatar = avatar.resize((100, 100))
                     back.paste(avatar, (5, 165))
-                    d.text(text=str(mem), xy=(125, 215), font=font)
+                    d.text(text=str(mem.name), xy=(125, 215), font=font)
                     d.line([(113, 219), (113, 500)], fill=(
                         50, 50, 50), width=3)  # line beside ava
 
