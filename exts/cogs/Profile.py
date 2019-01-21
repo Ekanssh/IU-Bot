@@ -200,7 +200,7 @@ class Profile:
         ems = []
         counter, rank = 0, 0
         async with ctx.typing():
-            l.sort(lambda el: el[1])[::-1]
+            l.sort(key = lambda el: el[1], reverse = True)
             for n in range(10, rowcount, 10):
                 em = discord.Embed(title="Top", description="```\n", color=0x00FFFF)
                 t = l[n-10: n]
