@@ -67,7 +67,7 @@ async def on_ready():
                 await devBotLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
             else:
                 await botLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
-     bot._memList = {}
+    bot._memList = {}
     for m in bot.users:
         bot._memList[m.id] = m.name
     await bot.change_presence(status=discord.Status.online,
