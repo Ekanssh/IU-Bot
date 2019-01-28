@@ -169,9 +169,9 @@ class General:
 
         while players_list.count(ctx.author) > 1:
             players_list.remove(ctx.author)
-            
+
         if len(players_list) == 1:
-            return ctx.send("You can't play with yourself!")
+            return await ctx.send("You can't play with yourself!")
 
         turn = 0
         letter = "s"
