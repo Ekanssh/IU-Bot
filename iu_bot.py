@@ -13,6 +13,8 @@ import time
 import datetime
 import random
 import json
+import googlemaps # used in atlas game
+
 
 with open("config.json") as fp:
     config = json.load(fp)
@@ -57,6 +59,8 @@ async def on_ready():
     await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT PRIMARY KEY, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT, banners_buyed TEXT)")
 
     bot.aio = aio
+    bot.atlas_active_channels = {}
+    bot.g_maps = googlemaps.Client(key = "AIzaSyCim5H7eH3XQFN068lNLr2v6LAUDA3L_Kw")
     extentions = ("Admin", "Economy", "Events", "General",
                   "repl", "Miscellaneous", "Profile","Roles")
     for i in extentions:
