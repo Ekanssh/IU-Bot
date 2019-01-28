@@ -143,10 +143,10 @@ class General:
     @commands.command()
     async def atlas(self, ctx, *players):
         '''Group atlas game'''
-        if ctx.channel.id in bot.atlas_active_channels:
+        if ctx.channel.id in self.bot.atlas_active_channels:
             return await ctx.send("Sorry, someone is playing atlas in this channel.\n"
                                     "Please start a new game after they finish or go in another channel")
-        bot.atlas_active_channels[ctx.channel.id] = [ctx.author.id, ]
+        self.bot.atlas_active_channels[ctx.channel.id] = [ctx.author.id, ]
 
         msg = await ctx.send(f"{ctx.author.mention} has invited {', '.join(players)}.\n"
                         "Type `join` to join the game in 30s.")
@@ -156,13 +156,13 @@ class General:
         for i in range(len(players) - 1):
             players[i] = commands.MemberConverter().convert(ctx, players[i])
 
-            join_msg = await bot.wait_for('message', check = check, timeout = 30)
+            join_msg = await self.bot.wait_for('message', check = check, timeout = 30)
 
             if join_msg is None:
-                bot.atlas_active_channels = {i:j for i, j in bot.atlas_active_channels if i != ctx.channel.id}
+                self.bot.atlas_active_channels = {i:j for i, j in self.bot.atlas_active_channels if i != ctx.channel.id}
                 return await ctx.send("Sorry, {ctx.author.mention}, no one joined. Maybe try again later?")
             else:
-                bot.atlas_active_channels[ctx.channel.id].append(join_msg.author.id)
+                self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author.id)
 
         turn = 0
         letter = "s"
@@ -176,7 +176,7 @@ class General:
             return m.author.id == players[turn].id
 
         while len(players) > 1:
-            g_msg = await bot.wait_for('message', check = game_check, timeout = 20)
+            g_msg = await self.bot.wait_for('message', check = game_check, timeout = 20)
 
             if g_msg is None:
                 await ctx.send(f"{players[turn]} is kicked out of the game because they failed to reply before 20s")
@@ -184,7 +184,7 @@ class General:
                 continue
             else:
                 if g_msg.content[0].lower() == letter:
-                    place = bot.g_maps.find_place(g_msg.content.strip(), input_type = "textquery")
+                    place = self.bot.g_maps.find_place(g_msg.content.strip(), input_type = "textquery")
                     if place['status'] == "OK":
                         turn = 0 if turn == (len(players) - 1) else turn + 1
                         letter = g_msg.content.strip()[-1]
@@ -195,8 +195,8 @@ class General:
                                         "\nYou're kicked out of the game!")
                         players.pop(turn)                
                         continue
-                        
-        bot.atlas_active_channels = {i:j for i, j in bot.atlas_active_channels if i != ctx.channel.id}
+
+        self.bot.atlas_active_channels = {i:j for i, j in self.bot.atlas_active_channels if i != ctx.channel.id}
         await ctx.send(f"{players[0].name} wins the game! :tada:")
 
 
