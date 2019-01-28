@@ -159,7 +159,7 @@ class General:
             join_msg = await self.bot.wait_for('message', check = check, timeout = 30)
 
             if join_msg is None:
-                self.bot.atlas_active_channels = {i:j for i, j in self.bot.atlas_active_channels if i != ctx.channel.id}
+                self.bot.atlas_active_channels.pop(ctx.channel.id, None)
                 return await ctx.send("Sorry, {ctx.author.mention}, no one joined. Maybe try again later?")
             else:
                 self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author.id)
@@ -196,7 +196,7 @@ class General:
                         players.pop(turn)                
                         continue
 
-        self.bot.atlas_active_channels = {i:j for i, j in self.bot.atlas_active_channels if i != ctx.channel.id}
+        self.bot.atlas_active_channels.pop(ctx.channel.id, None)
         await ctx.send(f"{players[0].name} wins the game! :tada:")
 
 
