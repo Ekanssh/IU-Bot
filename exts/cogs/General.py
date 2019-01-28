@@ -168,7 +168,7 @@ class General:
 
         turn = 0
         letter = "s"
-        await ctx.send("An atlas game has started with the following members:\n"+'\n'.join(players_list))
+        await ctx.send("An atlas game has started with the following members:\n"+'\n'.join(map(str, players_list))
         await ctx.send("Every player gets 20s to say the name of a city, district, state, country, "
                        "basically anything which can be found on the globe.")
         await ctx.send("If someone is unable to do so, they are kicked out of the game.\nGame continues"
@@ -181,7 +181,7 @@ class General:
             g_msg = await self.bot.wait_for('message', check = game_check, timeout = 20)
 
             if g_msg is None:
-                await ctx.send(f"{players_list[turn]} is kicked out of the game because they failed to reply before 20s")
+                await ctx.send(f"{str(players_list[turn])} is kicked out of the game because they failed to reply before 20s")
                 players_list.pop(turn)                
                 continue
             else:
@@ -190,7 +190,7 @@ class General:
                     if place['status'] == "OK":
                         turn = 0 if turn == (len(players_list) - 1) else turn + 1
                         letter = g_msg.content.strip()[-1]
-                        await ctx.send(f"Nice! It's {players_list[turn].name}'s turn now. 30s. GO!")
+                        await ctx.send(f"Nice! It's {players_list[turn].name}'s turn now. 20s. GO!")
                     else:
                         await ctx.send(f"Sorry, {players_list[turn].name}, I travelled all around the globe"
                                        f" but could not find the place called {g_msg.content}."
