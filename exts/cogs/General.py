@@ -170,7 +170,7 @@ class General:
         while players_list.count(ctx.author) > 1:
             players_list.remove(ctx.author)
 
-        if len(players_list) == 1:
+        if len(players_list) == 1 and ctx.author in players_list:
             return await ctx.send("You can't play with yourself!")
 
         turn = 0
