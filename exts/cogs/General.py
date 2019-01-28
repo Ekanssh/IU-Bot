@@ -146,6 +146,7 @@ class General:
         if ctx.channel.id in self.bot.atlas_active_channels:
             return await ctx.send("Sorry, someone is playing atlas in this channel.\n"
                                   "Please start a new game after they finish or go in another channel")
+
         self.bot.atlas_active_channels[ctx.channel.id] = [ctx.author.id, ]
 
         msg = await ctx.send(f"{ctx.author.mention} has invited {', '.join(players)}.\n"
@@ -166,13 +167,19 @@ class General:
             else:
                 self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author.id)
 
+        while players_list.count(ctx.author) > 1:
+            players_list.remove(ctx.author)
+            
+        if len(players_list) == 1:
+            return ctx.send("You can't play with yourself!")
+
         turn = 0
         letter = "s"
         await ctx.send("An atlas game has started with the following members:\n"+'\n'.join(map(str, players_list)))
         await ctx.send("Every player gets 20s to say the name of a city, district, state, country, "
                        "basically anything which can be found on the globe.")
         await ctx.send("If someone is unable to do so, they are kicked out of the game.\nGame continues"
-                       "until only 1 person is left which will hence be the winner.")
+                       " until only 1 person is left which will hence be the winner.")
 
         def game_check(m):
             return m.author.id == players_list[turn].id
