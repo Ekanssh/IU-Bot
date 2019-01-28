@@ -168,7 +168,7 @@ class General:
 
         turn = 0
         letter = "s"
-        await ctx.send("An atlas game has started with the following members:\n"+'\n'.join(map(str, players_list))
+        await ctx.send("An atlas game has started with the following members:\n"+'\n'.join(map(str, players_list)))
         await ctx.send("Every player gets 20s to say the name of a city, district, state, country, "
                        "basically anything which can be found on the globe.")
         await ctx.send("If someone is unable to do so, they are kicked out of the game.\nGame continues"
