@@ -150,7 +150,7 @@ class General:
         self.bot.atlas_active_channels[ctx.channel.id] = [ctx.author.id, ]
 
         players_list = [ctx.author, ]
-        for i in range(len(players)-1):
+        for i in range(len(players)):
             mem = commands.MemberConverter().convert(ctx, players[i])
             if isinstance(mem, discord.Member):
                 if mem not in players_list:
@@ -171,6 +171,7 @@ class General:
                 self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author.id)
 
         if len(players_list) == 1:
+            self.bot.atlas_active_channels.pop(ctx.channel.id, None)
             return await ctx.send("You can't play with yourself!")
 
         turn = 0
