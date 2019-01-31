@@ -159,8 +159,7 @@ class General:
         msg = await ctx.send(f"{ctx.author.mention} has invited {', '.join([m.mention for m in players_list])}.\n"
                         "Type `join` to join the game in 30s.")
         def check(m):
-            return m.content == 'join' and m.author in players_list 
-                                       and m.author not in self.bot.atlas_active_channels[ctx.channel.id]
+            return m.content == 'join' and m.author in players_list and m.author not in self.bot.atlas_active_channels[ctx.channel.id]
 
         for i in range(len(players_list)):
             try:
