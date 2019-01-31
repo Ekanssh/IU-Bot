@@ -60,7 +60,7 @@ async def on_ready():
 
     bot.aio = aio
     bot.atlas_active_channels = {}
-    bot.g_maps = googlemaps.Client(key = "AIzaSyCim5H7eH3XQFN068lNLr2v6LAUDA3L_Kw")
+    bot.g_maps = googlemaps.Client(key = "AHt5oyuk4wPi3bXr2gZcVYepeipjq37JK9EhjJE")
     extentions = ("Admin", "Economy", "Events", "General",
                   "repl", "Miscellaneous", "Profile","Roles")
     for i in extentions:
