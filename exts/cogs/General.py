@@ -149,16 +149,19 @@ class General:
 
         self.bot.atlas_active_channels[ctx.channel.id] = [ctx.author.id, ]
 
-        msg = await ctx.send(f"{ctx.author.mention} has invited {', '.join(players)}.\n"
+        players_list = [ctx.author, ]
+        for i in range(len(players)-1):
+            mem = commands.MemberConverter().convert(ctx, players[i])
+            if isinstance(mem, discord.Member):
+                if mem not in players_list:
+                    players_list.append(mem)
+
+        msg = await ctx.send(f"{ctx.author.mention} has invited {', '.join([m.mention for m in players_list])}.\n"
                         "Type `join` to join the game in 30s.")
         def check(m):
-            return m.content == 'join' and m.author.id in [i.id for i in players]
+            return m.content == 'join' and m.author.id in [i.id for i in players_list]
 
-        players_list = [ctx.author, ]
-
-        for i in range(len(players) - 1):
-            players_list.append(commands.MemberConverter().convert(ctx, players[i]))
-
+        for i in range(len(players_list) - 1):
             join_msg = await self.bot.wait_for('message', check = check, timeout = 30)
 
             if join_msg is None:
@@ -167,10 +170,7 @@ class General:
             else:
                 self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author.id)
 
-        while players_list.count(ctx.author) > 1:
-            players_list.remove(ctx.author)
-
-        if len(players_list) == 1 and ctx.author in players_list:
+        if len(players_list) == 1:
             return await ctx.send("You can't play with yourself!")
 
         turn = 0
@@ -189,7 +189,7 @@ class General:
 
             if g_msg is None:
                 await ctx.send(f"{str(players_list[turn])} is kicked out of the game because they failed to reply before 20s")
-                players_list.pop(turn)                
+                players_list.pop(turn)             
                 continue
             else:
                 if g_msg.content[0].lower() == letter:
