@@ -166,7 +166,7 @@ class General:
                 join_msg = await self.bot.wait_for('message', check = check, timeout = 30)
                 self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author)
 
-            except:
+            except asyncio.TimeoutError:
                 self.bot.atlas_active_channels.pop(ctx.channel.id, None)
                 return await ctx.send("Sorry, {ctx.author.mention}, no one joined. Maybe try again later?")
 
@@ -195,14 +195,14 @@ class General:
                     if place['status'] == "OK":
                         turn = 0 if turn == (len(self.bot.atlas_active_channels[ctx.channel.id]) - 1) else turn + 1
                         letter = g_msg.content.strip()[-1]
-                        await ctx.send(f"Nice! It's {self.bot.atlas_active_channels[ctx.channel.id][turn].name}'s turn now. 20s. GO!")
+                        await ctx.send(f"Nice! It's {self.bot.atlas_active_channels[ctx.channel.id][turn].name}'s turn now with the letter `{letter}`. 20s. GO!")
                     else:
                         await ctx.send(f"Sorry, {self.bot.atlas_active_channels[ctx.channel.id][turn].name}, I travelled all around the globe"
                                        f" but could not find the place called {g_msg.content}."
                                         "\nYou're kicked out of the game!")
                         self.bot.atlas_active_channels[ctx.channel.id].pop(turn)                
                         continue
-            except:
+            except asyncio.TimeoutError:
                 await ctx.send(f"{str(self.bot.atlas_active_channels[ctx.channel.id][turn])} is kicked out of the game because they failed to reply before 20s")
                 self.bot.atlas_active_channels[ctx.channel.id].pop(turn)             
                 continue
