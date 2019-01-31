@@ -181,18 +181,15 @@ class General:
                        "basically anything which can be found on the globe.")
         await ctx.send("If someone is unable to do so, they are kicked out of the game.\nGame continues"
                        " until only 1 person is left which will hence be the winner.")
+        await ctx.send("First letter is `s`. Reply in 20s!")
 
         def game_check(m):
             return m.author.id == players_list[turn].id
 
         while len(players_list) > 1:
-            g_msg = await self.bot.wait_for('message', check = game_check, timeout = 20)
-
-            if g_msg is None:
-                await ctx.send(f"{str(players_list[turn])} is kicked out of the game because they failed to reply before 20s")
-                players_list.pop(turn)             
-                continue
-            else:
+            try:
+                g_msg = await self.bot.wait_for('message', check = game_check, timeout = 20)
+                
                 if g_msg.content[0].lower() == letter:
                     place = self.bot.g_maps.find_place(g_msg.content.strip(), input_type = "textquery")
                     if place['status'] == "OK":
@@ -205,6 +202,10 @@ class General:
                                         "\nYou're kicked out of the game!")
                         players_list.pop(turn)                
                         continue
+            except:
+                await ctx.send(f"{str(players_list[turn])} is kicked out of the game because they failed to reply before 20s")
+                players_list.pop(turn)             
+                continue
 
         self.bot.atlas_active_channels.pop(ctx.channel.id, None)
         await ctx.send(f"{players_list[0].name} wins the game! :tada:")
