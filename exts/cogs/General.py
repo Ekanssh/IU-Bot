@@ -147,9 +147,9 @@ class General:
             return await ctx.send("Sorry, someone is playing atlas in this channel.\n"
                                   "Please start a new game after they finish or go in another channel")
 
-        self.bot.atlas_active_channels[ctx.channel.id] = [ctx.author.id, ]
+        self.bot.atlas_active_channels[ctx.channel.id] = [ctx.author, ]
 
-        players_list = [ctx.author, ]
+        players_list = []
         for i in range(len(players)):
             mem = await commands.MemberConverter().convert(ctx, players[i])
             if isinstance(mem, discord.Member):
@@ -159,24 +159,25 @@ class General:
         msg = await ctx.send(f"{ctx.author.mention} has invited {', '.join([m.mention for m in players_list])}.\n"
                         "Type `join` to join the game in 30s.")
         def check(m):
-            return m.content == 'join' and m.author.id in [i.id for i in players_list]
+            return m.content == 'join' and m.author in players_list 
+                                       and m.author not in self.bot.atlas_active_channels[ctx.channel.id]
 
-        for i in range(len(players_list) - 1):
-            join_msg = await self.bot.wait_for('message', check = check, timeout = 30)
+        for i in range(len(players_list)):
+            try:
+                join_msg = await self.bot.wait_for('message', check = check, timeout = 30)
+                self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author)
 
-            if join_msg is None:
+            except:
                 self.bot.atlas_active_channels.pop(ctx.channel.id, None)
                 return await ctx.send("Sorry, {ctx.author.mention}, no one joined. Maybe try again later?")
-            else:
-                self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author.id)
 
-        if len(players_list) == 1 :
+        if len(self.bot.atlas_active_channels[ctx.channel.id]) == 1 :
             self.bot.atlas_active_channels.pop(ctx.channel.id, None)
             return await ctx.send("You can't play with yourself!")
 
         turn = 0
         letter = "s"
-        await ctx.send("An atlas game has started with the following members:\n"+'\n'.join(map(str, players_list)))
+        await ctx.send("An atlas game has started with the following members:\n"+'\n'.join(map(str, self.bot.atlas_active_channels[ctx.channel.id])))
         await ctx.send("Every player gets 20s to say the name of a city, district, state, country, "
                        "basically anything which can be found on the globe.")
         await ctx.send("If someone is unable to do so, they are kicked out of the game.\nGame continues"
@@ -184,33 +185,31 @@ class General:
         await ctx.send("First letter is `s`. Reply in 20s!")
 
         def game_check(m):
-            return m.author.id == players_list[turn].id
+            return m.author.id == self.bot.atlas_active_channels[ctx.channel.id][turn].id
 
-        while len(players_list) > 1:
+        while len(self.bot.atlas_active_channels[ctx.channel.id]) > 1:
             try:
                 g_msg = await self.bot.wait_for('message', check = game_check, timeout = 20)
-                
+
                 if g_msg.content[0].lower() == letter:
                     place = self.bot.g_maps.find_place(g_msg.content.strip(), input_type = "textquery")
                     if place['status'] == "OK":
-                        turn = 0 if turn == (len(players_list) - 1) else turn + 1
+                        turn = 0 if turn == (len(self.bot.atlas_active_channels[ctx.channel.id]) - 1) else turn + 1
                         letter = g_msg.content.strip()[-1]
-                        await ctx.send(f"Nice! It's {players_list[turn].name}'s turn now. 20s. GO!")
+                        await ctx.send(f"Nice! It's {self.bot.atlas_active_channels[ctx.channel.id][turn].name}'s turn now. 20s. GO!")
                     else:
-                        await ctx.send(f"Sorry, {players_list[turn].name}, I travelled all around the globe"
+                        await ctx.send(f"Sorry, {self.bot.atlas_active_channels[ctx.channel.id][turn].name}, I travelled all around the globe"
                                        f" but could not find the place called {g_msg.content}."
                                         "\nYou're kicked out of the game!")
-                        players_list.pop(turn)                
+                        self.bot.atlas_active_channels[ctx.channel.id].pop(turn)                
                         continue
             except:
-                await ctx.send(f"{str(players_list[turn])} is kicked out of the game because they failed to reply before 20s")
-                players_list.pop(turn)             
+                await ctx.send(f"{str(self.bot.atlas_active_channels[ctx.channel.id][turn])} is kicked out of the game because they failed to reply before 20s")
+                self.bot.atlas_active_channels[ctx.channel.id].pop(turn)             
                 continue
 
+        await ctx.send(f"{self.bot.atlas_active_channels[ctx.channel.id][0].name} wins the game! :tada:")
         self.bot.atlas_active_channels.pop(ctx.channel.id, None)
-        await ctx.send(f"{players_list[0].name} wins the game! :tada:")
-
-
 
 def setup(bot):
     bot.add_cog(General(bot))
