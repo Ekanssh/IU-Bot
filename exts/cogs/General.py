@@ -163,18 +163,13 @@ class General:
         def check(m):
             return m.content == 'join' and m.author in players_list and m.author not in self.bot.atlas_active_channels[ctx.channel.id]
 
-        for i in range(len(players_list)):
-            try:
-                join_msg = await self.bot.wait_for('message', check = check, timeout = 30)
-                self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author)
-
-            except asyncio.TimeoutError:
+        try:
+            join_msg = await self.bot.wait_for('message', check = check, timeout = 30)
+            self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author)
+        except asyncio.TimeoutError:
+            if len(self.bot.atlas_active_channels[ctx.channel.id]) < 2:
                 self.bot.atlas_active_channels.pop(ctx.channel.id, None)
                 return await ctx.send(f"Sorry, {ctx.author.mention}, no one joined. Maybe try again later?")
-
-        if len(self.bot.atlas_active_channels[ctx.channel.id]) == 1 :
-            self.bot.atlas_active_channels.pop(ctx.channel.id, None)
-            return await ctx.send("You can't play with yourself!")
 
         turn = 0
         letter = "s"
