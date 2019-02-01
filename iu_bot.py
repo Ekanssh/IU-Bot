@@ -13,7 +13,6 @@ import time
 import datetime
 import random
 import json
-import googlemaps # used in atlas game
 
 
 with open("config.json") as fp:
@@ -60,7 +59,6 @@ async def on_ready():
 
     bot.aio = aio
     bot.atlas_active_channels = {}
-    bot.g_maps = googlemaps.Client(key = "AIzaSyAu-p7eW9fiaMdACb4pXwfsTF2hpY7h_1k")
     extentions = ("Admin", "Economy", "Events", "General",
                   "repl", "Miscellaneous", "Profile","Roles")
     for i in extentions:
