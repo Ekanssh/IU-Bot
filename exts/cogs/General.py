@@ -151,7 +151,7 @@ class General:
         self.bot.atlas_active_channels[ctx.channel.id] = [ctx.author, ]
 
         players_list = []
-        url = "api.openweathermap.org/data/2.5/weather?q="
+        url = "http://api.openweathermap.org/data/2.5/weather?q="
         for i in range(len(players)):
             mem = await commands.MemberConverter().convert(ctx, players[i])
             if isinstance(mem, discord.Member):
