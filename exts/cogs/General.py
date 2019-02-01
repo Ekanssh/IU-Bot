@@ -6,7 +6,7 @@ import discord
 import aiohttp
 from bs4 import BeautifulSoup as bs
 from PIL import Image, ImageFont, ImageDraw  # used in profile command
-import googlemaps # used in atlas game
+import urllib.parse
 
 import time
 import datetime
@@ -151,6 +151,7 @@ class General:
         self.bot.atlas_active_channels[ctx.channel.id] = [ctx.author, ]
 
         players_list = []
+        url = "api.openweathermap.org/data/2.5/weather?q="
         for i in range(len(players)):
             mem = await commands.MemberConverter().convert(ctx, players[i])
             if isinstance(mem, discord.Member):
@@ -169,7 +170,7 @@ class General:
 
             except asyncio.TimeoutError:
                 self.bot.atlas_active_channels.pop(ctx.channel.id, None)
-                return await ctx.send("Sorry, {ctx.author.mention}, no one joined. Maybe try again later?")
+                return await ctx.send(f"Sorry, {ctx.author.mention}, no one joined. Maybe try again later?")
 
         if len(self.bot.atlas_active_channels[ctx.channel.id]) == 1 :
             self.bot.atlas_active_channels.pop(ctx.channel.id, None)
@@ -192,12 +193,16 @@ class General:
                 g_msg = await self.bot.wait_for('message', check = game_check, timeout = 20)
 
                 if g_msg.content[0].lower() == letter:
-                    g_maps = googlemaps.Client(key = "AIzaSyAu-p7eW9fiaMdACb4pXwfsTF2hpY7h_1k")
-                    place = g_maps.find_place(g_msg.content.strip(), input_type = "textquery")
-                    if place['status'] == "OK":
+                    word = urllib.parse.quote_plus(g_msg.content)
+
+                    async with aiohttp.ClientSession() as cs:
+                        async with cs.get(url + word + "&APPID=" + self.bot.appid) as r:
+                            resp = await r.json()
+                    
+                    if resp['cod'] == 200:
                         turn = 0 if turn == (len(self.bot.atlas_active_channels[ctx.channel.id]) - 1) else turn + 1
                         letter = g_msg.content.strip()[-1]
-                        await ctx.send(f"Nice! It's {self.bot.atlas_active_channels[ctx.channel.id][turn].name}'s turn now with the letter `{letter}`. 20s. GO!")
+                        await ctx.send(f"Nice! It's {self.bot.atlas_active_channels[ctx.channel.id][turn].name}'s turn now with the letter `{letter}`.\n You have 20s. GO!")
                     else:
                         await ctx.send(f"Sorry, {self.bot.atlas_active_channels[ctx.channel.id][turn].name}, I travelled all around the globe"
                                        f" but could not find the place called {g_msg.content}."
