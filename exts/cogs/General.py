@@ -192,8 +192,8 @@ class General:
                 g_msg = await self.bot.wait_for('message', check = game_check, timeout = 20)
 
                 if g_msg.content[0].lower() == letter:
-                    bot.g_maps = googlemaps.Client(key = "AIzaSyAu-p7eW9fiaMdACb4pXwfsTF2hpY7h_1k")
-                    place = self.bot.g_maps.find_place(g_msg.content.strip(), input_type = "textquery")
+                    g_maps = googlemaps.Client(key = "AIzaSyAu-p7eW9fiaMdACb4pXwfsTF2hpY7h_1k")
+                    place = g_maps.find_place(g_msg.content.strip(), input_type = "textquery")
                     if place['status'] == "OK":
                         turn = 0 if turn == (len(self.bot.atlas_active_channels[ctx.channel.id]) - 1) else turn + 1
                         letter = g_msg.content.strip()[-1]
