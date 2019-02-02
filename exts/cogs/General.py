@@ -148,6 +148,9 @@ class General:
             return await ctx.send("Sorry, someone is playing atlas in this channel.\n"
                                   "Please start a new game after they finish or go in another channel")
 
+        if len(players) == 0:
+            return await ctx.send("Invite some people to play!")
+
         self.bot.atlas_active_channels[ctx.channel.id] = [ctx.author, ]
 
         players_list = []
