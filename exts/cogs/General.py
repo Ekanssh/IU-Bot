@@ -154,10 +154,15 @@ class General:
         cities_named = []
         url = "http://api.openweathermap.org/data/2.5/weather?q="
         for i in range(len(players)):
-            mem = await commands.MemberConverter().convert(ctx, players[i])
-            if isinstance(mem, discord.Member):
-                if mem not in players_list:
-                    players_list.append(mem)
+            try:
+                mem = await commands.MemberConverter().convert(ctx, players[i])    
+                if isinstance(mem, discord.Member):
+                    if mem not in players_list:
+                        players_list.append(mem)
+            except commands.errors.BadArgument:
+                if len(players_list) == 0:
+                    await ctx.send("No person you asked to join was found in the server. Closing the game.")
+                    self.bot.atlas_active_channels.pop(ctx.channel.id, None)
 
         msg = await ctx.send(f"{ctx.author.mention} has invited {', '.join([m.mention for m in players_list])}.\n"
                         "Type `join` to join the game in 30s.")
