@@ -151,6 +151,7 @@ class General:
         self.bot.atlas_active_channels[ctx.channel.id] = [ctx.author, ]
 
         players_list = []
+        cities_named = []
         url = "http://api.openweathermap.org/data/2.5/weather?q="
         for i in range(len(players)):
             mem = await commands.MemberConverter().convert(ctx, players[i])
@@ -163,13 +164,15 @@ class General:
         def check(m):
             return m.content == 'join' and m.author in players_list and m.author not in self.bot.atlas_active_channels[ctx.channel.id]
 
-        try:
-            join_msg = await self.bot.wait_for('message', check = check, timeout = 30)
-            self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author)
-        except asyncio.TimeoutError:
-            if len(self.bot.atlas_active_channels[ctx.channel.id]) < 2:
-                self.bot.atlas_active_channels.pop(ctx.channel.id, None)
-                return await ctx.send(f"Sorry, {ctx.author.mention}, no one joined. Maybe try again later?")
+        first_join_msg = datetime.datetime.now()
+        while ((first_join_msg - datetime.datetime.now()).total_seconds() <= 30) and len(self.bot.atlas_active_channels[ctx.channel.id]) < len(players_list):
+            try:
+                join_msg = await self.bot.wait_for('message', check = check, timeout = 30)
+                self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author)
+            except asyncio.TimeoutError:
+                if len(self.bot.atlas_active_channels[ctx.channel.id]) < 2:
+                    self.bot.atlas_active_channels.pop(ctx.channel.id, None)
+                    return await ctx.send(f"Sorry, {ctx.author.mention}, no one joined. Maybe try again later?")
 
         turn = 0
         letter = "s"
@@ -195,9 +198,15 @@ class General:
                             resp = await r.json()
                     
                     if resp['cod'] == 200:
-                        turn = 0 if turn == (len(self.bot.atlas_active_channels[ctx.channel.id]) - 1) else turn + 1
-                        letter = g_msg.content.strip()[-1]
-                        await ctx.send(f"Nice! It's {self.bot.atlas_active_channels[ctx.channel.id][turn].name}'s turn now with the letter `{letter}`.\n You have 20s. GO!")
+                        if g_msg.content in cities_named:
+                            ctx.send(f"Sorry, {ctx.author.mention}, {g_msg.content} has already been said.\nYou're kicked out of the game!")
+                            self.bot.atlas_active_channels[ctx.channel.id].pop(turn)                
+                            continue
+                        else:
+                            turn = 0 if turn == (len(self.bot.atlas_active_channels[ctx.channel.id]) - 1) else turn + 1
+                            letter = g_msg.content.strip()[-1]
+                            cities_named.append(g_msg.content)
+                            await ctx.send(f"Nice! It's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s turn now with the letter `{letter}`.\n You have 20s. GO!")
                     else:
                         await ctx.send(f"Sorry, {self.bot.atlas_active_channels[ctx.channel.id][turn].name}, I travelled all around the globe"
                                        f" but could not find the place called {g_msg.content}."
