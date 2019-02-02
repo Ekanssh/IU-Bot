@@ -170,9 +170,9 @@ class General:
             return m.content == 'join' and m.author in players_list and m.author not in self.bot.atlas_active_channels[ctx.channel.id]
 
         first_join_msg = datetime.datetime.now()
-        while ((first_join_msg - datetime.datetime.now()).total_seconds() <= 30) and len(self.bot.atlas_active_channels[ctx.channel.id]) < (len(players_list)+1):
+        while ((datetime.datetime.now() - first_join_msg).total_seconds() <= 30) and len(self.bot.atlas_active_channels[ctx.channel.id]) < (len(players_list)+1):
             try:
-                join_msg = await self.bot.wait_for('message', check = check, timeout = int(30-(first_join_msg - datetime.datetime.now()).seconds))
+                join_msg = await self.bot.wait_for('message', check = check, timeout = int(30-(datetime.datetime.now() - first_join_msg).seconds))
                 self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author)
             except asyncio.TimeoutError:
                 if len(self.bot.atlas_active_channels[ctx.channel.id]) < 2:
