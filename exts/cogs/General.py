@@ -211,17 +211,18 @@ class General:
                             turn = 0 if turn == (len(self.bot.atlas_active_channels[ctx.channel.id]) - 1) else turn + 1
                             letter = g_msg.content.strip()[-1]
                             cities_named.append(g_msg.content)
-                            await ctx.send(f"Nice! It's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s turn now with the letter `{letter}`.\n You have 20s. GO!")
+                            await ctx.send(f"Nice! It's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s turn now with the letter `{letter}`.\nYou have 20s. GO!")
                     else:
                         await ctx.send(f"Sorry, {self.bot.atlas_active_channels[ctx.channel.id][turn].name}, I travelled all around the globe"
                                        f" but could not find the place called {g_msg.content}."
                                         "\nYou're kicked out of the game!")
-                        self.bot.atlas_active_channels[ctx.channel.id].pop(turn)                
+                        self.bot.atlas_active_channels[ctx.channel.id].pop(turn)
+                        await ctx.send(f"Now it's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s turn now with the letter `{letter}`.\nYou have 20s. GO!")              
                         continue
             except asyncio.TimeoutError:
                 await ctx.send(f"{str(self.bot.atlas_active_channels[ctx.channel.id][turn])} is kicked out of the game because they failed to reply before 20s")
                 self.bot.atlas_active_channels[ctx.channel.id].pop(turn)
-                await ctx.send(f"Now it's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s turn now with the letter `{letter}`.\n You have 20s. GO!")            
+                await ctx.send(f"Now it's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s turn now with the letter `{letter}`.\nYou have 20s. GO!")            
                 continue
 
         await ctx.send(f"{self.bot.atlas_active_channels[ctx.channel.id][0].name} wins the game! :tada:")
