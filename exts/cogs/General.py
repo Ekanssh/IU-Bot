@@ -167,7 +167,7 @@ class General:
         first_join_msg = datetime.datetime.now()
         while ((first_join_msg - datetime.datetime.now()).total_seconds() <= 30) and len(self.bot.atlas_active_channels[ctx.channel.id]) < (len(players_list)+1):
             try:
-                join_msg = await self.bot.wait_for('message', check = check, timeout = 30)
+                join_msg = await self.bot.wait_for('message', check = check, timeout = 30-(first_join_msg - datetime.datetime.now()).seconds)
                 self.bot.atlas_active_channels[ctx.channel.id].append(join_msg.author)
             except asyncio.TimeoutError:
                 if len(self.bot.atlas_active_channels[ctx.channel.id]) < 2:
@@ -215,7 +215,8 @@ class General:
                         continue
             except asyncio.TimeoutError:
                 await ctx.send(f"{str(self.bot.atlas_active_channels[ctx.channel.id][turn])} is kicked out of the game because they failed to reply before 20s")
-                self.bot.atlas_active_channels[ctx.channel.id].pop(turn)             
+                self.bot.atlas_active_channels[ctx.channel.id].pop(turn)
+                await ctx.send(f"Now it's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s turn now with the letter `{letter}`.\n You have 20s. GO!")            
                 continue
 
         await ctx.send(f"{self.bot.atlas_active_channels[ctx.channel.id][0].name} wins the game! :tada:")
