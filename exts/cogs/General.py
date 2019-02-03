@@ -227,13 +227,21 @@ class General:
                             await ctx.send(f"Now it's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s "
                                            f"turn with the letter `{letter}`.\nYou have 20s. GO!")              
                         continue
+                else:
+                    await ctx.send(f"Sorry, {ctx.author.mention}, but the word {g_msg.content} does not begin "
+                                   f"with the current letter {letter}.\nYou're kicked out of the game!")
+                    self.bot.atlas_active_channels[ctx.channel.id].pop(turn)
+                    if len(self.bot.atlas_active_channels[ctx.channel.id]) > 1:
+                        await ctx.send(f"Now it's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s "
+                                       f"turn with the letter `{letter}`.\nYou have 20s. GO!")
+                    continue
             except asyncio.TimeoutError:
                 await ctx.send(f"{str(self.bot.atlas_active_channels[ctx.channel.id][turn])} is kicked out of "
                                 "the game because they failed to reply before 20s")
                 self.bot.atlas_active_channels[ctx.channel.id].pop(turn)
                 if len(self.bot.atlas_active_channels[ctx.channel.id]) > 1:
                    await ctx.send(f"Now it's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s "
-                                  f"turn with the letter `{letter}`.\nYou have 20s. GO!")            
+                                  f"turn with the letter `{letter}`.\nYou have 20s. GO!")
                 continue
 
         await ctx.send(f"{self.bot.atlas_active_channels[ctx.channel.id][0].name} wins the game! :tada:")
