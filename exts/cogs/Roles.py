@@ -7,7 +7,7 @@ class Roles:
 
     @commands.group(aliases=['roleme'], invoke_without_command=True)
     async def sar(self,ctx,*,role_name:str):
-        roles=[ 'Sololearn', 'PUBG', 'Self Help', 'Happiness Mod']
+        roles=[ 'Sololearn', 'PUBG', 'Debater']
         if role_name.lower() not in [i.lower() for i in roles]:
             await ctx.send(":x: Error occured.Run `iu sar list` to see list of self assignable roles")
             return
@@ -24,7 +24,7 @@ class Roles:
                     return
     @sar.command(name='list')
     async def sar_list(self,ctx):
-        roles=enumerate([ 'Sololearn', 'PUBG', 'Self Help', 'Happiness Mod'],1)
+        roles=enumerate([ 'Sololearn', 'PUBG', 'Debater'],1)
         string=''
         for count,value in roles:
             string+=f'{count}) {value} \n'
