@@ -216,7 +216,7 @@ class General:
                             letter = g_msg.content.strip()[-1]
                             cities_named.append(g_msg.content)
                             await ctx.send(f"Nice! It's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s"
-                                            " turn now with the letter `{letter}`.\nYou have 20s. GO!")
+                                           f" turn now with the letter `{letter}`.\nYou have 20s. GO!")
                     else:
                         await ctx.send(f"Sorry, {self.bot.atlas_active_channels[ctx.channel.id][turn].name}, "
                                         "I travelled all around the globe"
@@ -225,7 +225,7 @@ class General:
                         self.bot.atlas_active_channels[ctx.channel.id].pop(turn)
                         if len(self.bot.atlas_active_channels[ctx.channel.id]) > 1:
                             await ctx.send(f"Now it's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s "
-                                            "turn with the letter `{letter}`.\nYou have 20s. GO!")              
+                                           f"turn with the letter `{letter}`.\nYou have 20s. GO!")              
                         continue
             except asyncio.TimeoutError:
                 await ctx.send(f"{str(self.bot.atlas_active_channels[ctx.channel.id][turn])} is kicked out of "
@@ -233,7 +233,7 @@ class General:
                 self.bot.atlas_active_channels[ctx.channel.id].pop(turn)
                 if len(self.bot.atlas_active_channels[ctx.channel.id]) > 1:
                    await ctx.send(f"Now it's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s "
-                                    "turn with the letter `{letter}`.\nYou have 20s. GO!")            
+                                  f"turn with the letter `{letter}`.\nYou have 20s. GO!")            
                 continue
 
         await ctx.send(f"{self.bot.atlas_active_channels[ctx.channel.id][0].name} wins the game! :tada:")
