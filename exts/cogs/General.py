@@ -228,7 +228,7 @@ class General:
                                            f"turn with the letter `{letter}`.\nYou have 20s. GO!")              
                         continue
                 else:
-                    await ctx.send(f"Sorry, {ctx.author.mention}, but the word {g_msg.content} does not begin "
+                    await ctx.send(f"Sorry, {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}, but the word {g_msg.content} does not begin "
                                    f"with the current letter {letter}.\nYou're kicked out of the game!")
                     self.bot.atlas_active_channels[ctx.channel.id].pop(turn)
                     if len(self.bot.atlas_active_channels[ctx.channel.id]) > 1:
