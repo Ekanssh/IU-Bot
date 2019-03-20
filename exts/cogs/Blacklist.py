@@ -7,14 +7,14 @@ class Blacklist(commands.Cog):
 
     @commands.command(hidden = True)
     @commands.has_any_role('Lords', 'IU Bot Dev')
-    async def blacklist(ctx, mem: discord.Member):
+    async def blacklist(self, ctx, mem: discord.Member):
         await self.bot.aio.execute("INSERT INTO blacklist VALUES (%s)", (mem.id, ))
         em = discord.Embed(title = "Blacklisted {}".format(mem.name), colour = 0x000000, description = "Added {} to the blacklist.\n{} cannot use IU Bot anymore.".format(mem.name, mem.name))
         await ctx.send(embed = em)
 
     @commands.command(hidden = True)
     @commands.has_any_role('Lords', 'IU Bot Dev')
-    async def whitelist(ctx, mem: discord.Member):
+    async def whitelist(self, ctx, mem: discord.Member):
         await self.bot.aio.execute("SELECT * FROM blacklist WHERE id=%s", (mem.id, ))
         l = await self.bot.aio.cursor.fetchall()
 
