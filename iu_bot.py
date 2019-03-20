@@ -78,7 +78,7 @@ async def on_ready():
                               activity=discord.Game(name="on IU | IU help"))
 
 @bot.check
-def blacklist_ckeck(ctx):
+async def blacklist_check(ctx):
     await bot.aio.execute("SELECT * from blacklist WHERE id=%s", (ctx.author.id, ))
     l = await bot.aio.cursor.fetchall()
     return True if len(l) == 0 else False
