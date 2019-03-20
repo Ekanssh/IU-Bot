@@ -56,6 +56,7 @@ async def on_ready():
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id BIGINT PRIMARY KEY, dailiesCount INT, remaining_timestamp TIMESTAMP)")
     await aio.execute("CREATE TABLE IF NOT EXISTS rep(id BIGINT PRIMARY KEY, reps INT, last_given TIMESTAMP)")
     await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT PRIMARY KEY, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT, banners_buyed TEXT)")
+    await aio.execute("CREATE TABLE IF NOT EXISTS blacklist(id BIGINT PRIMARY KEY)")
 
     bot.aio = aio
     bot.atlas_active_channels = {}
@@ -76,5 +77,10 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.online,
                               activity=discord.Game(name="on IU | IU help"))
 
+@bot.check
+def blacklist_ckeck(ctx):
+    await bot.aio.execute("SELECT * from blacklist WHERE id=%s", (ctx.author.id, ))
+    l = await bot.aio.cursor.fetchall()
+    return True if len(l) == 0 else False
 
 bot.run(str(os.environ['TOKEN']))
