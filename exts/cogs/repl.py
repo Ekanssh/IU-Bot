@@ -15,7 +15,7 @@ ownerid = {315728369369088003: "Ekansh",
            388984732156690433: "Yash",
            443961507051601931: "Uday"}
 
-class REPL():
+class REPL(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
