@@ -8,7 +8,7 @@ import aiohttp
 banned = {367740727624466433: "Karan",
           341171182227161088: "Oxide"}
 
-class Miscellaneous:
+class Miscellaneous(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot

@@ -6,7 +6,7 @@ import asyncio
 import random
 
 
-class Economy:
+class Economy(commands.Cog):
     '''Economy commands like dailies, credits, level'''
 
     def __init__(self, bot):

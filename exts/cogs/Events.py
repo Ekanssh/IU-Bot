@@ -22,21 +22,24 @@ def calculate_level(level: 'current level') -> 'xp to reach next level':
     return (level**2+level)/2*100-(level*100)
 
 
-class Events:
+class Events(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
     async def on_member_join(self, member):
         if member.guild.id == 281793428793196544:
             channel = self.bot.get_channel(429618676875001856)
             await channel.send('Welcome to Indians United, '+member.mention+'! Please enjoy your time here and hope you check #rules! :)')
 
+    @commands.Cog.listener()
     async def on_member_remove(self, member):
         if member.guild.id == 281793428793196544:
             channel = self.bot.get_channel(429618676875001856)
             await channel.send('We are feeling bad to see you leaving %s!' % (member.name))
 
+    @commands.Cog.listener()
     async def on_message(self, msg):
         if msg.channel.id == 434664516991844352:  # counting channel
             last_nos = []
@@ -82,9 +85,11 @@ class Events:
             if not msg.author.bot:
                 await self.bot.aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (msg.author.id, 0, 'banner-9', 'None', 1, 'I am imperfectly perfect...', 0, 'banner-9'))
 
+    @commands.Cog.listener()
     async def on_message_edit(self, before, after):
         await self.bot.process_commands(after)
 
+    @commands.Cog.listener()
     async def on_reacton_add(self, reaction, user):
         if reaction.emoji.name in ["star","star2"]:
             role_list = list(map(lambda x:x.name , user.roles))
@@ -101,6 +106,7 @@ class Events:
                         embed.url=reaction.message.jump_url
                         await bot.get_guild(281793428793196544).get_channel(462294052482711553).send(f"{a.mention} sent an interesting message in {h.mention}",embed=embed)
 
+    @commands.Cog.listener()
     async def on_command_error(self, ctx, err):
         if isinstance(err, commands.CommandOnCooldown):
             msg = await ctx.send("❌ | Sorry, you're on a cooldown, try again in {}s".format(str(int(err.retry_after))))

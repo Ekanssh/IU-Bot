@@ -12,7 +12,7 @@ import asyncio
 import datetime
 
 
-class Profile:
+class Profile(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

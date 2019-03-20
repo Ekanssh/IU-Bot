@@ -19,7 +19,7 @@ import aiohttp  # various needs
 from exts.cogs import globalvars
 
 
-class General:
+class General(commands.Cog):
     '''General commands'''
 
     def __init__(self, bot):

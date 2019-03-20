@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
-class Roles:
+
+class Roles(commands.Cog):
     '''Self assignable roles'''
     def __init__(self,bot):
         self.bot=bot
