@@ -85,12 +85,6 @@ class General:
         res = tdm(res)
         await msg.edit(content='Pong! :ping_pong: Took {} ms'.format(res))
 
-    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
-    @commands.command()
-    async def say(self, ctx, *, something: commands.clean_content='IU Bot Bot here!'):
-        '''The bot becomes your copycat'''
-        await ctx.send(something)
-        await ctx.message.delete()
 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
