@@ -36,7 +36,8 @@ class General(commands.Cog):
         }
         async with aiohttp.ClientSession(headers=headers) as cs:
             async with cs.get(url) as r:'''
-        r=ur.urlopen(url)
+        req = ur.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'}
+        r=ur.urlopen(req)
         html = await r.read()
         soup = bs(html, 'html.parser')
         t = soup.find_all(attrs={'class': 'cb-ovr-flo'})
