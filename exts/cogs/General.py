@@ -27,7 +27,7 @@ class General(commands.Cog):
 
     @commands.command(aliases=['cricket', 'scores', 'cric', 'score'])
     async def cricbuzz(self, ctx):
-        url = "http://www.cricbuzz.com/"
+        url = "http://www.cricbuzz.com/cricket-match/live-scores"
         data = []
         async with aiohttp.ClientSession() as cs:
             async with cs.get(url) as r:
