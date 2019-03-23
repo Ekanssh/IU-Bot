@@ -27,9 +27,13 @@ class General(commands.Cog):
 
     @commands.command(aliases=['cricket', 'scores', 'cric', 'score'])
     async def cricbuzz(self, ctx):
-        url = "http://www.cricbuzz.com/cricket-match/live-scores"
+        url = "http://www.cricbuzz.com/"
         data = []
-        async with aiohttp.ClientSession() as cs:
+        headers={
+            'user-agent': 'Mozilla/5.0 (Windows NT x.y; rv:10.0) Gecko/20100101 Firefox/10.0',
+            'cache-control' : 'no-cache'
+        }
+        async with aiohttp.ClientSession(headers=headers) as cs:
             async with cs.get(url) as r:
                 html = await r.read()
             soup = bs(html, 'html.parser')
