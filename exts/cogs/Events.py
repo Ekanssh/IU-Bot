@@ -92,13 +92,13 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_reacton_add(self, reaction, user):
         if reaction.emoji.name in ["star","star2"]:
-            if reaction.count > 2:
+            if reaction.count == 3 or user.name == "Yashh":
                 em = discord.Embed(title = reaction.message.author.name, 
                                    colour = 0xFFDF00, 
                                    description = reaction.message.content)
                 em.set_footer(text = "Sent in " + reaction.message.channel.name, 
                               icon_url = reaction.message.author.avatar_url)
-                await bot.get_guild(281793428793196544).get_channel(477459520470384643).send(embed=em)
+                await bot.get_guild(281793428793196544).get_channel(567050071628054532).send(embed=em)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, err):
