@@ -98,7 +98,7 @@ class Events(commands.Cog):
                                    description = reaction.message.content)
                 em.set_footer(text = "Sent in " + reaction.message.channel.name, 
                               icon_url = reaction.message.author.avatar_url)
-                await bot.get_guild(281793428793196544).get_channel(567050071628054532).send(embed=em)
+                await self.bot.get_guild(281793428793196544).get_channel(567050071628054532).send(embed=em)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, err):
