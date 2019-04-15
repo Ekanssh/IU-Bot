@@ -91,8 +91,8 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
-        if reaction.emoji in [":star:",":star2:"]:
-            if reaction.count == 3 or user.name == "Yashh":
+        if (reaction.emoji == "\u2b50") or (reaction.emoji == "🌟"):
+            if reaction.count == 3:
                 em = discord.Embed(title = reaction.message.author.name, 
                                    colour = 0xFFDF00, 
                                    description = reaction.message.content)
