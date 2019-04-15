@@ -92,19 +92,13 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_reacton_add(self, reaction, user):
         if reaction.emoji.name in ["star","star2"]:
-            role_list = list(map(lambda x:x.name , user.roles))
-            for i in ["Nobles","Lords", "Queens"]:
-                 if i in role_list:
-                        a = reaction.message.author
-                        c = reaction.message.content
-                        h = reaction.message.channel
-                        if reaction.message.embeds:
-                            embed=reaction.message.embeds[0]
-                            embed.description+="\n\n**"+c+"**"
-                        else:
-                            embed=discord.Embed(title="Message",description=c)
-                        embed.url=reaction.message.jump_url
-                        await bot.get_guild(281793428793196544).get_channel(462294052482711553).send(f"{a.mention} sent an interesting message in {h.mention}",embed=embed)
+            if reaction.count > 2:
+                em = discord.Embed(title = reaction.message.author.name, 
+                                   colour = 0xFFDF00, 
+                                   description = reaction.message.content)
+                em.set_footer(text = "Sent in " + reaction.message.channel.name, 
+                              icon_url = reaction.message.author.avatar_url)
+                await bot.get_guild(281793428793196544).get_channel(477459520470384643).send(embed=em)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, err):
