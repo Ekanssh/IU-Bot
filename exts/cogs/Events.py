@@ -95,8 +95,9 @@ class Events(commands.Cog):
             if reaction.count == 3:
                 em = discord.Embed(title = reaction.message.author.name, 
                                    colour = 0xFFDF00, 
-                                   description = reaction.message.content)
-                em.set_footer(text = "Sent in " + reaction.message.channel.name, 
+                                   description = reaction.message.content,
+                                   url = reaction.message.jump_url)
+                em.set_footer(text = "Click on author's name to jump to message", 
                               icon_url = reaction.message.author.avatar_url)
                 await self.bot.get_guild(281793428793196544).get_channel(567050071628054532).send(embed=em)
 
