@@ -91,8 +91,7 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
-        if reaction.message.channel.id != 567050071628054532 
-            and reaction.message.guild.id == 281793428793196544:
+        if reaction.message.channel.id != 567050071628054532 and reaction.message.guild.id == 281793428793196544:
             if (reaction.emoji == "\u2b50") or (reaction.emoji == "🌟"):
                 if reaction.count == 3:
                     em = discord.Embed(title = reaction.message.author.name, 
