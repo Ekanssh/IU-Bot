@@ -115,7 +115,6 @@ class Events(commands.Cog):
             stack = 4  # how many levels deep to trace back
             traceback_text = "\n".join(traceback.format_exception(type(err), err, err.__traceback__, stack))
             print(traceback_text)
-            await ctx.send(traceback_text)
 
         else:
             embed=discord.Embed(title=str(type(err))[8:-2],description=str(err),colour=discord.Colour.from_rgb(random.randint(0,255),random.randint(0,255),random.randint(0,255)))
