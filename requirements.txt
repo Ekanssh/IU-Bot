@@ -5,3 +5,4 @@ googlemaps
 aiopg
 pillow
 bs4
+aiohttp>=3.3.0
