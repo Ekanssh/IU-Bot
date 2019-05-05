@@ -215,11 +215,8 @@ class Profile(commands.Cog):
                     counter += 1
                 em.description += "```"
                 ems.append(em)
-        info_embed = discord.Embed(
-            title="Help Info", description="\u23EA:  Go to the first page\n\u25C0:  Go to the previous page\n\u23F9:  Stop the help command\n\u25B6:  Go to the next page\n\u23E9:  Go to the last page\n\U0001f522:  Asks for a page number\n\u2139:  Shows this info", colour=0x00FFFF)
         for e in ems:
             e.add_field(name=f"{ctx.author.name}, Your guild rank", value=str(rank))
-        ems.append(info_embed)
         await msg.edit(embed=ems[0])
         pa = Paginator(self.bot, msg, ctx.author, 0)
         await pa.paginate(ems)
@@ -255,14 +252,11 @@ class Profile(commands.Cog):
                             em.add_field(name="Price", value="1000/- IUC")
                             ems.append(em)
                     await msg.edit(embed=ems[0])
-                    info_embed = discord.Embed(title="Help Info", 
-                                               description="\u23EA:  Go to the first page\n\u25C0:  Go to the previous page\n\u23F9:  Stop the help command\n\u25B6:  Go to the next page\n\u23E9:  Go to the last page\n\U0001f522:  Asks for a page number\n\u2139:  Shows this info", 
-                                               colour=0x00FFFF)
-                    ems.append(info_embed)
+                    
                     pa = Paginator(self.bot, msg, ctx.author, 0)
                     await pa.paginate(ems)
                     if pa.item_purchased == True:
-                        item = avail_banners[pa.index]
+                        item = msg.embeds[0].title
                         await ctx.send("**You are about to buy {} for 1000/- IUC.**\nType 'confirm' to confirm the purchase or 'cancel' to cancel it.".format(item))
 
                         def check(m):

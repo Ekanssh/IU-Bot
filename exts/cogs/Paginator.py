@@ -12,6 +12,10 @@ class Paginator:
         self.index = index
 
     async def paginate(self, list_to_paginate: list):
+        info_embed = discord.Embed(title="Help Info", 
+                                   description="\u23EA:  Go to the first page\n\u25C0:  Go to the previous page\n\u23F9:  Stop the help command\n\u25B6:  Go to the next page\n\u23E9:  Go to the last page\n\U0001f522:  Asks for a page number\n\u2139:  Shows this info", 
+                                   colour=0x00FFFF)
+        list_to_paginate.append(info_embed)
         c = await self.bot.get_context(self.message)
         emoji_list = "\u23EA \u25C0 \u23F9 \u25B6 \u23E9 \U0001f522 \u2139".split()
 
@@ -87,10 +91,10 @@ class Paginator:
                     await c.send("You did not chose a number :<\nI got bored")
 
             elif r.emoji == emoji_list[6]:
-                self.index = len(list_to_paginate) - 1
+                await self.message.edit(new_content = '', embed = info_embed)
 
             if len(emoji_list) == 8:
-                if r.emoji == emoji_list[7]:
+                if r.emoji == emoji_list[7] and self.message.embeds[0] != info_embed:
                     self.item_purchased = True
                     try:
                         await self.message.delete()
