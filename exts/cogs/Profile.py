@@ -227,45 +227,43 @@ class Profile(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.command()
     async def banner(self, ctx, option="show", arg=None):
-        '''Sets, shows, buys. or lists banners'''
+        '''Sets, shows, buys or lists banners'''
         with open('exts/HelperFiles/banner_list.json') as fp:
             banners = json.load(fp)
 
         await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
+        user_profile = await self.bot.aio.cursor.fetchall()
 
-        if len(await self.bot.aio.cursor.fetchall()) > 0:  # found in db
+        if len(user_profile) > 0:  # found in db
             if option == "show":
-                await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
-                current_banner = (await self.bot.aio.cursor.fetchall())[0][2]
+                current_banner = user_profile[0][2]
                 em = discord.Embed(title="Your current profile banner is: ", color=0x00FFFF).set_image(
                     url=banners[current_banner])
                 await ctx.send(embed=em)
 
             elif option == "buy":
                 if arg is None:
-                    await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.author.id, ))
-                    currentCredits = int((await self.bot.aio.cursor.fetchall())[0][1])
+                    currentCredits = int(user_profile[0][1])
                     msg = await ctx.send("**Making the deck ready...**")
                     ems = []
-                    await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
                     # last column is banners purchased, is a string
-                    purchased_banners = ((await self.bot.aio.cursor.fetchall())[0][-1]).split()
-
+                    purchased_banners = (user_profile[0][-1]).split()
+                    avail_banners = set(banners) - set(purchased_banners)
                     for i in banners:
                         if not i in purchased_banners:
-                            em = discord.Embed(
-                                title=i, color=0x00FFFF).set_image(url=banners[i])
-                            em.add_field(name="Price", value="1000/- Rupees")
+                            em = discord.Embed(title=i, color=0x00FFFF).set_image(url=banners[i])
+                            em.add_field(name="Price", value="1000/- IUC")
                             ems.append(em)
                     await msg.edit(embed=ems[0])
-                    info_embed = discord.Embed(
-                        title="Help Info", description="\u23EA:  Go to the first page\n\u25C0:  Go to the previous page\n\u23F9:  Stop the help command\n\u25B6:  Go to the next page\n\u23E9:  Go to the last page\n\U0001f522:  Asks for a page number\n\u2139:  Shows this info", colour=0x00FFFF)
+                    info_embed = discord.Embed(title="Help Info", 
+                                               description="\u23EA:  Go to the first page\n\u25C0:  Go to the previous page\n\u23F9:  Stop the help command\n\u25B6:  Go to the next page\n\u23E9:  Go to the last page\n\U0001f522:  Asks for a page number\n\u2139:  Shows this info", 
+                                               colour=0x00FFFF)
                     ems.append(info_embed)
                     pa = Paginator(self.bot, msg, ctx.author, 0)
                     await pa.paginate(ems)
                     if pa.item_purchased == True:
-                        item = "banner-" + str(pa.index + 1)
-                        await ctx.send("**You are about to buy {} for ₹1000/-.**\nType 'confirm' to confirm the purchase or 'cancel' to cancel it.".format(item))
+                        item = avail_banners[pa.index]
+                        await ctx.send("**You are about to buy {} for 1000/- IUC.**\nType 'confirm' to confirm the purchase or 'cancel' to cancel it.".format(item))
 
                         def check(m):
                             return m.author.id == ctx.author.id and m.channel == ctx.channel
