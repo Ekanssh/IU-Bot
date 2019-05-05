@@ -218,6 +218,7 @@ class Profile(commands.Cog):
         for e in ems:
             e.add_field(name=f"{ctx.author.name}, Your guild rank", value=str(rank))
         await msg.edit(embed=ems[0])
+        await ctx.message.delete()
         pa = Paginator(self.bot, msg, ctx.author, 0)
         await pa.paginate(ems)
 
@@ -240,12 +241,13 @@ class Profile(commands.Cog):
 
             elif option == "buy":
                 if arg is None:
-                    currentCredits = int(user_profile[0][1])
+                    await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (ctx.author.id, ))
+                    d = await self.bot.aio.cursor.fetchall()
+                    currentCredits = int(d[0][1])
                     msg = await ctx.send("**Making the deck ready...**")
                     ems = []
                     # last column is banners purchased, is a string
                     purchased_banners = (user_profile[0][-1]).split()
-                    avail_banners = set(banners) - set(purchased_banners)
                     for i in banners:
                         if not i in purchased_banners:
                             em = discord.Embed(title=i, color=0x00FFFF).set_image(url=banners[i])
@@ -257,20 +259,20 @@ class Profile(commands.Cog):
                     await pa.paginate(ems)
                     if pa.item_purchased == True:
                         item = msg.embeds[0].title
-                        await ctx.send("**You are about to buy {} for 1000/- IUC.**\nType 'confirm' to confirm the purchase or 'cancel' to cancel it.".format(item))
+                        await ctx.send("**You are about to buy {} for 1000/- IUC.**\nType 'CONFIRM' to confirm the purchase or 'cancel' to cancel it.".format(item))
 
                         def check(m):
                             return m.author.id == ctx.author.id and m.channel == ctx.channel
                         try:
                             response = await self.bot.wait_for('message', timeout=20, check=check)
-                            if response.content == "confirm":
+                            if response.content == "CONFIRM":
                                 if currentCredits < 1000:
                                     return await ctx.send("You don't have enough money to buy a banner.")
                                 else:
                                     purchased_banners.append(item)
                                     await self.bot.aio.execute("UPDATE profile SET banners_buyed = %s WHERE id = %s", (' '.join(purchased_banners), ctx.author.id))
                                     await self.bot.aio.execute("UPDATE Dailies SET dailiesCount = %s WHERE id = %s", (currentCredits - 1000, ctx.author.id))
-                                    await ctx.send("You successfully buyed {}.\nSay `iu banner set <banner name> to set the respective banner.".format(item))
+                                    await ctx.send("You successfully bought {}.\nType `iu banner set <banner name>` to set the respective banner.".format(item))
                             else:
                                 await ctx.send("Your purchase is cancelled.")
                         except asyncio.TimeoutError:
@@ -301,6 +303,7 @@ class Profile(commands.Cog):
                                     return await ctx.send("You don't have enough money to buy a banner.")
                                 else:
                                     purchased_banners.append(item)
+                                    purchased_banners.sort(key = lambda t: int(t[7:]))
                                     await self.bot.aio.execute("UPDATE profile SET banners_buyed = %s WHERE id = %s", (' '.join(purchased_banners), ctx.author.id))
                                     await self.bot.aio.execute("UPDATE Dailies SET dailiesCount = %s WHERE id = %s", (currentCredits - 1000, ctx.author.id, ))
                                     await ctx.send("You successfully bought {}.\nSay `iu banner set <banner name>` to set the respective banner.".format(item), ctx.author.id)
@@ -310,9 +313,8 @@ class Profile(commands.Cog):
                             await ctx.send("No response from user. Purchase cancelled.")
 
             elif option == "list":
-                await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
                 # last column is banners purchased, is a string
-                purchased_banners = ((await self.bot.aio.cursor.fetchall())[0][-1]).split()
+                purchased_banners = user_profile[0][-1].split()
                 await ctx.send("Banners that you own are: `{}`".format(', '.join(purchased_banners)))
             elif option == "set":
                 if arg is None:
@@ -320,9 +322,8 @@ class Profile(commands.Cog):
                 elif arg not in banners:
                     await ctx.send("No such banner found.")
                 else:
-                    await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id, ))
                     # last column is banners purchased, is a string
-                    purchased_banners = ((await self.bot.aio.cursor.fetchall())[0][-1]).split()
+                    purchased_banners = user_profile[0][-1].split()
                     if arg not in purchased_banners:
                         await ctx.send("You don't own this banner. To purchase it, type `IU banner buy {}`.".format(arg))
                     else:
