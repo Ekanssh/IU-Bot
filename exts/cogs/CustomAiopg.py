@@ -35,7 +35,7 @@ import os
 
 class aiopg_commands:
     async def connect(self):
-        self.conn = await aiopg.connect(database=os.getenv('DATABASE'),
+        self.conn = await aiopg.connect(database=os.getenv('dburl'),
                                         user=os.getenv('USER'),
                                         password=os.getenv('PASSWORD'),
                                         host=os.getenv('HOST'))
