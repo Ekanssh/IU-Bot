@@ -17,7 +17,7 @@ import os
 import asyncio
 import aiohttp  # various needs
 from exts.cogs import globalvars
-import urllib.request as ur
+#import urllib.request as ur
 
 
 class General(commands.Cog):
@@ -30,15 +30,15 @@ class General(commands.Cog):
     async def cricbuzz(self, ctx):
         url = "http://www.cricbuzz.com/"
         data = []
-        '''headers={
+        headers={
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
             'cache-control' : 'no-cache'
         }
+        #req = ur.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'})
+        #r= ur.urlopen(req)
         async with aiohttp.ClientSession(headers=headers) as cs:
-            async with cs.get(url) as r:'''
-        req = ur.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'})
-        r= ur.urlopen(req)
-        html = await r.read()
+            async with cs.get(url) as r:
+                html = await r.read()
         soup = bs(html, 'html.parser')
         t = soup.find_all(attrs={'class': 'cb-ovr-flo'})
         for u in t:
@@ -247,6 +247,12 @@ class General(commands.Cog):
 
         await ctx.send(f"{self.bot.atlas_active_channels[ctx.channel.id][0].name} wins the game! :tada:")
         self.bot.atlas_active_channels.pop(ctx.channel.id, None)
+
+    @commands.command()
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.channel)
+    async def invite(self,ctx):
+        '''Get an invite link to Indians United server'''
+        await ctx.send("https://discord.gg/Yn6W84Y")
 
 def setup(bot):
     bot.add_cog(General(bot))

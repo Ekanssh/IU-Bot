@@ -163,6 +163,7 @@ class Economy(commands.Cog):
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def pay(self, ctx,amount: int,*, mem=None):
+        '''pay iu credits to other users'''
         mem=await self.special_user_fetcher(ctx,mem)
         if mem=="cancel":
             return

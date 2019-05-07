@@ -8,6 +8,7 @@ class Roles(commands.Cog):
 
     @commands.group(aliases=['roleme'], invoke_without_command=True)
     async def sar(self,ctx,*,role_name:str):
+        '''Self Assignable Roles'''
         roles=[ 'Sololearn', 'PUBG', 'Debater', 'Clasher']
         if role_name.lower() not in [i.lower() for i in roles]:
             await ctx.send(":x: Error occured.Run `iu sar list` to see list of self assignable roles")

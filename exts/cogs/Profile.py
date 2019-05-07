@@ -126,6 +126,7 @@ class Profile(commands.Cog):
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def rep(self, ctx, *, mem: discord.Member):
+        '''Give a reputation point to persons u like'''
         msg_ts = ctx.message.created_at
         if ctx.author.bot or mem.bot:
             await ctx.send("Sorry!, Humans Only")
@@ -193,6 +194,7 @@ class Profile(commands.Cog):
     @commands.cooldown(1, 15, commands.BucketType.user)
     @commands.command()
     async def top(self, ctx):
+        '''Check IU Leaderboards to see ur rank or other's'''
         msg = await ctx.send("***Wait until i gather all the users...***")
         await self.bot.aio.execute("SELECT id, xp FROM profile")
         l = await self.bot.aio.cursor.fetchall()
