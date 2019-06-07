@@ -163,7 +163,7 @@ class Economy(commands.Cog):
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def pay(self, ctx,amount: int,*, mem=None):
-        '''pay iu credits to other users'''
+        '''Pay iu credits to other users'''
         mem=await self.special_user_fetcher(ctx,mem)
         if mem=="cancel":
             return
@@ -174,7 +174,7 @@ class Economy(commands.Cog):
             await ctx.send("Sorry, bot have nothing to do with money")
             return
         if ctx.author.id is mem.id:
-            await ctx.send("Want to some Credits,try collecting your free dailies")
+            await ctx.send("Want to some credits? Try collecting your free dailies!")
             return
         if amount <= 0:
             failure_embed=discord.Embed(title="Payment Cancelled",description='Enter a valid amount',color=discord.Colour.red())
@@ -207,13 +207,25 @@ class Economy(commands.Cog):
                 try:
                     r,u=await self.bot.wait_for('reaction_add', timeout=20, check=check)
                     if r.emoji == valid_emojis[0]:
-                        await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s',(author_bal-amount,ctx.author.id,))
-                        await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s',(mem_bal+amount,mem.id,))
-                        acknowledgement_embed=discord.Embed(title="Payment Successfull")
-                        acknowledgement_embed.description=f"₹{amount} added to {mem.mention}"
-                        acknowledgement_embed.color=discord.Colour.green()
-                        await prompt.clear_reactions()
-                        await prompt.edit(content='',embed=acknowledgement_embed)
+                        if amount > 100:
+                            tax = round(amount/10)
+                            payment = amount-tax
+                            await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s',(author_bal-amount,ctx.author.id,))
+                            await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s',(mem_bal+payment,mem.id,))
+                            await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s',(tax,429625142444949524,))
+                            acknowledgement_embed=discord.Embed(title="Payment Successfull")
+                            acknowledgement_embed.description=f"₹{payment} added to {mem.mention}"
+                            acknowledgement_embed.color=discord.Colour.green()
+                            await prompt.clear_reactions()
+                            await prompt.edit(content='',embed=acknowledgement_embed)
+                        else:
+                            await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s',(author_bal-amount,ctx.author.id,))
+                            await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s',(mem_bal+amount,mem.id,))
+                            acknowledgement_embed=discord.Embed(title="Payment Successfull")
+                            acknowledgement_embed.description=f"₹{amount} added to {mem.mention}"
+                            acknowledgement_embed.color=discord.Colour.green()
+                            await prompt.clear_reactions()
+                            await prompt.edit(content='',embed=acknowledgement_embed)
                     elif r.emoji == valid_emojis[1]:
                         failure_embed=discord.Embed(title="Payment Cancelled",description='Cancelled by Payee',color=discord.Colour.red())
                         await prompt.clear_reactions()
@@ -232,6 +244,62 @@ class Economy(commands.Cog):
         elif not found_author and found_mem:
             failure_embed=discord.Embed(title="Payment Unsuccessfull",color=discord.Colour.red())
             failure_embed.description=f"Payee Account not Found\nGo get yours by collecting daily credits now!"
+            await ctx.send(embed=failure_embed)
+        else:
+            failure_embed=discord.Embed(title="Payment Unsuccessfull",color=discord.Colour.red())
+            failure_embed.description=f"Accounts does not exist\nStart collecting your free dailies now!"
+            await ctx.send(embed=failure_embed)
+
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
+    @commands.command(hidden=True)
+    @commands.has_role('Lords')
+    async def gift(self, ctx,*, mem=None):
+        '''For gifting credit fund to birthday boy/girl'''
+        mem=await self.special_user_fetcher(ctx,mem)
+        if mem=="cancel":
+            return
+        if mem is None:
+            await ctx.send("Dear {},the user you typed does not seem to exist. Please make sure you provided correct details.".format(ctx.message.author.mention))
+            return
+        await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (429625142444949524,))
+        amount = (await self.bot.aio.cursor.fetchall())[0][1]
+        found_mem = False
+        mem_bal = None
+        valid_emojis=['\U0001f1fe','\U0001f1f3']
+        def check(reaction,user):
+            return reaction.emoji in valid_emojis and user is ctx.author
+        await self.bot.aio.execute("SELECT dailiesCount FROM Dailies WHERE id = %s", (mem.id, ))
+        mem_bal = (await self.bot.aio.cursor.fetchone())
+        if mem_bal is not None:
+            mem_bal=mem_bal[0]
+            found_mem = True
+        if found_mem:
+                prompt=await ctx.send(f"""You are about to pay ₹{amount} to {mem.name}
+                Press :regional_indicator_y: to CONFIRM
+                Press :regional_indicator_n: to CANCEL """)
+                await prompt.add_reaction("\U0001f1fe")
+                await prompt.add_reaction("\U0001f1f3")
+                try:
+                    r,u=await self.bot.wait_for('reaction_add', timeout=20, check=check)
+                    if r.emoji == valid_emojis[0]:
+                        await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s',(0,429625142444949524,))
+                        await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s',(mem_bal+amount,mem.id,))
+                        acknowledgement_embed=discord.Embed(title="Payment Successfull")
+                        acknowledgement_embed.description=f"₹{amount} gifted to {mem.mention}"
+                        acknowledgement_embed.color=discord.Colour.green()
+                        await prompt.clear_reactions()
+                        await prompt.edit(content='',embed=acknowledgement_embed)
+                    elif r.emoji == valid_emojis[1]:
+                        failure_embed=discord.Embed(title="Payment Cancelled",description='Cancelled by Payee',color=discord.Colour.red())
+                        await prompt.clear_reactions()
+                        await prompt.edit(content='',embed=failure_embed)
+                except asyncio.TimeoutError:
+                    failure_embed=discord.Embed(title="Payment Cancelled",description='Session Expired',color=discord.Colour.red())
+                    await prompt.clear_reactions()
+                    await prompt.edit(content='',embed=failure_embed)
+        elif not found_mem:
+            failure_embed=discord.Embed(title="Payment Unsuccessfull",color=discord.Colour.red())
+            failure_embed.description=f"Receiver Account not Found\nAsk {mem.name} to collect dailies to open account and try again"
             await ctx.send(embed=failure_embed)
         else:
             failure_embed=discord.Embed(title="Payment Unsuccessfull",color=discord.Colour.red())

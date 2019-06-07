@@ -23,23 +23,6 @@ class Miscellaneous(commands.Cog):
         else:
             await ctx.send("Not allowed.")
 
-    @commands.command()
-    async def weather(self, ctx, *, location):
-        '''Gives you the weather of a location'''
-        async with aiohttp.ClientSession() as cs:
-            async with cs.get('http://api.tanvis.xyz/weather/{}'.format(location)) as res:
-                res = await res.json(encoding='utf-8')
-        em = discord.Embed(title="Current weather of {}".format(location),
-                           color=0x00FFFF)
-        for i in res:
-            if i != 'error':
-                em.add_field(name=i, value=res[i])
-            else:
-                em.title = "Error"
-                em.description = "Could not find the location, {}".format(
-                    location)
-        await ctx.send(embed=em)
-
 
 def setup(bot):
     bot.add_cog(Miscellaneous(bot))

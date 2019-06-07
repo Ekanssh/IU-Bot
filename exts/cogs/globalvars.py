@@ -5,6 +5,7 @@ iuID = 281793428793196544
 logID = 430752769146617866
 logDevID = 453761426427871233
 devServerID = 381052278708240385
+iubotID = 429625142444949524
 
 welcomeName = 'welcome-good_bye'
 leaveName = 'welcome-good_bye'
