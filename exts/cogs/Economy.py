@@ -184,6 +184,8 @@ class Economy(commands.Cog):
         found_mem = False
         author_bal = None
         mem_bal = None
+        await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (429625142444949524,))
+        bot_bal = (await self.bot.aio.cursor.fetchall())[0][1]
         valid_emojis=['\U0001f1fe','\U0001f1f3']
         def check(reaction,user):
             return reaction.emoji in valid_emojis and user is ctx.author
@@ -212,7 +214,7 @@ class Economy(commands.Cog):
                             payment = amount-tax
                             await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s',(author_bal-amount,ctx.author.id,))
                             await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s',(mem_bal+payment,mem.id,))
-                            await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s',(tax,429625142444949524,))
+                            await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s',(bot_bal+tax,429625142444949524,))
                             acknowledgement_embed=discord.Embed(title="Payment Successfull")
                             acknowledgement_embed.description=f"₹{payment} added to {mem.mention}"
                             acknowledgement_embed.color=discord.Colour.green()
