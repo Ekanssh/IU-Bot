@@ -308,6 +308,13 @@ class Economy(commands.Cog):
             failure_embed.description=f"Accounts does not exist\nStart collecting your free dailies now!"
             await ctx.send(embed=failure_embed)
 
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
+    @commands.command()
+    async def fund(self, ctx):
+        '''Check fund collect from tax'''
+        await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (429625142444949524,))
+        await ctx.send((await self.bot.aio.cursor.fetchall())[0][1])
+
 
 def setup(bot):
     bot.add_cog(Economy(bot))
