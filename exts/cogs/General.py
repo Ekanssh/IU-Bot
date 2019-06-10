@@ -266,12 +266,12 @@ class General(commands.Cog):
         await msg.add_reaction("\U0001F389")
         def check(reaction, user):
             return reaction.emoji is "\U0001F389"
-        msgid = msg.id
-        msgg = ctx.channel.fetch_message(msgid)
         try:
-            r = await self.bot.wait_for('reaction_add', timeout=10, check=check)
+            await self.bot.wait_for('reaction_add', timeout=10, check=check)
         except asyncio.TimeoutError:
-            users = await msgg.reactions[0].users().flatten()
+            msgid = msg.id
+            msgg = await ctx.channel.fetch_message(msgid)
+            users = msgg.reactions[0].users().flatten()
             winner = random.choice(users)
             await msg.edit('{} has won the giveaway!'.format(winner))
 
