@@ -267,9 +267,12 @@ class General(commands.Cog):
         def check(reaction, user):
             return reaction.emoji is "\U0001F389"
         r = await self.bot.wait_for('reaction_add', timeout=10, check=check)
-        users = await r.users().flatten()
-        winner = random.choice(users)
-        await msg.edit('{} has won the giveaway!.'.format(winner))
+        try:
+            pass
+        except asyncio.TimeoutError:
+            users = await r.users().flatten()
+            winner = random.choice(users)
+            await msg.edit('{} has won the giveaway!.'.format(winner))
 
 def setup(bot):
     bot.add_cog(General(bot))
