@@ -80,7 +80,7 @@ async def on_ready():
 
     if str(datetime.date.today())[-2:] == '01':
         pass
-    if str(calendar.monthrange(datetime.date.today().year, datetime.date.today().month)[1]) == str(datetime.date.today())[-2:] and datetime.datetime.now().strftime('%H') == '1':
+    if str(calendar.monthrange(datetime.date.today().year, datetime.date.today().month)[1]) == str(datetime.date.today())[-2:] and datetime.datetime.now().strftime('%H') == '12':
         pass
 
 @bot.check

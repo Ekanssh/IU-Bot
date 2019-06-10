@@ -205,7 +205,7 @@ class General(commands.Cog):
                     async with aiohttp.ClientSession() as cs:
                         async with cs.get(url + word + "&APPID=" + self.bot.appid) as r:
                             resp = await r.json()
-                    
+
                     if resp['cod'] == 200:
                         if g_msg.content in cities_named:
                             ctx.send(f"Sorry, {ctx.author.mention}, {g_msg.content} has already been said."
@@ -261,8 +261,8 @@ class General(commands.Cog):
         em = discord.Embed(title = "Giveaway by {}! :tada:".format(ctx.author.name),
                                        colour = 0x0000ff,
                                        description = descrip)
-        em.set_footer(text = "React :tada: to participate.")
-        msg = await self.bot.get_guild(281793428793196544).get_channel(508921210512474112).send(embed=em)
+        em.set_footer(text = "React to participate.")
+        msg = await self.bot.get_guild(281793428793196544).get_channel(288928354478981120).send(embed=em)
         await msg.add_reaction("\U0001F389")
         def check(reaction, user):
             return reaction.emoji is "\U0001F389"
