@@ -273,7 +273,7 @@ class General(commands.Cog):
             userss = []
             async for i in u:
                 userss.append(i)
-            winner = random.choice(userss).name
+            winner = random.choice(list(u))
             await msg.edit('{} has won the giveaway!.'.format(winner))
 
 def setup(bot):
