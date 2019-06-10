@@ -269,8 +269,11 @@ class General(commands.Cog):
         try:
             r = await self.bot.wait_for('reaction_add', timeout=10, check=check)
         except asyncio.TimeoutError:
-            users = await msg.reactions[0].users().flatten()
-            winner = random.choice(users)
+            u = msg.reactions[0].users()
+            userss = []
+            async for i in u:
+                userss.append(i)
+            winner = random.choice(userss).name
             await msg.edit('{} has won the giveaway!.'.format(winner))
 
 def setup(bot):
