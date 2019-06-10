@@ -11,7 +11,7 @@ class Roles(commands.Cog):
         '''Self Assignable Roles'''
         roles=[ 'Sololearn', 'PUBG', 'Debater', 'Clasher']
         if role_name.lower() not in [i.lower() for i in roles]:
-            await ctx.send(":x: Error occured.Run `iu sar list` to see list of self assignable roles")
+            await ctx.send(":x: Error occured. Run `iu sar list` to see list of self assignable roles")
             return
         for role in roles:
             if role.lower() == role_name.lower():

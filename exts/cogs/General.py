@@ -159,7 +159,7 @@ class General(commands.Cog):
         url = "http://api.openweathermap.org/data/2.5/weather?q="
         for i in range(len(players)):
             try:
-                mem = await commands.MemberConverter().convert(ctx, players[i])    
+                mem = await commands.MemberConverter().convert(ctx, players[i])
                 if isinstance(mem, discord.Member):
                     if mem not in players_list:
                         players_list.append(mem)
@@ -210,7 +210,7 @@ class General(commands.Cog):
                         if g_msg.content in cities_named:
                             ctx.send(f"Sorry, {ctx.author.mention}, {g_msg.content} has already been said."
                                       "\nYou're kicked out of the game!")
-                            self.bot.atlas_active_channels[ctx.channel.id].pop(turn)                
+                            self.bot.atlas_active_channels[ctx.channel.id].pop(turn)
                             continue
                         else:
                             turn = 0 if turn == (len(self.bot.atlas_active_channels[ctx.channel.id]) - 1) else turn + 1
@@ -226,7 +226,7 @@ class General(commands.Cog):
                         self.bot.atlas_active_channels[ctx.channel.id].pop(turn)
                         if len(self.bot.atlas_active_channels[ctx.channel.id]) > 1:
                             await ctx.send(f"Now it's {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}'s "
-                                           f"turn with the letter `{letter}`.\nYou have 20s. GO!")              
+                                           f"turn with the letter `{letter}`.\nYou have 20s. GO!")
                         continue
                 else:
                     await ctx.send(f"Sorry, {self.bot.atlas_active_channels[ctx.channel.id][turn].mention}, but the word {g_msg.content} does not begin "
@@ -253,6 +253,16 @@ class General(commands.Cog):
     async def invite(self,ctx):
         '''Get an invite link to Indians United server'''
         await ctx.send("https://discord.gg/Yn6W84Y")
+
+    @commands.command()
+    @commands.has_role("Lords")
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.channel)
+    async def giveaway(self, ctx, *, descrip):
+        em = discord.Embed(title = "24hr Giveaway by {}! :tada:".format(ctx.author.name),
+                                       colour = 0x0000ff,
+                                       description = descrip)
+        em.set_footer(text = "Click :tada: to participate.")
+        await self.bot.get_guild(281793428793196544).get_channel(508921210512474112).send(embed=em)
 
 def setup(bot):
     bot.add_cog(General(bot))

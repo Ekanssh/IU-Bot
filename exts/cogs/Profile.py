@@ -256,7 +256,7 @@ class Profile(commands.Cog):
                             em.add_field(name="Price", value="1000/- IUC")
                             ems.append(em)
                     await msg.edit(embed=ems[0])
-                    
+
                     pa = Paginator(self.bot, msg, ctx.author, 0)
                     await pa.paginate(ems)
                     if pa.item_purchased == True:

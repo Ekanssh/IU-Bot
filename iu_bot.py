@@ -13,6 +13,7 @@ import time
 import datetime
 import random
 import json
+import calendar
 
 
 with open("config.json") as fp:
@@ -55,7 +56,7 @@ async def on_ready():
     await aio.connect()
     await aio.execute("CREATE TABLE IF NOT EXISTS Dailies(id BIGINT PRIMARY KEY, dailiesCount INT, remaining_timestamp TIMESTAMP)")
     await aio.execute("CREATE TABLE IF NOT EXISTS rep(id BIGINT PRIMARY KEY, reps INT, last_given TIMESTAMP)")
-    await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT PRIMARY KEY, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT, banners_buyed TEXT)")
+    await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT PRIMARY KEY, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT, banners_buyed TEXT, score TEXT)")
     await aio.execute("CREATE TABLE IF NOT EXISTS blacklist(id BIGINT PRIMARY KEY)")
 
     bot.aio = aio
@@ -76,6 +77,11 @@ async def on_ready():
         bot._memList[m.id] = m.name
     await bot.change_presence(status=discord.Status.online,
                               activity=discord.Game(name="on IU | IU help"))
+
+    if str(datetime.date.today())[-2:] == '01':
+        pass
+    if str(calendar.monthrange(datetime.date.today().year, datetime.date.today().month)[1]) == str(datetime.date.today())[-2:] and datetime.datetime.now().strftime('%H') == '1':
+        pass
 
 @bot.check
 async def blacklist_check(ctx):

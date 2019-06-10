@@ -94,11 +94,11 @@ class Events(commands.Cog):
         if reaction.message.channel.id != 567050071628054532 and reaction.message.guild.id == 281793428793196544:
             if (reaction.emoji == "\u2b50") or (reaction.emoji == "🌟"):
                 if reaction.count == 3:
-                    em = discord.Embed(title = reaction.message.author.name, 
-                                       colour = 0xFFDF00, 
+                    em = discord.Embed(title = reaction.message.author.name,
+                                       colour = 0xFFDF00,
                                        description = reaction.message.content,
                                        url = reaction.message.jump_url)
-                    em.set_footer(text = "Click on author's name to jump to message", 
+                    em.set_footer(text = "Click on author's name to jump to message",
                                   icon_url = reaction.message.author.avatar_url)
                     await self.bot.get_guild(281793428793196544).get_channel(567050071628054532).send(embed=em)
 
