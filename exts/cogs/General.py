@@ -264,9 +264,9 @@ class General(commands.Cog):
         em.set_footer(text = "React :tada: to participate.")
         msg = await self.bot.get_guild(281793428793196544).get_channel(508921210512474112).send(embed=em)
         await msg.add_reaction("\U0001F389")
-        def check(reaction,user):
+        def check(reaction, user):
             return reaction.emoji is "\U0001F389"
-        r = await self.bot.wait_for('reaction_add', timeout=21600, check=check)
+        r = await self.bot.wait_for('reaction_add', timeout=10, check=check)
         users = await r.users().flatten()
         winner = random.choice(users)
         await msg.edit('{} has won the giveaway!.'.format(winner))
