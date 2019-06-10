@@ -272,8 +272,8 @@ class General(commands.Cog):
             msgid = msg.id
             msgg = await ctx.channel.fetch_message(msgid)
             users = await msgg.reactions[0].users().flatten()
-            winner = random.choice(users)
-            await ctx.send(winner)
+            winner = random.choice(users).name
+            await msg.edit('{} has won the giveaway!'.format(winner))
 
 def setup(bot):
     bot.add_cog(General(bot))
