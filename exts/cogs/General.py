@@ -271,7 +271,7 @@ class General(commands.Cog):
         except asyncio.TimeoutError:
             msgid = msg.id
             msgg = await ctx.channel.fetch_message(msgid)
-            users = msgg.reactions[0].users().flatten()
+            users = await msgg.reactions[0].users().flatten()
             winner = random.choice(users)
             await msg.edit('{} has won the giveaway!'.format(winner))
 
