@@ -270,7 +270,7 @@ class General(commands.Cog):
             await self.bot.wait_for('reaction_add', timeout=time*60*60, check=check)
         except asyncio.TimeoutError:
             msgid = msg.id
-            msgg = await ctx.channel.fetch_message(msgid)
+            msgg = await self.bot.get_guild(281793428793196544).get_channel(587573866554195968).fetch_message(msgid)
             users = await msgg.reactions[0].users().flatten()
             u = []
             for i in users:
