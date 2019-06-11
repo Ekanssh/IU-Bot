@@ -257,7 +257,7 @@ class General(commands.Cog):
     @commands.command()
     @commands.has_role("IU Bot Dev")
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.channel)
-    async def giveaway(self, ctx, *, descrip):
+    async def giveaway(self, ctx, time, *, descrip):
         em = discord.Embed(title = "Giveaway by {}! :tada:".format(ctx.author.name),
                                        colour = 0x0000ff,
                                        description = descrip)
@@ -267,12 +267,16 @@ class General(commands.Cog):
         def check(reaction, user):
             return reaction.emoji is "\U0001F389"
         try:
-            await self.bot.wait_for('reaction_add', timeout=10, check=check)
+            await self.bot.wait_for('reaction_add', timeout=time*60*60, check=check)
         except asyncio.TimeoutError:
             msgid = msg.id
             msgg = await ctx.channel.fetch_message(msgid)
             users = await msgg.reactions[0].users().flatten()
-            winner = random.choice(users).name
+            u = []
+            for i in users:
+                u.append(i.name)
+            u.remove("IU Bot")
+            winner = random.choice(u)
             await msg.edit(content = '{} has won the giveaway!'.format(winner), embed=None)
 
 def setup(bot):
