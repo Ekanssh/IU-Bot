@@ -257,9 +257,9 @@ class General(commands.Cog):
     @commands.command()
     @commands.has_role("IU Bot Dev")
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.channel)
-    async def giveaway(self, ctx, time, *, descrip):
+    async def giveaway(self, ctx, time: int, *, descrip):
         em = discord.Embed(title = "Giveaway by {}! :tada:".format(ctx.author.name),
-                                       colour = 0x0000ff,
+                                       colour = 0x00ffff,
                                        description = descrip)
         em.set_footer(text = "React to participate.")
         msg = await self.bot.get_guild(281793428793196544).get_channel(288928354478981120).send(embed=em)
