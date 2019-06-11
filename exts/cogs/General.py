@@ -255,14 +255,14 @@ class General(commands.Cog):
         await ctx.send("https://discord.gg/Yn6W84Y")
 
     @commands.command()
-    @commands.has_role("IU Bot Dev")
+    @commands.has_any_role("Lords", "IU Bot Dev")
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.channel)
     async def giveaway(self, ctx, time: int, *, descrip):
         em = discord.Embed(title = "Giveaway by {}! :tada:".format(ctx.author.name),
                                        colour = 0x00ffff,
                                        description = descrip)
         em.set_footer(text = "React to participate.")
-        msg = await self.bot.get_guild(281793428793196544).get_channel(288928354478981120).send(embed=em)
+        msg = await self.bot.get_guild(281793428793196544).get_channel(587573866554195968).send(embed=em)
         await msg.add_reaction("\U0001F389")
         def check(reaction, user):
             return reaction.emoji is "\U0001F389"
