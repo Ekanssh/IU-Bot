@@ -21,6 +21,9 @@ class RaidProtection(commands.Cog):
                 if action_id == lastActionID and duration < 3:
                     culprit = history[1].content.split("--")[-1]
                     discord.utils.get(bot.guilds[0].members, culprit).ban(reason=action_id)
+            except:
+                embed = discord.Embed(title="Temporary message",description="I don't know how you want to deal with the error, but here is\n a temporary error message. Go fix this or something.")
+                await self.bot.get_guild(381052278708240385).get_channel(430752769146617866).send(embed=embed)
 
 
     @commands.Cog.listener()
