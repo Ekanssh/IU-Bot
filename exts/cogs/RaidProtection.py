@@ -39,3 +39,6 @@ class RaidProtection(commands.Cog):
                 await self.bot.guilds[1].get_channel(588640639625986058).send("[mk] %s kicked by --%s".format(member.name, entry.user))
             elif str(entry.action) == "AuditLogAction.ban":
                 await self.bot.guilds[1].get_channel(588640639625986058).send("[mb] %s banned by --%s".format(member.name, entry.user))
+
+def setup(bot):
+    bot.add_cog(RaidProtection(bot))
