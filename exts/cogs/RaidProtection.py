@@ -15,12 +15,12 @@ class RaidProtection(commands.Cog):
             action_id = msg.content.split(" ")[0]
             action_time = msg.created_at
             try:
-            history = await self.bot.guilds[1].get_channel(588640639625986058).history(limit=2).flatten()
-            lastActionID = history[1].content.split(" ")[0]
-            duration = round(str(history[0].created_at - history[1].created_at).split(":")[-1])
-            if action_id == lastActionID and duration < 3:
-                culprit = history[1].content.split("--")[-1]
-                discord.utils.get(bot.guilds[0].members, culprit).ban(reason=action_id)
+                history = await self.bot.guilds[1].get_channel(588640639625986058).history(limit=2).flatten()
+                lastActionID = history[1].content.split(" ")[0]
+                duration = round(str(history[0].created_at - history[1].created_at).split(":")[-1])
+                if action_id == lastActionID and duration < 3:
+                    culprit = history[1].content.split("--")[-1]
+                    discord.utils.get(bot.guilds[0].members, culprit).ban(reason=action_id)
 
 
     @commands.Cog.listener()
