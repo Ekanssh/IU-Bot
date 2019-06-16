@@ -298,6 +298,7 @@ class General(commands.Cog):
             await p.paginate()
         except Exception as e:
             await ctx.send(traceback.format_exception(None, e, e.__traceback__))
+            
 
 def setup(bot):
     bot.add_cog(General(bot))
