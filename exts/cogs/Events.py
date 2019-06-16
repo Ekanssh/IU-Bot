@@ -88,7 +88,7 @@ class Events(commands.Cog):
                     em.set_author(name=message.author.display_name, icon_url=message.author.avatar_url_as(format='png'))
                     em.timestamp = message.created_at
                     em.add_field(name=None, value=f'[Jump!]({message.jump_url})')
-                    emb.color = 0xFFDF00
+                    em.color = 0xFFDF00
                     if message.embeds:
                         data = message.embeds[0]
                         if data.type == 'image':
