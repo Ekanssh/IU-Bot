@@ -70,7 +70,7 @@ async def on_ready():
         try:
             bot.load_extension("exts.cogs.{}".format(i))
         except Exception as e:
-            await botLogChannel.send(str(traceback.format_exc()))
+            await botLogChannel.send("```"+str(traceback.format_exc())+"```")
             if maintenance:  # iu bot dev
                 await devBotLogChannel.send("Erorr occurred in loading {}".format(i) + ":\n" + "```{}```".format(e))
             else:
