@@ -66,6 +66,7 @@ async def on_ready():
     bot.appid = "9c23ae0122eeb6cd076c3e2d726312ed"
     extentions = ("Admin", "Economy", "Events", "General",
                   "repl", "Miscellaneous", "Profile", "Roles", "Blacklist", "RaidProtection")
+    bot.remove_command('help')
     for i in extentions:
         try:
             bot.load_extension("exts.cogs.{}".format(i))
