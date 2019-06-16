@@ -277,7 +277,7 @@ class General(commands.Cog):
             u.remove("IU Bot")
             winner = random.choice(u)
             await msg.edit(content = '{} has won the giveaway!'.format(winner), embed=None)
-    
+
     @commands.command(name='help')
     async def _help(self, ctx, *, command: str = None):
         """Shows help about a command or the bot"""
@@ -298,7 +298,7 @@ class General(commands.Cog):
             await p.paginate()
         except Exception as e:
             await ctx.send(traceback.format_exception(None, e, e.__traceback__))
-            
+
 
 def setup(bot):
     bot.add_cog(General(bot))

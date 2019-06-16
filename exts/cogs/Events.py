@@ -81,15 +81,34 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
         if reaction.message.channel.id != 567050071628054532 and reaction.message.guild.id == 281793428793196544:
-            if (reaction.emoji == "\u2b50") or (reaction.emoji == "🌟"):
-                if reaction.count == 3:
-                    em = discord.Embed(title = reaction.message.author.name,
-                                       colour = 0xFFDF00,
-                                       description = reaction.message.content,
-                                       url = reaction.message.jump_url)
-                    em.set_footer(text = "Click on author's name to jump to message",
-                                  icon_url = reaction.message.author.avatar_url)
-                    await self.bot.get_guild(281793428793196544).get_channel(567050071628054532).send(embed=em)
+            if ((reaction.emoji == "\u2b50") or (reaction.emoji == "🌟")) and reaction.count > 2:
+                message = reaction.message
+                async def emsend(stars: int):
+                    em = discord.Embed(description=message.content)
+                    em.set_author(name=message.author.display_name, icon_url=message.author.avatar_url_as(format='png'))
+                    em.timestamp = message.created_at
+                    em.add_field(name=None, value=f'[Jump!]({message.jump_url})')
+                    emb.color = 0xFFDF00
+                    if message.embeds:
+                        data = message.embeds[0]
+                        if data.type == 'image':
+                            em.set_image(url=data.url)
+                    if message.attachments:
+                        file = message.attachments[0]
+                        if file.url.lower().endswith(('png', 'jpeg', 'jpg', 'gif', 'webp')):
+                            em.set_image(url=file.url)
+                        else:
+                            em.add_field(name='Attachment', value=f'[{file.filename}]({file.url})', inline=False)
+                    if stars > 2 and stars < 5:
+                        staremoji = ":star:"
+                    if stars > 3 and stars < 8:
+                        staremoji = ":star2:"
+                    if stars > 7 and stars < 12:
+                        staremoji = ":dizzy:"
+                    if stars > 12:
+                        staremoji = ":sparkles:"
+                    await self.bot.guilds[0].get_channel(567050071628054532).send(content = " %s %s ID:%s"%(staremoji, message.channel, message.id), embed = em)
+                emsend(reaction.count)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, err):
