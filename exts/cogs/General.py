@@ -83,14 +83,12 @@ class General(commands.Cog):
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def ping(self, ctx):
-        '''Call the bot'''
-        msg = await ctx.send('Pong!')
-        res = msg.created_at - ctx.message.created_at
-
-        def tdm(td): return ((td.days * 86400000) +
-                             (td.seconds * 1000)) + (td.microseconds / 1000)
-        res = tdm(res)
-        await msg.edit(content='Pong! :ping_pong: Took {} ms'.format(res))
+        '''checks the time taken for the bot to respond'''
+        start = time.monotonic()
+        msg = await ctx.send("Pinging... 🕒")
+        millis = (time.monotonic() - start) * 1000
+        heartbeat = ctx.bot.latency * 1000
+        await msg.edit(content=f'Heartbeat: {heartbeat:,.2f}ms Response: {millis:,.2f}ms. ⏲️')
 
 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
