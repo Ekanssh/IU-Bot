@@ -358,7 +358,7 @@ class Economy(commands.Cog):
                     mem_bal += amount*2
                     await ctx.send(" ".join(list(map(str, cards))))
                     await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s', (mem_bal, ctx.author.id, ))
-                    return await ctx.send(f":tada: Congrats! You found {found} card(s)!\n{amount} credits are added to your account.")
+                    return await ctx.send(f":tada: Congrats! You found the card!\n{amount*2} credits are added to your account.")
                 else:
                     cards[chosen_card-1] = xmark
                     await ctx.send(" ".join(list(map(str, cards))))
