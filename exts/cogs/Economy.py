@@ -340,28 +340,31 @@ class Economy(commands.Cog):
         random.shuffle(cards)
 
         m = await ctx.send(" ".join([":stop_button:"]*10))
-        await ctx.send("Type 3 numbers separated by a space, ranging from 1-9 (inclusive) to select the respective card.")
+        await ctx.send("Type 3 numbers separated by a space, ranging from 1-10 (inclusive) to select the respective card.")
 
         def check(m):
             return m.author.id == ctx.author.id
         try:
             user_msg = await self.bot.wait_for('message', timeout=20, check=check)
-            chosen_cards = list(map(int, user_msg.content.split()))
-            multiplier = 1
-            for i in chosen_cards:
-                if cards[i-1] == lucky_card:
-                    multiplier += 1
-                else:
-                    cards[i-1] = xmark
+            found = 0
+            try:
+                chosen_cards = list(map(int, user_msg.content.split()))
+                for i in chosen_cards:
+                    if cards[i-1] == lucky_card:
+                        found += 1
+                    else:
+                        cards[i-1] = xmark
+            except:
+                return await ctx.send("These aren't 3 numbers separated by a space! Run the command again. :facepalm:")
 
             await ctx.send(" ".join(list(map(str, cards))))
-            if multiplier == 1:
+            if found == 0:
                 return await ctx.send(f"Aww, you won nothing! Your {amount} credits are gone forever!")
             else:
-                amount *= multiplier
+                amount *= found
                 mem_bal += amount
                 await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s', (mem_bal, ctx.author.id, ))
-                return await ctx.send(f":tada: Congrats! You found {multiplier} card(s)!\n{amount} credits are added to your account.")
+                return await ctx.send(f":tada: Congrats! You found {found} card(s)!\n{amount} credits are added to your account.")
 
         except asyncio.TimeoutError:
             await ctx.send("I can't wait for this long, {}.".format(ctx.author.mention))
