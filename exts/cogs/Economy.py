@@ -318,8 +318,7 @@ class Economy(commands.Cog):
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def scratch(self, ctx, amount):
-        '''Select 3 cards from a deck of 9 cards and get the amount chosen multiplied by 
-        the number of lucky cards chosen'''
+        '''Select a cards from a deck of 10 cards and get double the amount back if that card is the only lucky card!'''
 
         if not amount.isdigit(): 
             return await ctx.send("Wrong argument! Enter an integer!")
@@ -333,39 +332,35 @@ class Economy(commands.Cog):
         if amount < 50:
             return await ctx.send("Enter an amount greater than 50!")
 
+        mem_bal -= amount
+
+        await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s', (mem_bal, ctx.author.id, ))
         lucky_card = list(filter(lambda t: t.name == "rupees", self.bot.guilds[1].emojis))[0]
         unlucky_card = list(filter(lambda t: t.name == "empty", self.bot.guilds[1].emojis))[0]
         xmark =  list(filter(lambda t: t.name == "xmark", self.bot.guilds[1].emojis))[0]
-        cards = [unlucky_card]*7 + [lucky_card]*3
+        cards = [unlucky_card]*9 + [lucky_card]
         random.shuffle(cards)
 
         m = await ctx.send(" ".join([":stop_button:"]*10))
-        await ctx.send("Type 3 numbers separated by a space, ranging from 1-10 (inclusive) to select the respective card.")
+        await ctx.send("Type a number from 1-10 (inclusive) to select the respective card.")
 
         def check(m):
             return m.author.id == ctx.author.id
         try:
             user_msg = await self.bot.wait_for('message', timeout=20, check=check)
-            found = 0
-            try:
-                chosen_cards = list(map(int, user_msg.content.split()))
-                for i in chosen_cards:
-                    if cards[i-1] == lucky_card:
-                        found += 1
-                    else:
-                        cards[i-1] = xmark
-            except:
-                return await ctx.send("These aren't 3 numbers separated by a space! Run the command again. :facepalm:")
-
             await ctx.send(" ".join(list(map(str, cards))))
-            if found == 0:
-                return await ctx.send(f"Aww, you won nothing! Your {amount} credits are gone forever!")
-            else:
-                amount *= found
-                mem_bal += amount
-                await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s', (mem_bal, ctx.author.id, ))
-                return await ctx.send(f":tada: Congrats! You found {found} card(s)!\n{amount} credits are added to your account.")
+            try:
+                chosen_card = int(user_msg.content)
 
+                if cards[chosen_card-1] == lucky_card:
+                    mem_bal += amount*2
+                    await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s', (mem_bal, ctx.author.id, ))
+                    return await ctx.send(f":tada: Congrats! You found {found} card(s)!\n{amount} credits are added to your account.")
+                else:
+                    return await ctx.send(f"Aww, you won nothing! Your {amount} credits are gone forever!")
+            except:
+                return await ctx.send("This isn't a number from 1-10! Run the command again. :facepalm:")
+            
         except asyncio.TimeoutError:
             await ctx.send("I can't wait for this long, {}.".format(ctx.author.mention))
 
