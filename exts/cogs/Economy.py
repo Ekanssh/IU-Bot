@@ -325,7 +325,7 @@ class Economy(commands.Cog):
             return await ctx.send("Wrong argument! Enter an integer!")
         amount = int(amount)
 
-        await self.bot.aio.execute("SELECT dailiesCount FROM Dailies WHERE id = %s", (author.id, ))
+        await self.bot.aio.execute("SELECT dailiesCount FROM Dailies WHERE id = %s", (ctx.author.id, ))
         mem_bal = (await self.bot.aio.cursor.fetchone())[0]
         
         if mem_bal < amount:
@@ -333,9 +333,9 @@ class Economy(commands.Cog):
         if amount < 50:
             return await ctx.send("Enter an amount greater than 50!")
 
-        lucky_card = list(filter(lambda t: t.name == "rupees", bot.guilds[1].emojis))[0]
-        unlucky_card = list(filter(lambda t: t.name == "empty", bot.guilds[1].emojis))[0]
-        xmark =  list(filter(lambda t: t.name == "xmark", bot.guilds[1].emojis))[0]
+        lucky_card = list(filter(lambda t: t.name == "rupees", self.bot.guilds[1].emojis))[0]
+        unlucky_card = list(filter(lambda t: t.name == "empty", self.bot.guilds[1].emojis))[0]
+        xmark =  list(filter(lambda t: t.name == "xmark", self.bot.guilds[1].emojis))[0]
         cards = [lucky_card]*7 + [unlucky_card]*3
         random.shuffle(cards)
 
