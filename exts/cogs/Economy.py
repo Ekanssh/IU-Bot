@@ -346,7 +346,7 @@ class Economy(commands.Cog):
             return m.author.id == ctx.author.id
         try:
             user_msg = await self.bot.wait_for('message', timeout=20, check=check)
-            chosen_cards = list(map(int, user_msg.split()))
+            chosen_cards = list(map(int, user_msg.content.split()))
             multiplier = 1
             for i in chosen_cards:
                 if cards[i-1] == lucky_card:
