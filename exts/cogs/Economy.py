@@ -315,6 +315,60 @@ class Economy(commands.Cog):
         await self.bot.aio.execute("SELECT * FROM Dailies WHERE id = %s", (429625142444949524,))
         await ctx.send((await self.bot.aio.cursor.fetchall())[0][1])
 
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
+    @commands.command()
+    async def scratch(self, ctx, amount):
+        '''Select 3 cards from a deck of 9 cards and get the amount chosen multiplied by 
+        the number of lucky cards chosen'''
+
+        if not amount.isdigit(): 
+            return await ctx.send("Wrong argument! Enter an integer!")
+        amount = int(amount)
+
+        await self.bot.aio.execute("SELECT dailiesCount FROM Dailies WHERE id = %s", (author.id, ))
+        mem_bal = (await self.bot.aio.cursor.fetchone())[0]
+        
+        if mem_bal < amount:
+            return await ctx.send(f"You don't have {amount} credits in your account!")
+        if amount < 50:
+            return await ctx.send("Enter an amount greater than 50!")
+
+        lucky_card = list(filter(lambda t: t.name == "rupees", bot.guilds[1].emojis))[0]
+        unlucky_card = list(filter(lambda t: t.name == "empty", bot.guilds[1].emojis))[0]
+        xmark =  list(filter(lambda t: t.name == "xmark", bot.guilds[1].emojis))[0]
+        cards = [lucky_card]*7 + [unlucky_card]*3
+        random.shuffle(cards)
+
+        m = await ctx.send(" ".join([":stop_button:"]*10))
+        await ctx.send("Type 3 numbers separated by a space, ranging from 1-9 (inclusive) to select the respective card.")
+
+        def check(m):
+            m.author.id == ctx.author.id
+        try:
+            user_msg = await self.bot.wait_for('message', timeout=20, check=check)
+            chosen_cards = list(map(int, user_msg.split()))
+            multiplier = 1
+            for i in chosen_cards:
+                if cards[i-1] == lucky_card:
+                    multiplier += 1
+                else:
+                    cards[i-1] = xmark
+
+            await ctx.send(" ".join(list(map(str, cards))))
+            if multiplier == 1:
+                return await ctx.send(f"Aww, you won nothing! Your {amount} credits are gone forever!")
+            else:
+                amount *= multiplier
+                mem_bal += amount
+                await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s', (mem_bal, ctx.author.id, ))
+                return await ctx.send(f":tada: Congrats! You found {multiplier} card(s)!\n{amount} credits are added to your account.")
+
+        except asyncio.TimeoutError:
+            await ctx.send("I can't wait for this long, {}.".format(ctx.author.mention))
+
+
+
+
 
 def setup(bot):
     bot.add_cog(Economy(bot))
