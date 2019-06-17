@@ -343,7 +343,7 @@ class Economy(commands.Cog):
         await ctx.send("Type 3 numbers separated by a space, ranging from 1-9 (inclusive) to select the respective card.")
 
         def check(m):
-            m.author.id == ctx.author.id
+            return m.author.id == ctx.author.id
         try:
             user_msg = await self.bot.wait_for('message', timeout=20, check=check)
             chosen_cards = list(map(int, user_msg.split()))
