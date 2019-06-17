@@ -336,7 +336,7 @@ class Economy(commands.Cog):
         lucky_card = list(filter(lambda t: t.name == "rupees", self.bot.guilds[1].emojis))[0]
         unlucky_card = list(filter(lambda t: t.name == "empty", self.bot.guilds[1].emojis))[0]
         xmark =  list(filter(lambda t: t.name == "xmark", self.bot.guilds[1].emojis))[0]
-        cards = [lucky_card]*7 + [unlucky_card]*3
+        cards = [unlucky_card]*7 + [lucky_card]*3
         random.shuffle(cards)
 
         m = await ctx.send(" ".join([":stop_button:"]*10))
