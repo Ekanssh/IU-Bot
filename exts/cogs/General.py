@@ -13,6 +13,7 @@ import datetime
 from time import localtime, strftime
 import random
 import os
+import traceback
 
 import asyncio
 import aiohttp  # various needs
@@ -89,7 +90,7 @@ class General(commands.Cog):
         msg = await ctx.send("Pinging... 🕒")
         millis = (time.monotonic() - start) * 1000
         heartbeat = ctx.bot.latency * 1000
-        await msg.edit(content=f'Heartbeat: {heartbeat:,.2f}ms Response: {millis:,.2f}ms. ⏲️')
+        await msg.edit(content=f'Heartbeat: {heartbeat:,.2f} ms | Response: {millis:,.2f} ms ⏲️')
 
 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
@@ -285,7 +286,7 @@ class General(commands.Cog):
             if command is None:
                 p = await HelpPaginator.from_bot(ctx)
             else:
-                entity = bot.get_cog(command) or bot.get_command(command)
+                entity = self.bot.get_cog(command) or self.bot.get_command(command)
 
                 if entity is None:
                     clean = command.replace('@', '@\u200b')
