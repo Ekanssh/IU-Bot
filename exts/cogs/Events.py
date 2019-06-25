@@ -85,7 +85,7 @@ class Events(commands.Cog):
                 message = reaction.message
                 async def emsend(stars: int):
                     em = discord.Embed(description=message.content)
-                    em.set_author(name=message.author.display_name, icon_url=message.author.avatar_url_as(format='png'))
+                    em.set_author(name=message.author.name, icon_url=message.author.avatar_url_as(format='png'))
                     em.timestamp = message.created_at
                     em.add_field(name=None, value=f'[Jump!]({message.jump_url})')
                     em.color = 0xFFDF00
