@@ -87,7 +87,7 @@ class Events(commands.Cog):
                     em = discord.Embed(description=message.content)
                     em.set_author(name=message.author.name, icon_url=message.author.avatar_url_as(format='png'))
                     em.timestamp = message.created_at
-                    em.add_field(name=None, value=f'[Jump!]({message.jump_url})')
+                    em.add_field(name="⠀", value=f'[Jump!]({message.jump_url})')
                     em.color = 0xFFDF00
                     if message.embeds:
                         data = message.embeds[0]
@@ -107,7 +107,7 @@ class Events(commands.Cog):
                         staremoji = ":dizzy:"
                     if stars > 12:
                         staremoji = ":sparkles:"
-                    await self.bot.guilds[0].get_channel(567050071628054532).send(content = " %s #%s ID: %s"%(staremoji, message.channel, message.id), embed = em)
+                    await self.bot.guilds[0].get_channel(567050071628054532).send(content = "%s %s ID: %s"%(staremoji, message.channel.mention, message.id), embed = em)
                 await emsend(reaction.count)
 
     @commands.Cog.listener()
