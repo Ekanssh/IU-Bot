@@ -356,7 +356,7 @@ class Economy(commands.Cog):
 
                 if cards[chosen_card-1] == lucky_card:
                     if amount*10 > 10000:
-                        mem_bal = amount*6
+                        mem_bal += amount*6
                     else:
                         mem_bal += amount*10
                     await ctx.send(" ".join(list(map(str, cards))))
