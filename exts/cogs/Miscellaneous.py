@@ -23,6 +23,31 @@ class Miscellaneous(commands.Cog):
         else:
             await ctx.send("Hello banned noob!")
 
+    @commands.cooldown(rate=1, per=8, type=commands.BucketType.guild)
+    @commands.command()
+    async def weather(self, ctx, *, location):
+        '''to get the weather of a given location'''
+        try:
+            async with ctx.typing():
+                url = "http://api.tanvis.xyz/weather/" + urllib.request.pathname2url(location)
+                f = await utils.getjson(url)
+                if 'error' in f:
+                    await ctx.send(embed=discord.Embed(title="An error occurred",
+                                                       description="I could not find your given location",
+                                                       colour=discord.Colour.red()))
+                else:
+                    embed = discord.Embed(title="Weather information gathered", colour=discord.Colour.dark_orange(),
+                                          description="Here is your result, " + ctx.author.mention)
+                    embed.add_field(name="Location", value=f['name'], inline=False);
+                    embed.add_field(name="Temperature in °C", value=f['celsius'])
+                    embed.add_field(name="Temperature in °F", value=f['fahrenheit']);
+                    embed.add_field(name="Weather", value=f['weather'])
+                    embed.add_field(name="Wind Speed", value=f['windSpeed']);
+                    embed.set_thumbnail(url=f['icon'])
+                    embed.set_footer(text="using **tanvis.xyz** API")
+                    await ctx.send(embed=embed)
+        except:
+            await ctx.send("An error occurred. Please try again.", delete_after=3)
 
 def setup(bot):
     bot.add_cog(Miscellaneous(bot))
