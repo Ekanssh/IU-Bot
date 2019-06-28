@@ -21,7 +21,7 @@ class Miscellaneous(commands.Cog):
             await self.bot.get_guild(381052278708240385).get_channel(435375286385770497).send(embed=discord.Embed(color=eval(hex(ctx.author.color.value)), title=author, description="#"+ctx.channel.name+":\n"+message))
             await ctx.message.add_reaction('\u2705')
         else:
-            await ctx.send("Not allowed.")
+            await ctx.send("Hello banned noob!")
 
 
 def setup(bot):

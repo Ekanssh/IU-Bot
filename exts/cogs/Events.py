@@ -84,10 +84,9 @@ class Events(commands.Cog):
             if ((reaction.emoji == "\u2b50") or (reaction.emoji == "🌟")) and reaction.count == 3:
                 message = reaction.message
                 async def emsend(stars: int):
-                    em = discord.Embed(description=message.content)
+                    em = discord.Embed(description=(message.content + '\n[Jump!]({message.jump_url})'))
                     em.set_author(name=message.author.name, icon_url=message.author.avatar_url_as(format='png'))
                     em.timestamp = message.created_at
-                    em.add_field(name="⠀", value=f'[Jump!]({message.jump_url})')
                     em.color = 0xFFDF00
                     if message.embeds:
                         data = message.embeds[0]
@@ -101,7 +100,7 @@ class Events(commands.Cog):
                             em.add_field(name='Attachment', value=f'[{file.filename}]({file.url})', inline=False)
                     if stars > 2 and stars < 5:
                         staremoji = ":star:"
-                    if stars > 3 and stars < 8:
+                    if stars > 4 and stars < 8:
                         staremoji = ":star2:"
                     if stars > 7 and stars < 12:
                         staremoji = ":dizzy:"

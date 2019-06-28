@@ -25,5 +25,6 @@ class Blacklist(commands.Cog):
             em = discord.Embed(title = "Whitelisted {}".format(mem.name), colour = 0x00DD00, description = "Removed {} from the blacklist.\nThey can use IU Bot now.".format(mem.name))
             await ctx.send(embed = em)
 
+
 def setup(bot):
     bot.add_cog(Blacklist(bot))

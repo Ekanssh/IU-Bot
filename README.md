@@ -8,6 +8,56 @@ I hope to see your contributions! :)
 
 ## Quick start
 
+###PROPOSED STRUCTURE:
+
+**exts.cmds**
+---------
+Moderation
+Economy
+Social
+Games
+General
+Developer
+Music
+
+
+**exts.autos**
+---------
+Starboard
+RaidProtect
+UserChange
+
+
+**exts.imports**
+-----------
+Paginator
+Config
+Images
+Fonts
+
+
+
+**Proposed Bot Character:**
+-----------------------
+- Personalised
+- Humorous
+- Beautiful
+- Versatile
+
+**Proposed Characters:**
+---------------------
+- Ketan ~ Offense
+- Oxide ~ Smart
+- Yash ~ Late
+- Hannah ~ Chat
+- Harshit ~ Edgy
+- Frost ~ Lurk
+- Shirious ~ Calm
+- Sun ~ Powerful
+- (More to be added)
+
+
+
 ### Leveling system
 
 Level | Points
@@ -114,12 +164,3 @@ Level  98 |3234000
 Level  99 |3333000
 Level 100 |3434000
 **People must cross the above stated XP to level up.**
-
-## TODO
-
-- [x] #count-past-infinity
-- [ ] #bday
-- [x] welcoming
-- [x] rep
-- [x] leaderboard
-- [ ] admin & mod tools

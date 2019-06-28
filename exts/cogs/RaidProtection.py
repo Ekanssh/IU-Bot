@@ -19,6 +19,7 @@ class RaidProtection(commands.Cog):
                 duration = round(str(history[0].created_at - history[1].created_at).split(":")[-1])
                 if action_id == lastActionID and duration < 3:
                     culprit = history[1].content.split("--")[-1]
+                    #Make IU Bot leave guild if culprit is itself
                     discord.utils.get(bot.guilds[0].members, culprit).ban(reason=action_id)
             except:
                 pass
