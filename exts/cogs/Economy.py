@@ -355,7 +355,7 @@ class Economy(commands.Cog):
                     return await ctx.send("This isn't a number from 1-5! Run the command again. :facepalm:")
 
                 if cards[chosen_card-1] == lucky_card:
-                    if amount*10 > 10000:
+                    if amount*5 > 10000:
                         mem_bal += amount*3
                     else:
                         mem_bal += amount*5
