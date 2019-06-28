@@ -355,13 +355,16 @@ class Economy(commands.Cog):
                     return await ctx.send("This isn't a number from 1-5! Run the command again. :facepalm:")
 
                 if cards[chosen_card-1] == lucky_card:
+                    t = 0
                     if amount*5 > 10000:
                         mem_bal += amount*3
+                        t = amount*3
                     else:
                         mem_bal += amount*5
+                        t = amount*5
                     await ctx.send(" ".join(list(map(str, cards))))
                     await self.bot.aio.execute('UPDATE Dailies SET dailiesCount=%s WHERE id=%s', (mem_bal, ctx.author.id, ))
-                    return await ctx.send(f":tada: Congrats! You found the card!\n{amount*10} credits are added to your account.")
+                    return await ctx.send(f":tada: Congrats! You found the card!\n{t} credits are added to your account.")
                 else:
                     cards[chosen_card-1] = xmark
                     await ctx.send(" ".join(list(map(str, cards))))
