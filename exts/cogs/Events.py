@@ -84,7 +84,7 @@ class Events(commands.Cog):
             if ((reaction.emoji == "\u2b50") or (reaction.emoji == "🌟")) and reaction.count == 3:
                 message = reaction.message
                 async def emsend(stars: int):
-                    em = discord.Embed(description=(message.content + '\n[Jump!]({message.jump_url})'))
+                    em = discord.Embed(description=(message.content + f'\n[Jump!]({message.jump_url})'))
                     em.set_author(name=message.author.name, icon_url=message.author.avatar_url_as(format='png'))
                     em.timestamp = message.created_at
                     em.color = 0xFFDF00
