@@ -112,7 +112,7 @@ class Events(commands.Cog):
                         staremoji = ":dizzy:"
                     if stars > 12:
                         staremoji = ":sparkles:"
-                    await self.bot.guilds[0].get_channel(567050071628054532).send(content = "%s %s ID: %s"%(staremoji, message.channel.mention, message.id), embed = em)
+                    await self.bot.guilds[0].get_channel(567050071628054532).send(content = "%s %s ID: %s"%(staremoji + f" **{stars}**", message.channel.mention, message.id), embed = em)
                 await emsend(reaction.count)
 
     @commands.Cog.listener()
