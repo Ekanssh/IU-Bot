@@ -87,7 +87,7 @@ class Events(commands.Cog):
                 m = await discord.utils.get(self.bot.guilds[0]. channels, name="starboard").history(limit=20).flatten()
                 for i in m:
                     if i.content.split("ID: ")[-1] == str(message.id):
-                        return
+                        return "nhi chala"
 
                 async def emsend(stars: int):
                     em = discord.Embed(description=(message.content + f'\n[Jump!]({message.jump_url})'))
