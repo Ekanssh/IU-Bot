@@ -60,6 +60,7 @@ async def on_ready():
     await aio.execute("CREATE TABLE IF NOT EXISTS rep(id BIGINT PRIMARY KEY, reps INT, last_given TIMESTAMP)")
     await aio.execute("CREATE TABLE IF NOT EXISTS profile(id BIGINT PRIMARY KEY, reps INT, profile_background TEXT, badges TEXT, level INT, note TEXT, xp INT, banners_buyed TEXT, score TEXT)")
     await aio.execute("CREATE TABLE IF NOT EXISTS blacklist(id BIGINT PRIMARY KEY)")
+    await aio.execute("CREATE TABLE IF NOT EXISTS sar(rolename TEXT PRIMARY KEY)")
 
     bot.aio = aio
     bot.atlas_active_channels = {}
