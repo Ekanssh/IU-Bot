@@ -47,9 +47,9 @@ class Roles(commands.Cog):
             string+=f'{count}) {value} \n'
         await ctx.send("Self Assignable Roles: \n"+ string +"type `iu roleme <role name>` to get or get rid of roles.")
     
-    @sar.command(name= 'config', hidden=True)
+    @sar.command(hidden=True)
     @commands.has_any_role('Lords', 'IU Bot Dev')
-    async def _sar_add(self,ctx,*,role_name:str):
+    async def config(self,ctx,*,role_name:str):
         fetch=discord.utils.get(ctx.guild.roles,name=role_name)
         if fetch is not None:
             try:
@@ -61,9 +61,9 @@ class Roles(commands.Cog):
         else:
             await ctx.send(f":x: Role `{role_name}` not found. Make sure you enter role name in a **case sensitive** manner")
 
-    @sar.command(name='deconfig', hidden=True)
+    @sar.command(hidden=True)
     @commands.has_any_role('Lords', 'IU Bot Dev')
-    async def _sar_delete(self,ctx,*,role_name:str):
+    async def deconfig(self,ctx,*,role_name:str):
         fetch=discord.utils.get(ctx.guild.roles,name=role_name)
         if fetch is not None:
             try:
