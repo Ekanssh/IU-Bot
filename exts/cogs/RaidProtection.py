@@ -22,7 +22,8 @@ class RaidProtection(commands.Cog):
                     if culprit == self.bot.user.id:
                         for i in bot.guilds:
                             await i.leave()
-                    discord.utils.get(bot.guilds[0].members, culprit).ban(reason=action_id)
+                    else:
+                        discord.utils.get(bot.guilds[0].members, culprit).ban(reason=action_id)
             except:
                 pass
 
