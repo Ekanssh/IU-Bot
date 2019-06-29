@@ -85,7 +85,7 @@ class Events(commands.Cog):
                 message = reaction.message
 
                 m = await discord.utils.get(self.bot.guilds[0]. channels, name="starboard").history(limit=20).flatten()
-                async for i in m:
+                for i in m:
                     if i.content.split("ID: ")[-1] == str(message.id):
                         return
 
