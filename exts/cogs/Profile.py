@@ -216,9 +216,9 @@ class Profile(commands.Cog):
                         data = (str(counter)+") "+str(i[0]), str(i[1]))
                     showable.append(data)
                     counter += 1
-                len = max([i[0].length for i in showable])
+                length = max([i[0].length for i in showable])
                 for i in showable:
-                    em.description += f"{data[0]:<len} : {data[1]}\n"
+                    em.description += f"{data[0]:<length} : {data[1]}\n"
                 em.description += "```"
                 ems.append(em)
         for e in ems:
