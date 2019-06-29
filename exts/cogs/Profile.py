@@ -206,21 +206,24 @@ class Profile(commands.Cog):
             for n in range(10, rowcount, 10):
                 em = discord.Embed(title="Top", description="```\n", color=0x00FFFF)
                 t = l[n-10: n]
+                showable = []
                 for i in t:
                     if i[0] == ctx.author.id:
                         rank = counter
                     if i[0] in self.bot._memList:
-                        data = (self.bot._memList[i[0]] or "None", str(i[1]))
+                        data = (str(counter)+") "+self.bot._memList[i[0]] or "None", str(i[1]))
                     else:
-                        data = (str(i[0]), str(i[1]))
-                    em.description += f"{data [0]:<20} : {data[1]}\n"
+                        data = (str(counter)+") "+str(i[0]), str(i[1]))
+                    showable.append(data)
                     counter += 1
+                len = max([i[0].length for i in showable])
+                for i in showable:
+                    em.description += f"{data[0]:<len} : {data[1]}\n"
                 em.description += "```"
                 ems.append(em)
         for e in ems:
             e.add_field(name=f"{ctx.author.name}, Your guild rank", value=str(rank))
         await msg.edit(embed=ems[0])
-        await ctx.message.delete()
         pa = Paginator(self.bot, msg, ctx.author, 0)
         await pa.paginate(ems)
 
