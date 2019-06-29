@@ -61,7 +61,7 @@ class Roles(commands.Cog):
         else:
             await ctx.send(f":x: Role `{role_name}` not found. Make sure you enter role name in a **case sensitive** manner")
 
-    @sar.command(name='deconfig'hidden=True)
+    @sar.command(name='deconfig', hidden=True)
     @commands.has_any_role('Lords', 'IU Bot Dev')
     async def _sar_delete(self,ctx,*,role_name:str):
         fetch=discord.utils.get(ctx.guild.roles,name=role_name)
