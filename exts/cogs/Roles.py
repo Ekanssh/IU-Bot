@@ -53,7 +53,7 @@ class Roles(commands.Cog):
         fetch=discord.utils.get(ctx.guild.roles,name=role_name)
         if fetch is not None:
             try:
-                await self.bot.aio.aio.execute("INSERT INTO sar VALUES(%s)",(fetch.name,))
+                await self.bot.aio.execute("INSERT INTO sar VALUES(%s)",(fetch.name,))
                 await ctx.send(f":check: Added {fetch.name} to self assignable roles")
             except Exception as e:
                 em=discord.Embed(title="Error occured as below", description=str(e))
@@ -67,7 +67,7 @@ class Roles(commands.Cog):
         fetch=discord.utils.get(ctx.guild.roles,name=role_name)
         if fetch is not None:
             try:
-                await self.bot.aio.aio.execute("DELETE FROM sar WHERE rolename=%s",(fetch.name,))
+                await self.bot.aio.execute("DELETE FROM sar WHERE rolename=%s",(fetch.name,))
                 await ctx.send(f":check: Deleted {fetch.name} from self assignable roles")
             except Exception as e:
                 em=discord.Embed(title="Error occured as below", description=e)
