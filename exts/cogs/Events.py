@@ -84,7 +84,7 @@ class Events(commands.Cog):
             if ((reaction.emoji == "\u2b50") or (reaction.emoji == "🌟")) and reaction.count > 2:
                 message = reaction.message
 
-                m = await discord.utils.get(self.bot.guilds[0]. channels, name="starboard").history(limit=20).flatten()
+                m = await discord.utils.get(self.bot.guilds[0].channels, name="starboard").history(limit=20).flatten()
                 for i in m:
                     if i.content.split("ID: ")[-1] == str(message.id):
                         return "nhi chala"
