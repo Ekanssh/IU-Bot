@@ -81,8 +81,14 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
         if reaction.message.channel.id != 567050071628054532 and reaction.message.guild.id == 281793428793196544:
-            if ((reaction.emoji == "\u2b50") or (reaction.emoji == "🌟")) and reaction.count == 3:
+            if ((reaction.emoji == "\u2b50") or (reaction.emoji == "🌟")) and reaction.count > 3:
                 message = reaction.message
+
+                m = await discord.utils.get(self.bot.guilds[0]. channels, name="starboard").history(limit=20).flatten()
+                async for i in m:
+                    if i.content.split("ID: ")[-1] == str(message.id):
+                        return
+
                 async def emsend(stars: int):
                     em = discord.Embed(description=(message.content + f'\n[Jump!]({message.jump_url})'))
                     em.set_author(name=message.author.name, icon_url=message.author.avatar_url_as(format='png'))
