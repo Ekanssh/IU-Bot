@@ -56,7 +56,7 @@ class Roles(commands.Cog):
                 await self.bot.aio.aio.execute("INSERT INTO sar VALUES(%s)",(fetch.name,))
                 await ctx.send(f":check: Added {fetch.name} to self assignable roles")
             except Exception as e:
-                em=discord.Embed(title="Error occured as below", description=e)
+                em=discord.Embed(title="Error occured as below", description=str(e))
                 await ctx.send(embed=em)
         else:
             await ctx.send(f":x: Role `{role_name}` not found. Make sure you enter role name in a **case sensitive** manner")
