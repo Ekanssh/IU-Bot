@@ -41,9 +41,7 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, msg):
-        if msg.channel.name is globalvars.memesChannel:
-            for chr in list(string.ascii_letters):
-                if chr in str(msg.content):
+        if msg.channel.id == 281823482562478080 and len(msg.attachments) == 0:
                     await msg.delete()
 
         found = False
