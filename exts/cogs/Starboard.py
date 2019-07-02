@@ -37,8 +37,10 @@ class Starboard(commands.Cog):
             staremoji = ":dizzy:"
         elif stars > 12:
            staremoji = ":sparkles:"
+
+        channel_mention=msg.content.spilt()[2]
     
-        await msg.edit(content=f"{staremoji} {stars} {reaction.message.channel.mention} Id: {reaction.message.id}")
+        await msg.edit(content=f"{staremoji} {stars} {channel_mention} Id: {reaction.message.id}")
 
     async def create_new_entry(self,reaction):
         message = reaction.message
