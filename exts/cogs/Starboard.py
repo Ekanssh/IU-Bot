@@ -57,7 +57,7 @@ class Starboard(commands.Cog):
                 embed.set_image(url=file.url)
             else:
                 embed.add_field(name='Attachment', value=f'[{file.filename}]({file.url})', inline=False)
-        content = f":star: {stars} {reaction.message.channel.mention} Id: {reaction.message.id}")
+        content = f":star: {stars} {reaction.message.channel.mention} Id: {reaction.message.id}"
         await starboard.send(content,embed=embed)
 
 def setup(bot):

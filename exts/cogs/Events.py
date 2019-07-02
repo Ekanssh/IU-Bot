@@ -76,7 +76,7 @@ class Events(commands.Cog):
     async def on_message_edit(self, before, after):
         await self.bot.process_commands(after)
 
-'''
+    '''
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
         if reaction.message.channel.id != 567050071628054532 and reaction.message.guild.id == 281793428793196544:
@@ -113,7 +113,7 @@ class Events(commands.Cog):
                         staremoji = ":sparkles:"
                     await self.bot.guilds[0].get_channel(567050071628054532).send(content = "%s %s ID: %s"%(staremoji + f" **{stars}**", message.channel.mention, message.id), embed = em)
                 await emsend(reaction.count)
-'''
+    '''
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, err):
