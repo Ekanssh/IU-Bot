@@ -42,7 +42,7 @@ class Starboard(commands.Cog):
 
     async def create_new_entry(self,reaction):
         message = reaction.message
-        staboard=discord.utils.get(message.guild.channels, name='starboard')
+        starboard=discord.utils.get(message.guild.channels, name='starboard')
         embed = discord.Embed(description=(message.content + f'\n[Jump!]({message.jump_url})'))
         embed.set_author(name=message.author.name, icon_url=message.author.avatar_url_as(format='png'))
         embed.timestamp = message.created_at
@@ -57,7 +57,7 @@ class Starboard(commands.Cog):
                 embed.set_image(url=file.url)
             else:
                 embed.add_field(name='Attachment', value=f'[{file.filename}]({file.url})', inline=False)
-        content = f":star: {stars} {reaction.message.channel.mention} Id: {reaction.message.id}"
+        content = f":star: {reaction.count} {reaction.message.channel.mention} Id: {reaction.message.id}"
         await starboard.send(content,embed=embed)
 
 def setup(bot):
