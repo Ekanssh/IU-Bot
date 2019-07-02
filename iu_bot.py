@@ -66,7 +66,7 @@ async def on_ready():
     bot.atlas_active_channels = {}
     bot.appid = "9c23ae0122eeb6cd076c3e2d726312ed"
     extentions = ("Admin", "Economy", "Events", "General",
-                  "repl", "Miscellaneous", "Profile", "Roles", "Blacklist", "RaidProtection")
+                  "repl", "Miscellaneous", "Profile", "Roles", "Blacklist", "RaidProtection","Starboard")
     bot.remove_command('help')
     for i in extentions:
         try:
