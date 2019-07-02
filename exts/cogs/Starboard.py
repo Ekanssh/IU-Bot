@@ -13,7 +13,7 @@ class Starboard(commands.Cog):
     async def on_reaction_add(self, reaction, user):
         if reaction.emoji == "\u2b50" or reaction.emoji == "🌟" :
             if reaction.message.channel.name == 'starboard' :
-                total_reactions =  int(reaction.message.content.split()[1]) + reaction.count
+                total_reactions =  int(reaction.message.content.split()[1]) + 1
                 return await self.edit_existing(total_reactions,reaction.message)
             elif reaction.count > 2:
                 return await self.starborad_lookup(reaction)
@@ -23,14 +23,14 @@ class Starboard(commands.Cog):
         if reaction.emoji == "\u2b50" or reaction.emoji == "🌟" :
             starboard=discord.utils.get(reaction.message.guild.channels, name='starboard')
             if reaction.message.channel is starboard:
-                total_reactions =  int(reaction.message.content.split()[1]) + reaction.count
+                total_reactions =  int(reaction.message.content.split()[1]) - 1
                 return await self.edit_existing(total_reactions,reaction.message)
             else:
                 async for msg_itr in starboard.history(limit=50):
                     if msg_itr.content.split()[4] == str(reaction.message.id):
                         msg = msg_itr
                         break
-                total_reactions = int(msg.content.split()[1]) + reaction.count
+                total_reactions = int(msg.content.split()[1]) - 1
                 if total_reactions < 2:
                     await msg.delete()
                 else:
