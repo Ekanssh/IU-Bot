@@ -13,9 +13,9 @@ class Starboard(commands.Cog):
     async def on_reaction_add(self, reaction, user):
         if reaction.emoji == "\u2b50" or reaction.emoji == "🌟" :
             if reaction.message.channel.name == 'starboard' :
-                total_reactions =  int(reaction.message.content.split()[1]) + reaction.count
+                total_reactions =  int(reaction.message.content.split()[1]) + 1
                 return await self.edit_existing(total_reactions,reaction.message)
-            elif reaction.count > 0:
+            elif reaction.count > 2:
                 return await self.starborad_lookup(reaction)
 
             
