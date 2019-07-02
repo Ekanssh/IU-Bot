@@ -39,6 +39,7 @@ class Starboard(commands.Cog):
            staremoji = ":sparkles:"
 
         channel_mention=msg.content.split()[2]
+        message_id= msg.content.split()[4]
     
         await msg.edit(content=f"{staremoji} {stars} {channel_mention} Id: {reaction.message.id}")
 
