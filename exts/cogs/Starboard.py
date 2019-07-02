@@ -31,7 +31,7 @@ class Starboard(commands.Cog):
                         msg = msg_itr
                         break
                 total_reactions = int(msg.content.split()[1]) - 1
-                if total_reactions < 2:
+                if total_reactions < 3:
                     await msg.delete()
                 else:
                     await self.edit_existing(total_reactions,msg)
