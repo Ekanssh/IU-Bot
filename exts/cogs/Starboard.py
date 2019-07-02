@@ -21,7 +21,7 @@ class Starboard(commands.Cog):
             
     async def starborad_lookup(self,reaction):
         message=reaction.message
-        staboard=discord.utils.get(message.guild.channels, name='starboard')
+        starboard=discord.utils.get(message.guild.channels, name='starboard')
         async for msg in starboard.history(limit=50):
             if msg.content.split()[4] == str(message.id):
                 return await self.edit_existing(reaction.count,msg)
