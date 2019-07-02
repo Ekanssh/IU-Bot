@@ -15,7 +15,7 @@ class Starboard(commands.Cog):
             if reaction.message.channel.name == 'starboard' :
                 total_reactions =  int(reaction.message.content.split()[1]) + reaction.count
                 return await self.edit_existing(total_reactions,reaction.message)
-            elif reaction.count > 2:
+            elif reaction.count > 0:
                 return await self.starborad_lookup(reaction)
 
             
@@ -29,7 +29,7 @@ class Starboard(commands.Cog):
 
 
     async def edit_existing(self,stars,msg):
-        if stars > 2 and stars < 5:
+        if stars > 0 and stars < 5:
             staremoji = ":star:"
         elif stars > 4 and stars < 8:
             staremoji = ":star2:"
@@ -41,7 +41,7 @@ class Starboard(commands.Cog):
         channel_mention=msg.content.split()[2]
         message_id= msg.content.split()[4]
     
-        await msg.edit(content=f"{staremoji} {stars} {channel_mention} Id: {reaction.message.id}")
+        await msg.edit(content=f"{staremoji} {stars} {channel_mention} Id: {message_id}")
 
     async def create_new_entry(self,reaction):
         message = reaction.message
