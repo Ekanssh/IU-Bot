@@ -28,6 +28,10 @@ personalities = {"name": "not real name", "age": "graduation", "pfp": "none", "s
 
 given = {"name": "not real name", "age": "graduation", "pfp": "none", "speciality": ["js"], "id": 1}
 
+def sortify(given):
+    return list(filter(createFilter(given), personalities))
+
+
 def createFilter(given):
     def newFilter(personality):
         for token, value in personality.items():
@@ -40,5 +44,3 @@ def createFilter(given):
                         return False
         return True
     return newFilter
-
-print(list(filter(createFilter(given), personalities)))
