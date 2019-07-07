@@ -33,13 +33,10 @@ def calculate(array):
 def sortify(given):
     for personality in  personalities:
         for token, value in personality.items():
-            try:
-                if type(given[token]) is not list:
-                    if value != given[token]:
-                        del personalities[personalities.index(personalities)]
-                else:
-                    if given[token] not in value:
-                        del personalities[personalities.index(personalities)]
-            except:
-                pass
+            if type(given[token]) is not list:
+                if value != given[token]:
+                    del personalities[personalities.index(personalities)]
+            else:
+                if given[token] not in value:
+                    del personalities[personalities.index(personalities)]
     return personalities
