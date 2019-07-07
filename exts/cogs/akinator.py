@@ -15,8 +15,8 @@ nits = {"name": "not real name", "age": "graduation", "pfp": "anime", "specialit
 sun = {"name": "not real name", "age": "graduation", "pfp": "anime", "speciality": ["py", "medical", "admin"], "id": 1}
 sky = {"name": "not real name", "age": "graduation", "pfp": "none", "speciality": ["js"], "id": 1}
 
-personalities = [oxide, shirious, stark, kueen, pixie, hannah, yash, ekansh, uday, ketan, surbhi, juzzou, frost, nits, sun, sky]
-sort = []
+sort = [oxide, shirious, stark, kueen, pixie, hannah, yash, ekansh, uday, ketan, surbhi, juzzou, frost, nits, sun, sky]
+personalities = []
 
 #real name - 6
 #anime pfp - 5
@@ -31,7 +31,10 @@ def calculate(array):
     return
 
 def sortify(given):
-    for personality in  personalities:
+    personalities = []
+    for i in sort:
+        personalities.append(i)
+    for personality in personalities:
         for token, value in personality.items():
             if type(given[token]) is not list:
                 if value != given[token]:
