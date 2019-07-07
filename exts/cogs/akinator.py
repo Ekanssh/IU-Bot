@@ -24,7 +24,7 @@ sort = [oxide, shirious, stark, kueen, pixie, hannah, yash, ekansh, uday, ketan,
 #cat pfp - 2
 #graduation - 9
 
-personalities = {"name": "not real name", "age": "graduation", "pfp": "none", "speciality": ["js"], "id": 1}
+personalities = [oxide, shirious, stark, kueen, pixie, hannah, yash, ekansh, uday, ketan, surbhi, juzzou, frost, nits, sun, sky]
 
 given = {"name": "not real name", "age": "graduation", "pfp": "none", "speciality": ["js"], "id": 1}
 
