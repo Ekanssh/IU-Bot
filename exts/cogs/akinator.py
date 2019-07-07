@@ -35,8 +35,8 @@ def sortify(given):
         for token, value in personality.items():
             if type(given[token]) is not list:
                 if value != given[token]:
-                    del personalities[personalities.index(personalities)]
+                    del personalities[personalities.index(personality)]
             else:
                 if given[token] not in value:
-                    del personalities[personalities.index(personalities)]
+                    del personalities[personalities.index(personality)]
     return personalities
