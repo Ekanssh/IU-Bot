@@ -27,7 +27,7 @@ if maintenance:
     bot = commands.Bot(description='IU Bot Dev build', command_prefix=prefixes)
 else:
     bot = commands.Bot(
-        description='The official bot overwatching Indians United discord server.', command_prefix=prefixes)
+        description = 'The official bot overwatching Indians United discord server.', command_prefix = commands.when_mentioned)
 
 
 ownerid = {315728369369088003: "Ekansh",
