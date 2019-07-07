@@ -29,7 +29,7 @@ personalities = [oxide, shirious, stark, kueen, pixie, hannah, yash, ekansh, uda
 given = {"name": "not real name", "age": "graduation", "pfp": "none", "speciality": ["js"], "id": 1}
 
 def sortify(given):
-    return list(filter(createFilter(given), personalities))
+    return list(filter(createFilter(given), sort))
 
 
 def createFilter(given):
