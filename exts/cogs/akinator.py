@@ -27,10 +27,10 @@ sort = []
 
 given = {"name": "not real name", "age": "graduation", "pfp": "none", "speciality": ["js"], "id": 1}
 
-def calculate(self, array):
+def calculate(array):
     return
 
-def sortify(self, given):
+def sortify(given):
     for personality in  personalities:
         for token, value in personality.items():
             try:
