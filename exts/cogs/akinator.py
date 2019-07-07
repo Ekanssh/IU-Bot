@@ -16,7 +16,6 @@ sun = {"name": "not real name", "age": "graduation", "pfp": "anime", "speciality
 sky = {"name": "not real name", "age": "graduation", "pfp": "none", "speciality": ["js"], "id": 1}
 
 sort = [oxide, shirious, stark, kueen, pixie, hannah, yash, ekansh, uday, ketan, surbhi, juzzou, frost, nits, sun, sky]
-personalities = []
 
 #real name - 6
 #anime pfp - 5
