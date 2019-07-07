@@ -24,23 +24,21 @@ sort = [oxide, shirious, stark, kueen, pixie, hannah, yash, ekansh, uday, ketan,
 #cat pfp - 2
 #graduation - 9
 
+personalities = {"name": "not real name", "age": "graduation", "pfp": "none", "speciality": ["js"], "id": 1}
+
 given = {"name": "not real name", "age": "graduation", "pfp": "none", "speciality": ["js"], "id": 1}
 
-def calculate(array):
-    return
-
-def sortify(given):
-    personalities = []
-    for i in sort:
-        personalities.append(i)
-    for personality in personalities:
+def createFilter(given):
+    def newFilter(personality):
         for token, value in personality.items():
             if type(given[token]) is not list:
                 if value != given[token]:
-                    del personalities[personalities.index(personality)]
-                    break
+                    return False
             else:
-                if given[token] not in value:
-                    del personalities[personalities.index(personality)]
-                    break
-    return personalities
+                for givenVal in given[token]:
+                    if givenVal not in value:
+                        return False
+        return True
+    return newFilter
+
+print(list(filter(createFilter(given), personalities)))
