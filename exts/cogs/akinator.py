@@ -15,8 +15,6 @@ nits = {"name": "not real name", "age": "graduation", "pfp": "anime", "specialit
 sun = {"name": "not real name", "age": "graduation", "pfp": "anime", "speciality": ["py", "medical", "admin"], "id": 1}
 sky = {"name": "not real name", "age": "graduation", "pfp": "none", "speciality": ["js"], "id": 1}
 
-sort = [oxide, shirious, stark, kueen, pixie, hannah, yash, ekansh, uday, ketan, surbhi, juzzou, frost, nits, sun, sky]
-
 #real name - 6
 #anime pfp - 5
 #school - 3
@@ -40,7 +38,7 @@ def createFilter(given):
                     return False
             else:
                 for givenVal in given[token]:
-                    if givenVal not in value:
+                    if givenVal not in value or len(given[token]) != len(value):
                         return False
         return True
     return newFilter
