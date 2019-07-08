@@ -34,9 +34,9 @@ def response_logic(resp: dict, given: dict):
 
     if resp["age"]["school"] == True and resp["age"]["graduation"] == False and resp["age"]["job"] == False:
         given["age"] = "school"
-    elif resp["age"]["school"] == False and resp["pfp"]["graduation"] == True and resp["age"]["job"] == False:
+    elif resp["age"]["school"] == False and resp["age"]["graduation"] == True and resp["age"]["job"] == False:
         given["age"] = "graduation"
-    elif resp["age"]["school"] == False and resp["pfp"]["graduation"] == False and resp["age"]["job"] == True:
+    elif resp["age"]["school"] == False and resp["age"]["graduation"] == False and resp["age"]["job"] == True:
         given["name"] = "job"
     else:
         return "Invaild Response!"
@@ -52,13 +52,13 @@ def response_logic(resp: dict, given: dict):
     else:
         return "Invaild Response!"
 
-    if resp["position"]["admin"] == False and resp["pfp"]["mod"] == False and resp["pfp"]["IU Bot dev"] == False:
+    if resp["position"]["admin"] == False and resp["position"]["mod"] == False and resp["position"]["IU Bot dev"] == False:
         given["postion"] = ""
-    elif resp["posiion"]["admin"] == True and resp["pfp"]["mod"] == False and resp["pfp"]["IU Bot dev"] == False:
+    elif resp["posiion"]["admin"] == True and resp["position"]["mod"] == False and resp["position"]["IU Bot dev"] == False:
         given["position"] = "admin"
-    elif resp["position"]["admin"] == False and resp["pfp"]["mod"] == True and resp["pfp"]["IU Bot dev"] == False:
+    elif resp["position"]["admin"] == False and resp["position"]["mod"] == True and resp["position"]["IU Bot dev"] == False:
         given["position"] = "mod"
-    elif resp["position"]["admin"] == False and resp["pfp"]["mod"] == False and resp["pfp"]["IU Bot dev"] == True:
+    elif resp["position"]["admin"] == False and resp["position"]["mod"] == False and resp["position"]["IU Bot dev"] == True:
         given["position"] = "IU Bot dev"
     else:
         return "Invaild Response!"
