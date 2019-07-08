@@ -54,7 +54,7 @@ def response_logic(resp: dict, given: dict):
 
     if resp["position"]["admin"] == False and resp["position"]["mod"] == False and resp["position"]["IU Bot dev"] == False:
         given["postion"] = ""
-    elif resp["posiion"]["admin"] == True and resp["position"]["mod"] == False and resp["position"]["IU Bot dev"] == False:
+    elif resp["position"]["admin"] == True and resp["position"]["mod"] == False and resp["position"]["IU Bot dev"] == False:
         given["position"] = "admin"
     elif resp["position"]["admin"] == False and resp["position"]["mod"] == True and resp["position"]["IU Bot dev"] == False:
         given["position"] = "mod"
