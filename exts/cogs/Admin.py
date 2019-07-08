@@ -16,7 +16,7 @@ class Admin(commands.Cog):
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command(hidden=True)
     @commands.has_permissions(kick_members=True)
-    async def kick(self, ctx, member: discord.Member,*,reason):
+    async def kick(self, ctx, member: discord.Member,*,reason=None):
         '''Kick members from your server'''
         try:
             await member.kick(reason=reason)
@@ -27,7 +27,7 @@ class Admin(commands.Cog):
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command(hidden=True)
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member: discord.Member,*,reason):
+    async def ban(self, ctx, member: discord.Member,*,reason=None):
         '''Ban toxic members from your server'''
         try:
             await member.ban(reason=reason)
@@ -64,7 +64,7 @@ class Admin(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.has_permissions(manage_messages=True)
-    async def purge(self, ctx, number: int,author: discord.Member = None):
+    async def purge(self, ctx, number: int, author: discord.Member = None):
         '''Clears specified number of messages'''
         if author is not None:
             check = lambda x: x.author == author
@@ -82,7 +82,7 @@ class Admin(commands.Cog):
         {link}"""
         await self.bot.get_channel(450997458600984586).send(result)
 
-    async def haste_post(self,content):
+    async def haste_post(self, content):
         async with aiohttp.ClientSession() as session:
             async with session.post("https://paste.pydis.com/documents",data=content.encode('utf-8')) as post:
                 data=await post.read()

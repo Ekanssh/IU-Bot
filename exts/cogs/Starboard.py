@@ -3,7 +3,7 @@ import discord
 
 
 #look in starboard if message is already starred
-#call edit_existing() if found 
+#call edit_existing() if found
 #call create_new_entry() if not found
 class Starboard(commands.Cog):
     def __init__(self, bot):
@@ -35,7 +35,7 @@ class Starboard(commands.Cog):
                     await msg.delete()
                 else:
                     await self.edit_existing(total_reactions,msg)
-            
+
     async def starborad_lookup(self,reaction):
         message=reaction.message
         starboard=discord.utils.get(message.guild.channels, name='starboard')
@@ -53,12 +53,12 @@ class Starboard(commands.Cog):
         elif stars > 7 and stars < 12:
             staremoji = ":dizzy:"
         elif stars > 12:
-           staremoji = ":sparkles:"
+            staremoji = ":sparkles:"
 
         channel_mention=msg.content.split()[2]
         message_id= msg.content.split()[4]
-    
-        await msg.edit(content=f"{staremoji} {stars} {channel_mention} Id: {message_id}")
+
+        await msg.edit(content=f"{staremoji} {stars} {channel_mention} ID: {message_id}")
 
     async def create_new_entry(self,reaction):
         message = reaction.message

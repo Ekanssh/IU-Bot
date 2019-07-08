@@ -8,7 +8,7 @@ I hope to see your contributions! :)
 
 ## Quick start
 
-###PROPOSED STRUCTURE:
+### PROPOSED STRUCTURE:
 
 **exts.cmds**
 ---------
@@ -34,28 +34,6 @@ Paginator
 Config
 Images
 Fonts
-
-
-
-**Proposed Bot Character:**
------------------------
-- Personalised
-- Humorous
-- Beautiful
-- Versatile
-
-**Proposed Characters:**
----------------------
-- Ketan ~ Offense
-- Oxide ~ Smart
-- Yash ~ Late
-- Hannah ~ Chat
-- Harshit ~ Edgy
-- Frost ~ Lurk
-- Shirious ~ Calm
-- Sun ~ Powerful
-- (More to be added)
-
 
 
 ### Leveling system
