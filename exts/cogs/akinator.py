@@ -22,8 +22,21 @@ personalities = [oxide, shirious, stark, kueen, pixie, hannah, yash, ekansh, uda
 given = {"name": {"real name": False, "not real name": True}, "age": {"school": False, "graduation": True, "job": False}, "position": {"admin": False, "mod": False, "IU Bot dev": False}, "pfp": {"anime": False, "cat": False, "avenger": True}, "speciality": ["torrent"], "id": 398419629606830082}
 
 
+def uniq_vals():
+    pass
 
-def response_logic(resp: dict, given: dict):
+def throw_ques(token, resp):
+
+    if token == "name":
+        print("Do they have their real name as username?")
+        if resp == "yes":
+            given["name"] = "real name"
+        elif resp == "no":
+            given["name"]["not real name"] = True
+    elif token == "age":
+        pass
+
+def resp_logic(resp: dict, given: dict):
 
     if resp["name"]["real name"] == False and resp["name"]["not real name"] == True:
         given["name"] = "not real name"
@@ -70,7 +83,7 @@ def sortify(given: dict):
 
 
 def createFilter(inputs: dict):
-    response_logic(inputs, inputs)
+    resp_logic(inputs, inputs)
     def newFilter(personality):
         for token, value in personality.items():
             if type(inputs[token]) is not list:
@@ -82,3 +95,4 @@ def createFilter(inputs: dict):
                         return False
         return True
     return newFilter
+

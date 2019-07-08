@@ -8,10 +8,9 @@ I hope to see your contributions! :)
 
 ## Quick start
 
-### PROPOSED STRUCTURE:
+### PROPOSED STRUCTURE
 
-**exts.cmds**
----------
+- exts.cmds
 Moderation
 Economy
 Social
@@ -20,21 +19,16 @@ General
 Developer
 Music
 
-
-**exts.autos**
----------
+- exts.autos
 Starboard
 RaidProtect
 UserChange
 
-
-**exts.imports**
------------
+- exts.imports
 Paginator
 Config
 Images
 Fonts
-
 
 ### Leveling system
 
