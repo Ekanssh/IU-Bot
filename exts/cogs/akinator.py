@@ -19,15 +19,15 @@ sky =      {"name": "not real name", "age": "graduation", "pfp": "avenger", "pos
 
 personalities = [oxide, shirious, stark, kueen, pixie, hannah, yash, ekansh, uday, ketan, surbhi, juzzou, frost, nits, sun, sky]
 
-given = {"name": {"real name": False}, "age": {"graduation": True}, "pfp": {"anime": False, "cat": False}, "speciality": ["torrent"], "id": 398419629606830082}
+given = {"name": {"real name": False, "not real name": False}, "age": {"school": False, "graduation": True, "job": False}, "pfp": {"anime": False, "cat": False, "avenger": True}, "speciality": ["torrent"], "id": 398419629606830082}
 
 
 
 def response_logic(resp: dict, given: dict):
 
-    if resp["name"]["real name"] == False:
+    if resp["name"]["real name"] == False and resp["name"]["not real name"] == True:
         given["name"] = "not real name"
-    elif resp["name"]["not real name"] == False:
+    elif resp["name"]["not real name"] == False and resp["name"]["real name"] == True:
         given["name"] = "real name"
     else:
         return "Invaild Response!"
@@ -66,7 +66,7 @@ def response_logic(resp: dict, given: dict):
 
 
 def sortify(given: dict):
-    return list(filter(createFilter(given), personalities))
+    return list(filter(createFilter(given), personalities))[0]["id"]
 
 
 def createFilter(inputs: dict):
