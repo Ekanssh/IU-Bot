@@ -19,7 +19,7 @@ sky =      {"name": "not real name", "age": "graduation", "pfp": "avenger", "pos
 
 personalities = [oxide, shirious, stark, kueen, pixie, hannah, yash, ekansh, uday, ketan, surbhi, juzzou, frost, nits, sun, sky]
 
-given = {"name": {"real name": False, "not real name": False}, "age": {"school": False, "graduation": True, "job": False}, "pfp": {"anime": False, "cat": False, "avenger": True}, "speciality": ["torrent"], "id": 398419629606830082}
+given = {"name": {"real name": False, "not real name": True}, "age": {"school": False, "graduation": True, "job": False}, "pfp": {"anime": False, "cat": False, "avenger": True}, "speciality": ["torrent"], "id": 398419629606830082}
 
 
 
