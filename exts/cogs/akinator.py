@@ -34,9 +34,9 @@ def response_logic(resp: dict, given: dict):
 
     if resp["age"]["school"] == True and resp["age"]["graduation"] == False and resp["age"]["job"] == False:
         given["age"] = "school"
-    elif resp["age"]["cat"] == False and resp["pfp"]["graduation"] == True and resp["age"]["job"] == False:
+    elif resp["age"]["school"] == False and resp["pfp"]["graduation"] == True and resp["age"]["job"] == False:
         given["age"] = "graduation"
-    elif resp["age"]["cat"] == False and resp["pfp"]["graduation"] == False and resp["age"]["job"] == True:
+    elif resp["age"]["school"] == False and resp["pfp"]["graduation"] == False and resp["age"]["job"] == True:
         given["name"] = "job"
     else:
         return "Invaild Response!"
