@@ -44,7 +44,7 @@ class Events(commands.Cog):
         if msg.channel.id == 281823482562478080 and len(msg.attachments) == 0:
             await msg.delete()
 
-        if "nangu" in msg.split(" "):
+        if "nangu" in msg.content.split(" "):
             await msg.channel.send(random.choice(["Same to you!", "Are you talking about yourself?", "Don't say bad about yourself."]))
 
         found = False
@@ -79,44 +79,6 @@ class Events(commands.Cog):
     async def on_message_edit(self, before, after):
         await self.bot.process_commands(after)
 
-    '''
-    @commands.Cog.listener()
-    async def on_reaction_add(self, reaction, user):
-        if reaction.message.channel.id != 567050071628054532 and reaction.message.guild.id == 281793428793196544:
-            if ((reaction.emoji == "\u2b50") or (reaction.emoji == "🌟")) and reaction.count > 2:
-                message = reaction.message
-
-                m = await discord.utils.get(self.bot.guilds[0].channels, name="starboard").history(limit=20).flatten()
-                for i in m:
-                    if i.content.split("ID: ")[-1] == str(message.id):
-                        return "nhi chala"
-
-                async def emsend(stars: int):
-                    em = discord.Embed(description=(message.content + f'\n[Jump!]({message.jump_url})'))
-                    em.set_author(name=message.author.name, icon_url=message.author.avatar_url_as(format='png'))
-                    em.timestamp = message.created_at
-                    em.color = 0xFFDF00
-                    if message.embeds:
-                        data = message.embeds[0]
-                        if data.type == 'image':
-                            em.set_image(url=data.url)
-                    if message.attachments:
-                        file = message.attachments[0]
-                        if file.url.lower().endswith(('png', 'jpeg', 'jpg', 'gif', 'webp')):
-                            em.set_image(url=file.url)
-                        else:
-                            em.add_field(name='Attachment', value=f'[{file.filename}]({file.url})', inline=False)
-                    if stars > 2 and stars < 5:
-                        staremoji = ":star:"
-                    if stars > 4 and stars < 8:
-                        staremoji = ":star2:"
-                    if stars > 7 and stars < 12:
-                        staremoji = ":dizzy:"
-                    if stars > 12:
-                        staremoji = ":sparkles:"
-                    await self.bot.guilds[0].get_channel(567050071628054532).send(content = "%s %s ID: %s"%(staremoji + f" **{stars}**", message.channel.mention, message.id), embed = em)
-                await emsend(reaction.count)
-    '''
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, err):
