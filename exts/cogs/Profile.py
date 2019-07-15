@@ -4,7 +4,7 @@
 from discord.ext import commands
 import discord
 from exts.cogs.Paginator import Paginator
-from PIL import Image, ImageFont, ImageDraw  # used in profile command
+from PIL import Image, ImageFont, ImageDraw, ImageOps  # used in profile command
 import aiohttp
 import os
 import json
@@ -105,6 +105,46 @@ class Profile(commands.Cog):
         if not found:
             await self.bot.aio.execute("INSERT INTO profile VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (mem.id, 0, 'banner-9', 'None', 1, 'I am imperfectly perfect...', 0, "banner-9"))
             await ctx.invoke(self.bot.get_command("profile"), mem)
+
+    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
+    @commands.command()
+    async def nprofile(self, ctx):
+        async with aiohttp.ClientSession() as cs:
+                        async with cs.get(str(ctx.author.avatar_url)) as r:
+                            with open("TEMPava.png", 'wb') as ava:
+                                ava.write(await r.read())
+        im = Image.open("TEMPava.png")
+        im = im.resize((150, 150))
+
+        bigsize = (im.size[0] * 3, im.size[1] * 3)
+        mask = Image.new('L', bigsize, 0)
+        draw = ImageDraw.Draw(mask)
+        draw.ellipse((0, 0) + bigsize, fill=255)
+        mask = mask.resize(im.size, Image.ANTIALIAS)
+        im.putalpha(mask)
+
+        output = ImageOps.fit(im, mask.size, centering=(0.5, 0.5))
+        output.putalpha(mask)
+        output.save('output.png')
+
+        robotoBold = ImageFont.truetype("exts/Fonts/Roboto/Roboto-Bold.ttf", 36)
+        robotoLight = ImageFont.truetype("exts/Fonts/Roboto/Roboto-Light.ttf", 24)
+
+        background = Image.open("exts/Images/Profile-blueprint.png")
+        comp1 = Image.open("exts/Images/component1.png").resize((20, 40))
+        comp = Image.open("exts/Images/component.png").resize((300, 40))
+        comp2 = Image.open("exts/Images/component2.png").resize((20, 40))
+        d = ImageDraw.Draw(background)
+        d.text(text="RANK", xy=(532, 72), font=robotoLight, fill=(201, 201, 201))
+        d.text(text="#1", xy=(604, 62), font=robotoBold, fill=(201, 201, 201))
+        background.paste(im, (75, 65), im)
+        background.paste(comp1, (270, 174), comp1)
+        background.paste(comp, (290, 174), comp)
+        background.paste(comp2, (590, 174), comp2)
+        background.save('test.png')
+        await ctx.send(file=discord.File("test.png"))
+        os.remove('TEMPava.png')
+        os.remove('test.png')
 
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
