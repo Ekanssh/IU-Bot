@@ -44,7 +44,7 @@ class Events(commands.Cog):
         if msg.channel.id == 281823482562478080 and len(msg.attachments) == 0:
             await msg.delete()
 
-        if "nangu" in msg.content.lower().split(" "):
+        if "nangu" in msg.content.lower():
             await msg.channel.send(random.choice(["Same to you!", "Are you talking about yourself?", "Don't say bad about yourself."]))
 
         found = False
