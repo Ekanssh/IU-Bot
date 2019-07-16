@@ -126,7 +126,8 @@ class Profile(commands.Cog):
             else:
                 rank = rank + 1
 
-        xp_req = (((((level ** 2) + level) / 2) * 100) - (level*100))
+        xp = xp - ((((((level - 1) ** 2) + (level - 1)) / 2) * 100) - ((level - 1) * 100))
+        xp_req = (((((level ** 2) + level) / 2) * 100) - (level * 100)) - ((((((level - 1) ** 2) + (level - 1)) / 2) * 100) - ((level - 1) * 100))
         xp_percent = round((xp / xp_req) * 100)
         comp_size = round(xp_percent / 100) * 540
 
