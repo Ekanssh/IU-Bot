@@ -19,7 +19,7 @@ import random
 import traceback
 
 def calculate_level(level: 'current level') -> 'xp to reach next level':
-    return (level**2+level)/2*100-(level*100)
+    return (((((level ** 2) + level) / 2) * 100) - (level*100))
 
 
 class Events(commands.Cog):

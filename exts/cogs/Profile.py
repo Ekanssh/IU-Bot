@@ -109,6 +109,27 @@ class Profile(commands.Cog):
     @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     @commands.command()
     async def nprofile(self, ctx):
+
+        await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id,))
+        level = (await self.bot.aio.cursor.fetchall())[0][4]
+
+        await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id,))
+        xp = (await self.bot.aio.cursor.fetchall())[0][6]
+
+        await self.bot.aio.execute("SELECT id, xp FROM profile")
+        l = await self.bot.aio.cursor.fetchall()
+        l.sort(key = lambda el: el[1], reverse = True)
+        rank = 1
+        for i in l:
+            if i[0] == ctx.author.id:
+                break
+            else:
+                rank = rank + 1
+
+        xp_req = (((((level ** 2) + level) / 2) * 100) - (level*100))
+        xp_percent = round((xp_req / xp) * 100)
+        comp_size = (xp_percent / 100) * 540
+
         async with aiohttp.ClientSession() as cs:
                         async with cs.get(str(ctx.author.avatar_url)) as r:
                             with open("TEMPava.png", 'wb') as ava:
@@ -132,15 +153,16 @@ class Profile(commands.Cog):
 
         background = Image.open("exts/Images/Profile-blueprint.png")
         comp1 = Image.open("exts/Images/component1.png").resize((20, 40))
-        comp = Image.open("exts/Images/component.png").resize((300, 40))
+        comp = Image.open("exts/Images/component.png").resize((comp_size, 40))
         comp2 = Image.open("exts/Images/component2.png").resize((20, 40))
+
         d = ImageDraw.Draw(background)
         d.text(text="RANK", xy=(532, 72), font=robotoLight, fill=(201, 201, 201))
-        d.text(text="#1", xy=(604, 62), font=robotoBold, fill=(201, 201, 201))
+        d.text(text=f"#{rank}", xy=(604, 62), font=robotoBold, fill=(201, 201, 201))
         background.paste(im, (75, 65), im)
         background.paste(comp1, (270, 174), comp1)
         background.paste(comp, (290, 174), comp)
-        background.paste(comp2, (590, 174), comp2)
+        background.paste(comp2, (290 + comp_size, 174), comp2)
         background.save('test.png')
         await ctx.send(file=discord.File("test.png"))
         os.remove('TEMPava.png')
