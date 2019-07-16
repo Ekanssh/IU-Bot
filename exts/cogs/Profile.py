@@ -127,8 +127,8 @@ class Profile(commands.Cog):
                 rank = rank + 1
 
         xp_req = (((((level ** 2) + level) / 2) * 100) - (level*100))
-        xp_percent = round((xp_req / xp) * 100)
-        comp_size = (xp_percent / 100) * 540
+        xp_percent = round((xp / xp_req) * 100)
+        comp_size = round(xp_percent / 100) * 540
 
         async with aiohttp.ClientSession() as cs:
                         async with cs.get(str(ctx.author.avatar_url)) as r:
