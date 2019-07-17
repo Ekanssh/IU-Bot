@@ -116,6 +116,9 @@ class Profile(commands.Cog):
         await self.bot.aio.execute("SELECT * FROM profile WHERE id = %s", (ctx.author.id,))
         xp = (await self.bot.aio.cursor.fetchall())[0][6]
 
+        await self.bot.aio.execute("SELECT * FROM rep WHERE id = %s", (ctx.author.id,))
+        rep = (await self.bot.aio.cursor.fetchall())[0][1]
+
         await self.bot.aio.execute("SELECT id, xp FROM profile")
         l = await self.bot.aio.cursor.fetchall()
         l.sort(key = lambda el: el[1], reverse = True)
@@ -150,20 +153,29 @@ class Profile(commands.Cog):
         output.save('output.png')
 
         robotoBold = ImageFont.truetype("exts/Fonts/Roboto/Roboto-Bold.ttf", 36)
+        robotoLight = ImageFont.truetype("exts/Fonts/Roboto/Roboto-Light.ttf", 24)
 
         background = Image.open("exts/Images/Profile-blueprint.png").resize((930, 520))
+
         comp1 = Image.open("exts/Images/component1.png").resize((20, 40))
         comp = Image.open("exts/Images/component.png").resize((comp_size, 40))
         comp2 = Image.open("exts/Images/component2.png").resize((20, 40))
 
         d = ImageDraw.Draw(background)
+
+        d.text(text=f"#{ctx.author.name}", xy=(598, 346), font=robotoLight, fill=(201, 201, 201))
         d.text(text=f"#{rank}", xy=(592, 312), font=robotoBold, fill=(201, 201, 201))
+        d.text(text=f"#{level}", xy=(598, 354), font=robotoBold, fill=(201, 201, 201))
+        d.text(text=f"#{rep}", xy=(694, 402), font=robotoBold, fill=(201, 201, 201))
+
         background.paste(im, (74, 64), im)
         background.paste(comp1, (270, 174), comp1)
         background.paste(comp, (290, 174), comp)
         background.paste(comp2, (290 + comp_size, 174), comp2)
+
         background.save('test.png')
         await ctx.send(file=discord.File("test.png"))
+
         os.remove('TEMPava.png')
         os.remove('test.png')
 
