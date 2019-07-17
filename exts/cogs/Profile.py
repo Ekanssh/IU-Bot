@@ -163,7 +163,7 @@ class Profile(commands.Cog):
 
         d = ImageDraw.Draw(background)
 
-        d.text(text=f"{ctx.author.name}", xy=(598, 346), font=robotoLight, fill=(201, 201, 201))
+        d.text(text=f"{ctx.author.name}", xy=(290, 108), font=robotoLight, fill=(201, 201, 201))
         d.text(text=f"#{rank}", xy=(592, 312), font=robotoBold, fill=(201, 201, 201))
         d.text(text=f"{level}", xy=(598, 354), font=robotoBold, fill=(201, 201, 201))
         d.text(text=f"{rep}", xy=(694, 402), font=robotoBold, fill=(201, 201, 201))
