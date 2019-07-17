@@ -153,7 +153,7 @@ class Profile(commands.Cog):
         output.save('output.png')
 
         robotoBold = ImageFont.truetype("exts/Fonts/Roboto/Roboto-Bold.ttf", 36)
-        robotoLight = ImageFont.truetype("exts/Fonts/Roboto/Roboto-Light.ttf", 24)
+        robotoLight = ImageFont.truetype("exts/Fonts/Roboto/Roboto-Light.ttf", 48)
 
         background = Image.open("exts/Images/Profile-blueprint.png").resize((930, 520))
 
@@ -163,10 +163,10 @@ class Profile(commands.Cog):
 
         d = ImageDraw.Draw(background)
 
-        d.text(text=f"#{ctx.author.name}", xy=(598, 346), font=robotoLight, fill=(201, 201, 201))
+        d.text(text=f"{ctx.author.name}", xy=(598, 346), font=robotoLight, fill=(201, 201, 201))
         d.text(text=f"#{rank}", xy=(592, 312), font=robotoBold, fill=(201, 201, 201))
-        d.text(text=f"#{level}", xy=(598, 354), font=robotoBold, fill=(201, 201, 201))
-        d.text(text=f"#{rep}", xy=(694, 402), font=robotoBold, fill=(201, 201, 201))
+        d.text(text=f"{level}", xy=(598, 354), font=robotoBold, fill=(201, 201, 201))
+        d.text(text=f"{rep}", xy=(694, 402), font=robotoBold, fill=(201, 201, 201))
 
         background.paste(im, (74, 64), im)
         background.paste(comp1, (270, 174), comp1)
