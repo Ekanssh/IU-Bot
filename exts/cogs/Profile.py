@@ -151,7 +151,7 @@ class Profile(commands.Cog):
 
         robotoBold = ImageFont.truetype("exts/Fonts/Roboto/Roboto-Bold.ttf", 36)
 
-        background = Image.open("exts/Images/Profile-blueprint.png")
+        background = Image.open("exts/Images/Profile-blueprint.png").resize((930, 520))
         comp1 = Image.open("exts/Images/component1.png").resize((20, 40))
         comp = Image.open("exts/Images/component.png").resize((comp_size, 40))
         comp2 = Image.open("exts/Images/component2.png").resize((20, 40))
