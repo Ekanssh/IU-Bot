@@ -136,7 +136,7 @@ class Profile(commands.Cog):
                             with open("TEMPava.png", 'wb') as ava:
                                 ava.write(await r.read())
         im = Image.open("TEMPava.png")
-        im = im.resize((150, 150))
+        im = im.resize((152, 152))
 
         bigsize = (im.size[0] * 3, im.size[1] * 3)
         mask = Image.new('L', bigsize, 0)
@@ -150,7 +150,6 @@ class Profile(commands.Cog):
         output.save('output.png')
 
         robotoBold = ImageFont.truetype("exts/Fonts/Roboto/Roboto-Bold.ttf", 36)
-        robotoLight = ImageFont.truetype("exts/Fonts/Roboto/Roboto-Light.ttf", 24)
 
         background = Image.open("exts/Images/Profile-blueprint.png")
         comp1 = Image.open("exts/Images/component1.png").resize((20, 40))
@@ -158,9 +157,8 @@ class Profile(commands.Cog):
         comp2 = Image.open("exts/Images/component2.png").resize((20, 40))
 
         d = ImageDraw.Draw(background)
-        d.text(text="RANK", xy=(532, 72), font=robotoLight, fill=(201, 201, 201))
-        d.text(text=f"#{rank}", xy=(604, 62), font=robotoBold, fill=(201, 201, 201))
-        background.paste(im, (75, 65), im)
+        d.text(text=f"#{rank}", xy=(592, 312), font=robotoBold, fill=(201, 201, 201))
+        background.paste(im, (74, 64), im)
         background.paste(comp1, (270, 174), comp1)
         background.paste(comp, (290, 174), comp)
         background.paste(comp2, (290 + comp_size, 174), comp2)
