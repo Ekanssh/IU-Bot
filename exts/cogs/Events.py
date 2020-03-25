@@ -64,7 +64,7 @@ class Events(commands.Cog):
                         async with aiopg.create_pool(dsn) as pool:
                             async with pool.acquire() as conn:
                                 async with conn.cursor() as cur:
-                                    await cur.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 5, msg.author.id, ))
+                                    await cur.execute("UPDATE profile SET xp = %s WHERE id = %s", (xp + 50000, msg.author.id, ))
                                     if xp == int(calculate_level(level)):
                                         await cur.execute("UPDATE profile SET level = %s WHERE id = %s", (level + 1, msg.author.id, ))
                                         await msg.channel.send("Congratulations, " + msg.author.mention + " you advanced to level {}".format(level + 1), delete_after=10)
