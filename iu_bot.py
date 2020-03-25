@@ -31,12 +31,8 @@ else:
 
 
 ownerid = {315728369369088003: "Ekansh",
-           270898185961078785: "Shirious",
            388984732156690433: "Yash",
-           443961507051601931: "Uday",
-           586426079078514700: "Prometheus",
-          341171182227161088: "Oxide",
-          456331309304905730: "code_learner"}
+          341171182227161088: "Oxide"}
 
 aio = aiopg_commands()  # used for database purposes
 
